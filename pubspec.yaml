@@ -8,9 +8,13 @@ environment:
   sdk: ^3.5.4
 
 dependencies:
+  image_picker: ^1.1.2
+  mobile_scanner: ^6.0.2
+  provider: ^6.1.2
   flutter:
     sdk: flutter
-
+  flutter_localization: ^0.3.0
+  intl: ^0.19.0
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -20,7 +24,7 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter:
-
+  generate: true
   uses-material-design: true
   assets:
     - assets/
