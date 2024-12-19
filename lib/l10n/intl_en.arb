@@ -1,0 +1,12 @@
+{
+  "@@locale": "en",
+  "myCard": "My Card",
+  "cardWallet": "Card Wallet",
+  "openCard": "Open Card",
+  "myInfo": "My Info",
+  "setting": "Setting",
+  "language" : "Language",
+  "theme" : "Theme",
+  "about": "AppInformation",
+  "qrcodescan" : "QR Code Scan"
+}

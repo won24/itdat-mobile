@@ -1,0 +1,12 @@
+{
+  "@@locale": "ko",
+  "myCard": "내 명함",
+  "cardWallet": "명함첩",
+  "openCard": "공개 명함",
+  "myInfo": "내 정보",
+  "setting": "설정",
+  "language" : "언어",
+  "theme" : "테마",
+  "about" : "앱 정보",
+  "qrcodescan": "QR 코드 스캔"
+}
