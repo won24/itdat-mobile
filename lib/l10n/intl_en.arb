@@ -8,5 +8,12 @@
   "language" : "Language",
   "theme" : "Theme",
   "about": "AppInformation",
-  "qrcodescan" : "QR Code Scan"
+  "qrcodescan" : "QR Code Scan",
+  "selectTheme" : "Theme",
+  "defaultTheme" : "Default Theme",
+  "dark" : "Dark",
+  "light" : "Light",
+  "cancel" : "Cancel",
+  "confirm" : "Confirm",
+  "security" : "Security"
 }
