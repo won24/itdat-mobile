@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: [
             Locale('en', ''), // English
             Locale('ko', ''), // Korean
+            Locale('ja',''),
           ],
           home: MainLayout(),
         );

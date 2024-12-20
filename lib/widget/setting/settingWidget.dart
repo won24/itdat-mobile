@@ -1,6 +1,7 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:itdat/widget/setting/languageTranWidget.dart';
+import 'package:itdat/widget/setting/permissionWidget.dart';
 import 'package:itdat/widget/setting/themeTranWidget.dart';
 
 class Settings extends StatefulWidget {
@@ -26,7 +27,7 @@ class _SettingsState extends State<Settings> {
             ThemeDialog.show(context);
           }),
           _buildSettingItem(Icons.lock_outline_rounded, AppLocalizations.of(context)!.security, () {
-            //보안
+            PermissionManager.navigateToPermissionSettings(context);
           }),
           _buildSettingItem(Icons.info_outline, AppLocalizations.of(context)!.about, () {
             // 앱 정보 페이지로 이동

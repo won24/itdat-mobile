@@ -3,7 +3,7 @@
   "myCard": "My Card",
   "cardWallet": "Card Wallet",
   "openCard": "Open Card",
-  "myInfo": "My Info",
+  "myInfo": "Profile",
   "setting": "Setting",
   "language" : "Language",
   "theme" : "Theme",
@@ -15,5 +15,11 @@
   "light" : "Light",
   "cancel" : "Cancel",
   "confirm" : "Confirm",
-  "security" : "Security"
+  "security" : "Security",
+  "appPermissions" : "App Permission",
+  "close" : "Close",
+  "open" : "Open",
+  "camera" : "Camera",
+  "location" : "Location",
+  "storage" : "Storage"
 }

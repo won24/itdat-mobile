@@ -15,5 +15,11 @@
   "light" : "라이트",
   "cancel" : "취소",
   "confirm" : "확인",
-  "security" : "보안"
+  "security" : "보안",
+  "appPermissions" : "앱 권한",
+  "close" : "닫기",
+  "open" : "열기",
+  "camera" : "카메라",
+  "location" : "위치",
+  "storage" : "저장소"
 }

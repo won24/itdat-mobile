@@ -34,6 +34,9 @@ class LanguageDialog {
                     _buildLanguageOption(context, Locale('ko'), '한국어', selectedLocale, (value) {
                       setState(() => selectedLocale = value!);
                     }),
+                    _buildLanguageOption(context, Locale('ja'), '일본어', selectedLocale, (value) {
+                      setState(() => selectedLocale = value!);
+                    }),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [

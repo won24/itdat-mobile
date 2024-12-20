@@ -3,6 +3,7 @@ import 'package:itdat/widget/main_screen/cardWalletWidget.dart';
 import 'package:itdat/widget/main_screen/myCardWidget.dart';
 import 'package:itdat/widget/main_screen/myInfoWidget.dart';
 import 'package:itdat/widget/main_screen/openCardWidget.dart';
+import 'package:itdat/widget/nfc/nfcScreen.dart';
 import 'package:itdat/widget/qr_scan/qrScreen.dart';
 import 'package:itdat/widget/setting/settingWidget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,6 +33,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(65),
@@ -45,8 +47,12 @@ class _MainLayoutState extends State<MainLayout> {
             IconButton(
               icon: Icon(Icons.nfc_rounded, size: 28),
               onPressed: () {
-                // NFC 아이콘 클릭 이벤트
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NfcScreen()),
+                );
               },
+
             ),
             IconButton(
               icon: Icon(Icons.qr_code, size: 28),
@@ -80,8 +86,8 @@ class _MainLayoutState extends State<MainLayout> {
           onTap: onTapped,
           selectedFontSize: 14,
           unselectedFontSize: 12,
-          selectedItemColor: Colors.black, // 선택된 아이템의 색상
-          unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
+          selectedItemColor: isDarkMode ? Colors.white : Colors.black,
+          unselectedItemColor: isDarkMode ? Colors.grey[400] : Colors.grey[600],
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.credit_card_rounded),
