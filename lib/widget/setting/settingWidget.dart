@@ -1,5 +1,8 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:itdat/widget/setting/languageTranWidget.dart';
+import 'package:itdat/widget/setting/permissionWidget.dart';
+import 'package:itdat/widget/setting/themeTranWidget.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -17,13 +20,16 @@ class _SettingsState extends State<Settings> {
       ),
       body: ListView(
         children: [
-          _buildSettingItem(Icons.language, AppLocalizations.of(context)!.language, () {
-            // 언어 설정 페이지로 이동
+          _buildSettingItem(Icons.language_outlined, AppLocalizations.of(context)!.language, () {
+            LanguageDialog.show(context);
           }),
-          _buildSettingItem(Icons.palette, AppLocalizations.of(context)!.theme, () {
-            // 테마 설정 페이지로 이동
+          _buildSettingItem(Icons.palette_outlined, AppLocalizations.of(context)!.theme, () {
+            ThemeDialog.show(context);
           }),
-          _buildSettingItem(Icons.info, AppLocalizations.of(context)!.about, () {
+          _buildSettingItem(Icons.lock_outline_rounded, AppLocalizations.of(context)!.security, () {
+            PermissionManager.navigateToPermissionSettings(context);
+          }),
+          _buildSettingItem(Icons.info_outline, AppLocalizations.of(context)!.about, () {
             // 앱 정보 페이지로 이동
           }),
         ],
@@ -35,17 +41,16 @@ class _SettingsState extends State<Settings> {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
         child: Row(
           children: [
             Icon(icon, size: 24),
-            SizedBox(width: 16),
+            SizedBox(width: 15),
             Text(
               title,
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 18),
             ),
             Spacer(),
-            Icon(Icons.arrow_forward_ios, size: 16),
           ],
         ),
       ),

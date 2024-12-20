@@ -8,5 +8,18 @@
   "language" : "언어",
   "theme" : "테마",
   "about" : "앱 정보",
-  "qrcodescan": "QR 코드 스캔"
+  "qrcodescan": "QR 코드 스캔",
+  "selectTheme" : "테마 선택",
+  "defaultTheme" : "기본 테마",
+  "dark" : "다크",
+  "light" : "라이트",
+  "cancel" : "취소",
+  "confirm" : "확인",
+  "security" : "보안",
+  "appPermissions" : "앱 권한",
+  "close" : "닫기",
+  "open" : "열기",
+  "camera" : "카메라",
+  "location" : "위치",
+  "storage" : "저장소"
 }

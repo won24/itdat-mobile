@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itdat/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:itdat/screen/mainLayout.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -7,8 +8,11 @@ import 'package:itdat/providers/locale_provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => LocaleProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LocaleProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ],
       child: MyApp(),
     ),
   );
@@ -19,13 +23,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LocaleProvider>(
-      builder: (context, localeProvider, child) {
+    return Consumer2<LocaleProvider, ThemeProvider>(
+      builder: (context, localeProvider, themeProvider, child) {
         return MaterialApp(
           title: 'ITDAT',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+          theme: themeProvider.lightTheme,
+          darkTheme: themeProvider.darkTheme,
+          themeMode: themeProvider.themeMode,
           locale: localeProvider.locale,
           localizationsDelegates: [
             AppLocalizations.delegate,
@@ -36,6 +40,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: [
             Locale('en', ''), // English
             Locale('ko', ''), // Korean
+            Locale('ja',''),
           ],
           home: MainLayout(),
         );
