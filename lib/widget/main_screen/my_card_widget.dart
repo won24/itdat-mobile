@@ -29,7 +29,9 @@ class _MyCardWidgetState extends State<MyCardWidget> {
 
       body: Column(
         children: [
-          BusinessCardWidget(),
+          Expanded(child:
+            BusinessCardWidget(),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
