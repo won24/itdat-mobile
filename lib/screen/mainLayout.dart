@@ -3,10 +3,9 @@ import 'package:itdat/widget/main_screen/cardWalletWidget.dart';
 import 'package:itdat/widget/main_screen/my_card_widget.dart';
 import 'package:itdat/widget/main_screen/myInfoWidget.dart';
 import 'package:itdat/widget/main_screen/openCardWidget.dart';
+import 'package:itdat/widget/nfc/nfcScreen.dart';
 import 'package:itdat/widget/qr_scan/qrScreen.dart';
 import 'package:itdat/widget/setting/settingWidget.dart';
-import 'package:provider/provider.dart';
-import 'package:itdat/providers/locale_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainLayout extends StatefulWidget {
@@ -31,79 +30,83 @@ class _MainLayoutState extends State<MainLayout> {
     });
   }
 
-  void _changeLanguage(BuildContext context) {
-    final provider = Provider.of<LocaleProvider>(context, listen: false);
-    final currentLocale = provider.locale;
-    if (currentLocale.languageCode == 'en') {
-      provider.setLocale(Locale('ko'));
-    } else {
-      provider.setLocale(Locale('en'));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'ITDAT',
-          style: TextStyle(fontWeight: FontWeight.bold),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(65),
+        child: AppBar(
+          title: Text(
+            'ITDAT',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          centerTitle: false,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.nfc_rounded, size: 28),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NfcScreen()),
+                );
+              },
+
+            ),
+            IconButton(
+              icon: Icon(Icons.qr_code, size: 28),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QRScanScreen()),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.settings, size: 28),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Settings()),
+                );
+              },
+            ),
+            SizedBox(width: 12),
+          ],
+          toolbarHeight: 70,
         ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.nfc_rounded),
-            onPressed: () {
-              // NFC 아이콘 클릭 이벤트
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.qr_code),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => QRScanScreen()),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Settings()),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.change_circle),
-            onPressed: () => _changeLanguage(context),
-          ),
-        ],
       ),
       body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: onTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.credit_card_rounded),
-            label: AppLocalizations.of(context)!.myCard,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.wallet),
-            label: AppLocalizations.of(context)!.cardWallet,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people_rounded),
-            label: AppLocalizations.of(context)!.openCard,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: AppLocalizations.of(context)!.myInfo,
-          ),
-        ],
+      bottomNavigationBar: Container(
+        height: 62,
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _selectedIndex,
+          onTap: onTapped,
+          selectedFontSize: 14,
+          unselectedFontSize: 12,
+          selectedItemColor: isDarkMode ? Colors.white : Colors.black,
+          unselectedItemColor: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.credit_card_rounded),
+              label: AppLocalizations.of(context)!.myCard,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.wallet),
+              label: AppLocalizations.of(context)!.cardWallet,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people_rounded),
+              label: AppLocalizations.of(context)!.openCard,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: AppLocalizations.of(context)!.myInfo,
+            ),
+          ],
+        ),
       ),
     );
   }
