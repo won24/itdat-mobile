@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modify this file to customize your launch splash screen -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 배경 색상 -->
     <item android:drawable="@android:color/white" />
 
-    <!-- You can insert your own image assets here -->
-    <!-- <item>
+    <!-- 배경 이미지와 테두리 -->
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                    android:width="5dp"
+                    android:color="@android:color/black" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <item android:left="5dp" android:top="5dp" android:right="5dp" android:bottom="5dp">
         <bitmap
-            android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+                android:gravity="fill"
+                android:src="@drawable/background" />
+    </item>
+
+    <!-- 스플래시 이미지 (오른쪽으로 이동) -->
+    <item>
+        <bitmap
+                android:gravity="center|top"
+                android:src="@drawable/splash"
+                android:layout_marginStart="50dp" />
+    </item>
 </layer-list>
