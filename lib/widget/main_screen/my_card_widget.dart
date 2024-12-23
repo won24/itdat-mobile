@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:itdat/screen/card/template_selection_screen.dart';
 import 'package:itdat/widget/my_card_screen/business_card_widget.dart';
 import 'package:itdat/widget/my_card_screen/history_widget.dart';
 import 'package:itdat/widget/my_card_screen/info_widget.dart';
@@ -29,9 +30,10 @@ class _MyCardWidgetState extends State<MyCardWidget> {
 
       body: Column(
         children: [
-          Expanded(child:
-            BusinessCardWidget(),
-          ),
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const TemplateSelectionScreen()));
+          }, icon: Icon(Icons.add, size: 64,)),
+            // BusinessCardWidget(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
