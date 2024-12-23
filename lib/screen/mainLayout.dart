@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/widget/main_screen/cardWalletWidget.dart';
-import 'package:itdat/widget/main_screen/myCardWidget.dart';
+import 'package:itdat/widget/main_screen/my_card_widget.dart';
 import 'package:itdat/widget/main_screen/myInfoWidget.dart';
 import 'package:itdat/widget/main_screen/openCardWidget.dart';
 import 'package:itdat/widget/nfc/nfcScreen.dart';
@@ -19,7 +19,7 @@ class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    myCard(),
+    MyCardWidget(),
     cardWallet(),
     openCard(),
     myInfo()
