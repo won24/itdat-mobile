@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/preview_screen.dart';
 import 'dart:io';
 
 class FormScreen extends StatefulWidget {
-  final String selectedTemplate;
+  final int templateId;
 
   const FormScreen({
     super.key,
-    required this.selectedTemplate
+    required this.templateId
   });
 
   @override
@@ -17,8 +18,12 @@ class FormScreen extends StatefulWidget {
 }
 
 class _FormScreenState extends State<FormScreen> {
-  final GlobalKey _tempatekey = GlobalKey(); // 캡쳐
-  File? _logoFile;
+
+  final CardModel cardModel = CardModel();
+  final _formKey = GlobalKey<FormState>();
+  final Map<String, dynamic> _userInfo = {};
+  File? _logo;
+
   final ImagePicker _picker = ImagePicker();
 
   final TextEditingController _name = TextEditingController();
@@ -29,37 +34,32 @@ class _FormScreenState extends State<FormScreen> {
   final TextEditingController _position = TextEditingController();
   final TextEditingController _department = TextEditingController();
   final TextEditingController _fax = TextEditingController();
-  
-  Future<void> _pickLogo() async{
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-    if(pickedFile != null){
+  Future<void> _pickLogo() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
       setState(() {
-        _logoFile = File(pickedFile.path);
+        _logo = File(pickedFile.path);
       });
     }
   }
 
-  Future<File> _saveTemplateAsImage() async {
-    try{
-      RenderRepaintBoundary boundary =
-          _tempatekey.currentContext?.findRenderObject() as RenderRepaintBoundary;
+  void changeInfo(){
+    String updateName = _name.text;
+  }
 
-      // 명함 위젯 이미지로 변환
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (byteData == null) throw Exception('Failed to convert image');
 
-      // 로컬에 저장
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/business_card.png';
-      final file = File(filePath);
-      await file.writeAsBytes(byteData.buffer.asUint8List());
-      return file;
-    } catch (e) {
-      throw Exception('명함 템플릿 이미지 저장 실패: $e');
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate() && _logo != null) {
+      _formKey.currentState!.save();
+      final businessCard = await cardModel.createBusinessCard(_userInfo, _logo!.path, widget.templateId);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => PreviewScreen(svgUrl: businessCard.svgUrl)),
+      );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +83,8 @@ class _FormScreenState extends State<FormScreen> {
               children: [
                 const Text('로고 선택', style: TextStyle(fontSize: 16),),
                 const SizedBox(height: 10,),
-                _logoFile != null ?
-                    Image.file(_logoFile!, width: 100, height: 100, fit: BoxFit.cover,)
+                _logo != null ?
+                    Image.file(_logo!, width: 100, height: 100, fit: BoxFit.cover,)
                     : const Text("선택된 로고가 없습니다."),
                 const SizedBox(height: 10,),
                 ElevatedButton.icon(
@@ -96,42 +96,9 @@ class _FormScreenState extends State<FormScreen> {
             ),
             const SizedBox(height: 20,),
 
-            // 템플릿 미리보기 (캡처 영역)
-            RepaintBoundary(
-              key: _templateKey,
-              child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _logoFile != null ? Image.file(_logoFile!, width: 80, height: 80) : const SizedBox(),
-                    Text('Name: ${_name.text}', style: const TextStyle(fontSize: 16)),
-                    Text('Position: ${_position.text}', style: const TextStyle(fontSize: 16)),
-                    Text('Phone: ${_phone.text}', style: const TextStyle(fontSize: 16)),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
             ElevatedButton(
-                onPressed: () async {
-                  try {
-                    File savedFile = await _saveTemplateAsImage();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PreviewScreen(imageFile: savedFile),
-                      ),
-                    );
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
-                }, child: const Text("미리보기 & 저장"))
+                onPressed: _submitForm,
+                child: const Text("명함 생성"))
           ],
         ),
       ),
