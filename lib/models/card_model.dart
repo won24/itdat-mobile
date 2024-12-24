@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:itdat/models/BusinessCard.dart';
 
 class CardModel{
 
@@ -6,14 +7,14 @@ class CardModel{
   final dio = Dio();
 
   // 유저 정보 가져오기
-  Future<List<dynamic>> searchUserInfo(int userCode) async{
+  Future<List<String>> getUserInfo(String userId) async{
 
     try{
-      final response = await dio.get("$baseUrl/userinfo/$userCode");
+      final response = await dio.get("$baseUrl/userinfo/$userId");
 
       if(response.statusCode == 200){
         print("회원 정보: $response");
-        return response.data as List<dynamic>;
+        return response.data as List<String>;
       }else{
         throw Exception("회원 정보 가져오기 실패");
       }
@@ -39,33 +40,44 @@ class CardModel{
 
 
   // 명함 저장
-  Future<List<Map<String,dynamic>>> createBusinessCard(
-      Map<String, dynamic> userInfo, String logoPath, int templateId) async {
+  Future<Map<String,dynamic>> createBusinessCard(
+      Map<String, dynamic> userInfo, String logoPath, int templateId, String userId) async {
 
     try{
       final formData = FormData.fromMap({
         'info': userInfo,
         'templateId': templateId,
         'logo': await MultipartFile.fromFile(logoPath, filename: 'logo.png'),
+        'userId': userId
       });
 
       final response = await dio.post('$baseUrl/save', data: formData);
-      return BusinessCard.fromJson(response.data);
+
+      if (response.statusCode == 200) {
+        return response.data as Map<String, dynamic>;
+      } else {
+        throw Exception('명함 생성 실패');
+      }
     }catch(e){
-      print("명함 저장 실패");
+      print("명함 생성 실패");
       throw Exception("Error: $e");
     }
   }
 
 
   // 명함 가져오기
-  Future<BusinessCard> getBusinessCard(int userId) async {
+  Future<List<BusinessCard>> getBusinessCard(String userId) async {
     try{
       final response = await dio.get("$baseUrl/$userId");
-      return BusinessCard.fromJson(response.data);
-    }catch(e){
-      print("명함 가져오기 실패");
-      throw Exception("Error: $e");
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        return data.map((item) => BusinessCard.fromJson(item)).toList();
+      } else {
+        throw Exception('명함 가져오기 실패');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
     }
   }
 }

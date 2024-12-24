@@ -1,20 +1,22 @@
 
 import 'package:flutter/material.dart';
-import 'package:itdat/screen/card/template_selection_screen.dart';
-import 'package:itdat/widget/my_card_screen/business_card_widget.dart';
-import 'package:itdat/widget/my_card_screen/history_widget.dart';
-import 'package:itdat/widget/my_card_screen/info_widget.dart';
-import 'package:itdat/widget/my_card_screen/portfolio_widget.dart';
+import 'package:itdat/widget/card/business_card_widget.dart';
+import 'package:itdat/widget/card/history_widget.dart';
+import 'package:itdat/widget/card/info_widget.dart';
+import 'package:itdat/widget/card/portfolio_widget.dart';
 
-class MyCardWidget extends StatefulWidget {
-  const MyCardWidget({super.key});
+
+class MyCardScreen extends StatefulWidget {
+  const MyCardScreen({super.key});
 
   @override
-  State<MyCardWidget> createState() => _MyCardWidgetState();
+  State<MyCardScreen> createState() => _MyCardWidgetState();
 }
 
-class _MyCardWidgetState extends State<MyCardWidget> {
-  
+class _MyCardWidgetState extends State<MyCardScreen> {
+
+  final userId = "asd";
+
   int _selectedIndex = 0;
   
   final List<Widget> _widgets = const[
@@ -30,10 +32,7 @@ class _MyCardWidgetState extends State<MyCardWidget> {
 
       body: Column(
         children: [
-          IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const TemplateSelectionScreen()));
-          }, icon: Icon(Icons.add, size: 64,)),
-            // BusinessCardWidget(),
+          BusinessCardWidget(userId: userId),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

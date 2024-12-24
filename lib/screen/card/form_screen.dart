@@ -7,10 +7,12 @@ import 'dart:io';
 
 class FormScreen extends StatefulWidget {
   final int templateId;
+  final String userId;
 
   const FormScreen({
     super.key,
-    required this.templateId
+    required this.templateId,
+    required this.userId
   });
 
   @override
@@ -21,7 +23,8 @@ class _FormScreenState extends State<FormScreen> {
 
   final CardModel cardModel = CardModel();
   final _formKey = GlobalKey<FormState>();
-  final Map<String, dynamic> _userInfo = {};
+  List<dynamic> _userInfo = [];
+  final Map<String, String> _cardInfo = {};
   File? _logo;
 
   final ImagePicker _picker = ImagePicker();
@@ -31,9 +34,26 @@ class _FormScreenState extends State<FormScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _companyName = TextEditingController();
   final TextEditingController _companyNumber = TextEditingController();
+  final TextEditingController _companyAddress = TextEditingController();
+  final TextEditingController _companyFax = TextEditingController();
   final TextEditingController _position = TextEditingController();
   final TextEditingController _department = TextEditingController();
-  final TextEditingController _fax = TextEditingController();
+
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+
+  Future<void> _loadUserInfo() async {
+    final userData = await cardModel.getUserInfo(widget.userId);
+    setState(() {
+      _userInfo = userData;
+    });
+  }
+
 
   Future<void> _pickLogo() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -44,19 +64,43 @@ class _FormScreenState extends State<FormScreen> {
     }
   }
 
-  void changeInfo(){
-    String updateName = _name.text;
-  }
-
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate() && _logo != null) {
       _formKey.currentState!.save();
-      final businessCard = await cardModel.createBusinessCard(_userInfo, _logo!.path, widget.templateId);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => PreviewScreen(svgUrl: businessCard.svgUrl)),
+
+      // 명함 정보 업데이트
+      _cardInfo.addAll({
+        'name': _name.text,
+        'phone': _phone.text,
+        'email': _email.text,
+        'companyName': _companyName.text,
+        'companyNumber': _companyNumber.text,
+        'companyAddress': _companyAddress.text,
+        'companyFax': _companyFax.text,
+        'position': _position.text,
+        'department': _department.text,
+      });
+
+      // 명함 생성 요청 보내기
+      final businessCard = await cardModel.createBusinessCard(
+        _cardInfo,
+        _logo!.path,
+        widget.templateId,
+        widget.userId
       );
+
+      // 만들어진 명함 보기
+      if (businessCard.containsKey('svgUrl')) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => PreviewScreen(svgUrl: businessCard['svgUrl'])),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('명함 생성 실패. 다시 시도해주세요.')),
+        );
+      }
     }
   }
 
@@ -66,16 +110,48 @@ class _FormScreenState extends State<FormScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(controller: _name, decoration: const InputDecoration(labelText: 'Name')),
-            TextField(controller: _position, decoration: const InputDecoration(labelText: 'Position')),
-            TextField(controller: _department, decoration: const InputDecoration(labelText: 'Department')),
-            TextField(controller: _phone, decoration: const InputDecoration(labelText: 'Phone')),
-            TextField(controller: _email, decoration: const InputDecoration(labelText: 'Email')),
-            TextField(controller: _fax, decoration: const InputDecoration(labelText: 'Fax')),
-            TextField(controller: _companyName, decoration: const InputDecoration(labelText: 'Company Name')),
-            TextField(controller: _companyNumber, decoration: const InputDecoration(labelText: 'Company Number')),
+        child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+              TextFormField(
+              controller: _name,
+              decoration: const InputDecoration(labelText: '이름'),
+              validator: (value) => value == null || value.isEmpty ? '이름 필수 입력' : null,
+            ),
+            TextFormField(
+              controller: _phone,
+              decoration: const InputDecoration(labelText: '핸드폰 번호'),
+              validator: (value) => value == null || value.isEmpty ? '핸드폰 번호 필수 입력' : null,
+            ),
+            TextFormField(
+              controller: _email,
+              decoration: const InputDecoration(labelText: '이메일'),
+            ),
+            TextFormField(
+              controller: _companyName,
+              decoration: const InputDecoration(labelText: '회사 이름'),
+            ),
+            TextFormField(
+              controller: _companyNumber,
+              decoration: const InputDecoration(labelText: '회사 연락처'),
+            ),
+            TextFormField(
+              controller: _companyAddress,
+              decoration: const InputDecoration(labelText: '회사 주소'),
+            ),
+            TextFormField(
+              controller: _companyFax,
+              decoration: const InputDecoration(labelText: '팩스 번호'),
+            ),
+            TextFormField(
+              controller: _department,
+              decoration: const InputDecoration(labelText: '부서'),
+            ),
+            TextFormField(
+              controller: _position,
+              decoration: const InputDecoration(labelText: '직급'),
+            ),
             const SizedBox(height: 20),
 
             Column(
@@ -95,13 +171,15 @@ class _FormScreenState extends State<FormScreen> {
               ],
             ),
             const SizedBox(height: 20,),
-
             ElevatedButton(
                 onPressed: _submitForm,
                 child: const Text("명함 생성"))
           ],
         ),
       ),
+      )
     );
   }
 }
+
+

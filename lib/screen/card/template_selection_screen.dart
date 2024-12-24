@@ -3,7 +3,13 @@ import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/form_screen.dart';
 
 class TemplateSelectionScreen extends StatefulWidget {
-  const TemplateSelectionScreen({super.key});
+
+  final String userId;
+
+  const TemplateSelectionScreen({
+    super.key,
+    required this.userId
+  });
 
   @override
   State<TemplateSelectionScreen> createState() => _TemplateSelectionScreenState();
@@ -49,7 +55,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                      builder: (_) => FormScreen(templateId: templateId),) // 선택한 템플릿 ID 전달
+                      builder: (_) => FormScreen(templateId: templateId, userId: widget.userId),)
                   );
                 },
               );

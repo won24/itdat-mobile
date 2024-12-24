@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:itdat/widget/main_screen/cardWalletWidget.dart';
-import 'package:itdat/widget/main_screen/my_card_widget.dart';
-import 'package:itdat/widget/main_screen/myInfoWidget.dart';
-import 'package:itdat/widget/main_screen/openCardWidget.dart';
+import 'package:itdat/screen/main/card_wallet_screen.dart';
+import 'package:itdat/screen/main/my_card_screen.dart';
+import 'package:itdat/screen/main/my_info_screen.dart';
+import 'package:itdat/screen/main/open_card_screen.dart';
 import 'package:itdat/widget/nfc/nfcScreen.dart';
 import 'package:itdat/widget/qr_scan/qrScreen.dart';
 import 'package:itdat/widget/setting/settingWidget.dart';
@@ -19,10 +19,10 @@ class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    MyCardWidget(),
-    cardWallet(),
-    openCard(),
-    myInfo()
+    MyCardScreen(),
+    CardWalletScreen(),
+    OpenCardScreen(),
+    MyInfoScreen()
   ];
   void onTapped(int index) {
     setState(() {
