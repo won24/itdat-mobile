@@ -21,5 +21,10 @@
   "open" : "Open",
   "camera" : "Camera",
   "location" : "Location",
-  "storage" : "Storage"
+  "storage" : "Storage",
+  "nfc" : "NFC",
+  "logout" : "Logout",
+  "login" : "Login",
+  "logoutSuccessful" : "Logout Successful",
+  "logoutError" : "Logout Error"
 }

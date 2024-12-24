@@ -21,5 +21,11 @@
   "open" : "열기",
   "camera" : "카메라",
   "location" : "위치",
-  "storage" : "저장소"
+  "storage" : "저장소",
+  "nfc" : "NFC 쓰기",
+  "logout" : "로그아웃",
+  "login" : "로그인",
+  "logoutSuccessful" : "로그아웃 성공",
+  "logoutError" : "로그아웃 오류"
+
 }
