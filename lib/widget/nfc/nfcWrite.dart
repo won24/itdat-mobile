@@ -40,9 +40,9 @@ class NfcWritePage extends StatelessWidget {
       }
 
       NdefMessage message = NdefMessage([
-        NdefRecord.createText('이름: $name'),
-        NdefRecord.createText('전화번호: $phone'),
-        NdefRecord.createText('이메일: $email'),
+        NdefRecord.createText('name: $name'),
+        NdefRecord.createText('number: $phone'),
+        NdefRecord.createText('email: $email'),
       ]);
 
       try {
