@@ -40,9 +40,10 @@ class _MainLayoutState extends State<MainLayout> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(65),
         child: AppBar(
-          title: Text(
-            'ITDAT',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          title: Image.asset(
+            'assets/splash.png',
+            fit: BoxFit.contain,
+            height: 50, // 원하는 높이로 조정
           ),
           centerTitle: false,
           actions: [
