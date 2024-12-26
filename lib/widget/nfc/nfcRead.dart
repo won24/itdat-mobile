@@ -113,7 +113,7 @@ class _NfcReadPageState extends State<NfcReadPage> with SingleTickerProviderStat
     Future.delayed(Duration(seconds: 30), () {
       if (_isReading) {
         _stopNfcRead();
-        _updateNfcData('태그를 읽기 위해 NFC 카드를 기기에 가까이 대세요.');
+        _updateNfcData('태그를 읽기 위해 NFC 카드를 기기에 가까 이 대세요.');
       }
     });
   }
