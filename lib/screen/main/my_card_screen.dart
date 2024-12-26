@@ -32,7 +32,9 @@ class _MyCardWidgetState extends State<MyCardScreen> {
 
       body: Column(
         children: [
-          BusinessCardWidget(userId: userId),
+          Expanded(child:
+            BusinessCardWidget(userId: userId),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

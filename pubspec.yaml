@@ -8,6 +8,7 @@ environment:
   sdk: ^3.5.4
 
 dependencies:
+  http: ^1.2.2
   qr_flutter: ^4.1.0
   app_settings: ^5.1.1
   nfc_manager: ^3.5.0
@@ -22,6 +23,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   dio: ^5.7.0
   flutter_svg: ^2.0.16
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
