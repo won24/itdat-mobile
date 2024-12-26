@@ -29,7 +29,7 @@ class _FormScreenState extends State<FormScreen> {
   final TextEditingController _position = TextEditingController();
   final TextEditingController _department = TextEditingController();
   final TextEditingController _fax = TextEditingController();
-  
+
   Future<void> _pickLogo() async{
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
@@ -40,26 +40,26 @@ class _FormScreenState extends State<FormScreen> {
     }
   }
 
-  Future<File> _saveTemplateAsImage() async {
-    try{
-      RenderRepaintBoundary boundary =
-          _tempatekey.currentContext?.findRenderObject() as RenderRepaintBoundary;
-
-      // 명함 위젯 이미지로 변환
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (byteData == null) throw Exception('Failed to convert image');
-
-      // 로컬에 저장
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/business_card.png';
-      final file = File(filePath);
-      await file.writeAsBytes(byteData.buffer.asUint8List());
-      return file;
-    } catch (e) {
-      throw Exception('명함 템플릿 이미지 저장 실패: $e');
-    }
-  }
+  // Future<File> _saveTemplateAsImage() async {
+  //   try{
+  //     RenderRepaintBoundary boundary =
+  //         _tempatekey.currentContext?.findRenderObject() as RenderRepaintBoundary;
+  //
+  //     // 명함 위젯 이미지로 변환
+  //     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+  //     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+  //     if (byteData == null) throw Exception('Failed to convert image');
+  //
+  //     // 로컬에 저장
+  //     final directory = await getApplicationDocumentsDirectory();
+  //     final filePath = '${directory.path}/business_card.png';
+  //     final file = File(filePath);
+  //     await file.writeAsBytes(byteData.buffer.asUint8List());
+  //     return file;
+  //   } catch (e) {
+  //     throw Exception('명함 템플릿 이미지 저장 실패: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class _FormScreenState extends State<FormScreen> {
 
             // 템플릿 미리보기 (캡처 영역)
             RepaintBoundary(
-              key: _templateKey,
+              key: _tempatekey,
               child: Container(
                 color: Colors.white,
                 padding: const EdgeInsets.all(16),
@@ -116,22 +116,22 @@ class _FormScreenState extends State<FormScreen> {
 
             const SizedBox(height: 20),
 
-            ElevatedButton(
-                onPressed: () async {
-                  try {
-                    File savedFile = await _saveTemplateAsImage();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PreviewScreen(imageFile: savedFile),
-                      ),
-                    );
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
-                }, child: const Text("미리보기 & 저장"))
+            // ElevatedButton(
+            //     onPressed: () async {
+            //       try {
+            //         File savedFile = await _saveTemplateAsImage();
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (context) => PreviewScreen(imageFile: savedFile),
+            //           ),
+            //         );
+            //       } catch (e) {
+            //         ScaffoldMessenger.of(context).showSnackBar(
+            //           SnackBar(content: Text('Error: $e')),
+            //         );
+            //       }
+            //     }, child: const Text("미리보기 & 저장"))
           ],
         ),
       ),
