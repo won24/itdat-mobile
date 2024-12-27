@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/splash.png',
+                  'assets/logoblack.png',
                   width: 80, // 로고의 너비 조정
                   height: 100, // 로고의 높이 조정
                 ),

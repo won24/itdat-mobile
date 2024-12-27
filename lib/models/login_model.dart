@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class LoginModel {
-  final String baseUrl = 'http://112.221.66.174:8000';  // Replace with your actual API base URL
+  final String baseUrl = 'http://112.221.66.174:8000';
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
