@@ -1,17 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../widget/login_screen/login_service.dart';
+import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 class AuthProvider with ChangeNotifier {
   final AuthService _authService = AuthService();
   bool _isLoggedIn = false;
   final FlutterSecureStorage _storage = FlutterSecureStorage();
+  final Dio _dio = Dio();
 
   bool get isLoggedIn => _isLoggedIn;
 
   Future<bool> checkLoginStatus() async {
-    // Secure Storage에서 로그인 상태 확인
     String? token = await _storage.read(key: 'auth_token');
     print("토큰확인: $token");
 
@@ -36,5 +40,4 @@ class AuthProvider with ChangeNotifier {
     _isLoggedIn = false;
     notifyListeners();
   }
-
 }
