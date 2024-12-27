@@ -5,21 +5,19 @@ import 'package:http/http.dart' as http;
 
 class CardModel{
 
-  final baseUrl = "http://112.221.66.174:8001/card";
+  final baseUrl = "http://112.221.66.174:8001/card";  // 원
   final dio = Dio();
 
   // 유저 정보 가져오기
-  Future<List<String>> getUserInfo(String userId) async{
-    final dio = Dio();
+  Future<Map<String, dynamic>> getUserById(String userId) async {
 
     try{
-      final response = await dio.get("$baseUrl/userinfo/$userId");
+      final response = await http.get(Uri.parse("$baseUrl/userinfo/$userId"));
 
       if(response.statusCode == 200){
-        print("회원 정보: $response");
-        return response.data as List<String>;
-      }else{
-        throw Exception("회원 정보 가져오기 실패");
+        return json.decode(response.body);
+      } else {
+        throw Exception('회원 정보 가져오기 실패');
       }
     }catch(e){
       print("회원 정보 가져오기 실패");
@@ -27,17 +25,25 @@ class CardModel{
     }
   }
 
+
   // 템플릿 가져오기
-  Future<List<Map<String, dynamic>>> getTemplates() async {
+  Future<List<dynamic>> getTemplates() async {
     try{
-      final response = await dio.get("$baseUrl/templates");
-      print("템플릿 : $response");
-      return List<Map<String, dynamic>>.from(response.data);
+      final response = await http.get(Uri.parse('$baseUrl/templates'));
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('템플릿 가져오기 실패');
+      }
     }catch(e){
       print("템플릿 가져오기 실패");
-      throw Exception("Error: $e");
+      throw Exception("템플릿 가져오기 Error: $e");
     }
   }
+
+
+
 
   // Svg content 로 변환
   Future<String> fetchSvgContent(String svgUrl) async {
