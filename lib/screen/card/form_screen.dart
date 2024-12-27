@@ -43,6 +43,8 @@ class _FormScreenState extends State<FormScreen> {
   final TextEditingController _companyFax = TextEditingController();
   final TextEditingController _position = TextEditingController();
   final TextEditingController _department = TextEditingController();
+  final TextEditingController _fax = TextEditingController();
+
 
   String svgData = "";
   Timer? _debounce; // 딜레이를 위한 Timer
@@ -254,6 +256,7 @@ class _FormScreenState extends State<FormScreen> {
             ElevatedButton(
                 onPressed: _submitForm,
                 child: const Text("명함 생성"))
+
           ],
         ),
       ),

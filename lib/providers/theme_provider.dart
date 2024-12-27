@@ -1,12 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ThemeProvider with ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   ThemeMode get themeMode => _themeMode;
 
-  void setThemeMode(ThemeMode themeMode) {
+  ThemeProvider() {
+    _loadThemeMode();
+  }
+
+  Future<void> _loadThemeMode() async {
+    String? savedThemeMode = await _storage.read(key: 'theme_mode');
+    if (savedThemeMode != null) {
+      _themeMode = ThemeMode.values.firstWhere(
+            (e) => e.toString() == savedThemeMode,
+        orElse: () => ThemeMode.system,
+      );
+      notifyListeners();
+    }
+  }
+
+  Future<void> setThemeMode(ThemeMode themeMode) async {
     _themeMode = themeMode;
+    await _storage.write(key: 'theme_mode', value: themeMode.toString());
     notifyListeners();
   }
 

@@ -8,6 +8,8 @@ import 'package:itdat/widget/qr_scan/qrScreen.dart';
 import 'package:itdat/widget/setting/settingWidget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../widget/nfc/nfcRead.dart';
+
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
 
@@ -38,9 +40,10 @@ class _MainLayoutState extends State<MainLayout> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(65),
         child: AppBar(
-          title: Text(
-            'ITDAT',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          title: Image.asset(
+            'assets/splash.png',
+            fit: BoxFit.contain,
+            height: 50, // 원하는 높이로 조정
           ),
           centerTitle: false,
           actions: [
@@ -49,7 +52,7 @@ class _MainLayoutState extends State<MainLayout> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NfcScreen()),
+                  MaterialPageRoute(builder: (context) => NfcReadPage()),
                 );
               },
 
