@@ -41,7 +41,7 @@ class _MainLayoutState extends State<MainLayout> {
         preferredSize: Size.fromHeight(65),
         child: AppBar(
           title: Image.asset(
-            'assets/splash.png',
+            isDarkMode ? 'assets/logowhite.png' : 'assets/logoblack.png',
             fit: BoxFit.contain,
             height: 50, // 원하는 높이로 조정
           ),

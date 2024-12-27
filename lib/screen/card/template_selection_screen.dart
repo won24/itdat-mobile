@@ -23,6 +23,8 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
   late Future<List<Map<String, dynamic>>> _templates;
 
   @override
+
+
   void initState() {
     super.initState();
     _templates = _cardModel.getTemplates();
