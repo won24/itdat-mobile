@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:itdat/models/login_model.dart';
 import 'package:itdat/providers/theme_provider.dart';
 import 'package:itdat/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => LocaleProvider()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
+        Provider(create: (context) => LoginModel()),
       ],
       child: MyApp(),
     ),

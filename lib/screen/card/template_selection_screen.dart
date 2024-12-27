@@ -112,12 +112,12 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                     await saveSvgToLocal(svgContent);
 
                     // FormScreen으로 이동
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => FormScreen(templateId: templateId, userId: widget.userId),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (_) => FormScreen(templateId: templateId, userId: widget.userId),
+                    //   ),
+                    // );
                   } catch (e) {
                     print("Error: $e");
                   }
