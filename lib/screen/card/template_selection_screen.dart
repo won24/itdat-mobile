@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:itdat/models/card_model.dart';
-import 'package:itdat/screen/card/form_screen.dart';
+import 'package:itdat/screen/card/personal_card_form_screen.dart';
+import 'package:itdat/screen/card/template/no_1.dart';
+import 'package:itdat/screen/card/template/no_2.dart';
+import 'package:itdat/screen/card/template/no_3.dart';
 
 class TemplateSelectionScreen extends StatefulWidget {
 
@@ -18,33 +20,16 @@ class TemplateSelectionScreen extends StatefulWidget {
 
 class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
 
-  List templates = [];
+  List templates = [
+    No1,
+    No2,
+    No3
+  ];
+
   String selectedTemplate = "";
   final CardModel cardModel = CardModel();
   final String serverBaseUrl = "http://112.221.66.174:8001";
 
-  @override
-  void initState() {
-    super.initState();
-    fetchTemplates();
-  }
-
-  Future<void> fetchTemplates() async {
-    try {
-      final data = await cardModel.getTemplates();
-      setState(() {
-        templates = data.map((template) {
-          return {
-            'templateId': template['templateId'],
-            'svgUrl': "$serverBaseUrl${template['svgUrl']}",
-            'thumbnailUrl': "$serverBaseUrl${template['thumbnailUrl']}",
-          };
-        }).toList();
-      });
-    } catch (e) {
-      print("Error 템플릿 가져오기: $e");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,29 +44,24 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
           mainAxisSpacing: 10,
         ),
         itemCount: templates.length,
-        itemBuilder: (context, index) {
-          final template = templates[index];
+        itemBuilder: (context, i) {
+          final template = templates[i];
           return GestureDetector(
             onTap: () =>
                 setState(() {
-                  selectedTemplate = template['svgUrl'];
+                  selectedTemplate = template;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FormScreen(templateUrl:template['svgUrl'], userId: widget.userId),
+                      // builder: (context) => FormScreen(templateUrl:template['svgUrl'], userId: widget.userId),
+                      builder: (context) => PersonalCardFormScreen(userId: widget.userId, selectedTemplate: selectedTemplate
+                      )
                     ),
                   );
-                }),
+                },
+                ),
             child: Card(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SvgPicture.network(
-                        template['thumbnailUrl'], fit: BoxFit.contain),
-                  ),
-                  Text(template['templateId'].toString()),
-                ],
-              ),
+              child: template, // 템플릿 위젯 표시
             ),
           );
         },
@@ -89,3 +69,4 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
     );
   }
 }
+

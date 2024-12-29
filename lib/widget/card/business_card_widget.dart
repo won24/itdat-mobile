@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template_selection_screen.dart';
 
@@ -16,7 +15,7 @@ class BusinessCardWidget extends StatefulWidget {
 }
 
 class _BusinessCardWidgetState extends State<BusinessCardWidget> {
-  late Future<List<BusinessCard>> _businessCards;
+  late Future<dynamic> _businessCards;
 
   @override
   void initState() {
@@ -27,7 +26,7 @@ class _BusinessCardWidgetState extends State<BusinessCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<BusinessCard>>(
+      body: FutureBuilder<dynamic>(
         future: _businessCards,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

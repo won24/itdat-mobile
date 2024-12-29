@@ -1,18 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
-import 'package:itdat/screen/card/preview_screen.dart';
+
 
 class FormScreen extends StatefulWidget {
-  final String templateUrl;
   final String userId;
 
   const FormScreen({
     super.key,
-    required this.templateUrl,
-    required this.userId
+    required this.userId,
   });
 
   @override
@@ -23,91 +19,111 @@ class _FormScreenState extends State<FormScreen> {
 
   final CardModel cardModel = CardModel();
   Map<String, dynamic>? userData;
-  XFile? logoImage;
+  late BusinessCard _card;
 
   @override
   void initState() {
     super.initState();
     fetchUserData();
+    _card = BusinessCard(
+        userName: "",
+        phone: "",
+        email: "",
+        companyName: "",
+        companyNumber: "",
+        companyAddress: "",
+        companyFax: "",
+        department: "",
+        position: ""
+    );
   }
 
-  Future<void> fetchUserData() async {
+  Future<dynamic> fetchUserData() async {
     try {
       final data = await cardModel.getUserById(widget.userId);
       setState(() {
         userData = data;
-        print("유저 정보: $data");
       });
     } catch (e) {
       print("Error 유저 정보 가져오기: $e");
     }
   }
 
-  Future<void> pickLogo() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedImage != null) {
-      setState(() {
-        logoImage = pickedImage;
-      });
+  void _saveCard() async {
+    try {
+      await cardModel.createBusinessCard(widget.userId, _card);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("새로운 명함이 생성되었습니다.")));
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("명함 생성에 실패했습니다. 다시 시도해주세요.")));
     }
   }
-
-  void navigateToPreview() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PreviewScreen(userData: userData!, logoPath: logoImage?.path, templateUrl: widget.templateUrl),
-      ),
-    );
-  }
-
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("명함 정보 확인")),
-      body: userData == null
-          ? Center(child: CircularProgressIndicator())
-          : ListView(
-        padding: EdgeInsets.all(16.0),
-        children: [
-          ...[
-            'userName',
-            'userPhone',
-            'userEmail',
-            'company',
-            'companyPhone',
-            'companyAddr',
-            'companyFax',
-            'companyRank',
-            'companyDept'
-          ].map((field) {
-            return TextField(
-              controller: TextEditingController(text: userData![field]),
-              decoration: InputDecoration(labelText: field),
-              onChanged: (value) {
-                userData![field] = value;
-              },
-            );
-          }).toList(),
+      appBar: AppBar(title: Text("명함 만들기")),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              initialValue: userData!['userName'],
+              decoration: InputDecoration(labelText: "이름"),
+              onChanged: (value) => _card.userName = value,
+            ),
+            TextFormField(
+              initialValue: userData!['phone'],
+              decoration: InputDecoration(labelText: "연락처"),
+              onChanged: (value) => _card.phone = value,
+            ),
+            TextFormField(
+              initialValue: userData!['userEmail'],
+              decoration: InputDecoration(labelText: "이메일"),
+              onChanged: (value) => _card.email = value,
+            ),
+            TextFormField(
+              initialValue: userData!['company'],
+              decoration: InputDecoration(labelText: "회사 이름"),
+              onChanged: (value) => _card.companyName = value,
+            ),
+            TextFormField(
+              initialValue: userData!['companyPhone'],
+              decoration: InputDecoration(labelText: "회사 연락처"),
+              onChanged: (value) => _card.companyNumber = value,
+            ),
+            TextFormField(
+              initialValue: userData!['companyAddr'] +
+                  userData!['companyAddrDetail'],
+              decoration: InputDecoration(labelText: "회사 주소"),
+              onChanged: (value) => _card.companyAddress = value,
+            ),
+            TextFormField(
+              initialValue: userData!['companyFax'],
+              decoration: InputDecoration(labelText: "팩스번호"),
+              onChanged: (value) => _card.companyFax = value,
+            ),
+            TextFormField(
+              initialValue: userData!['companyDept'],
+              decoration: InputDecoration(labelText: "부서"),
+              onChanged: (value) => _card.department = value,
+            ),
+            TextFormField(
+              initialValue: userData!['companyRank'],
+              decoration: InputDecoration(labelText: "직책"),
+              onChanged: (value) => _card.position = value,
+            ),
+            SizedBox(height: 20),
 
-
-          logoImage == null
-              ? Text("선택된 로고 없음")
-              : Image.file(File(logoImage!.path)),
-          ElevatedButton( onPressed: pickLogo, child: Text("로고 선택"),),
-
-          ElevatedButton(
-            onPressed: navigateToPreview,
-            child: Text("미리보기"),
-          ),
-        ],
+            ElevatedButton(
+              onPressed: _saveCard,
+              child: Text("저장"),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-

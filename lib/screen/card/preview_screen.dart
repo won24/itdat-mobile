@@ -1,54 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:itdat/screen/card/personal_card_form_screen.dart';
+import 'package:itdat/screen/card/template/no_1.dart';
+import 'package:itdat/screen/card/template/no_2.dart';
+import 'package:itdat/screen/card/template/no_3.dart';
 
 class PreviewScreen extends StatelessWidget {
-  final Map<String, dynamic> userData;
-  final String? logoPath;
-  final String templateUrl;
+  final String userId;
+  final String selectedTemplate;
+  final Map<String, dynamic> cardInfo;
+  final Map<String, bool> fieldVisibility;
 
   const PreviewScreen({
     super.key,
-    required this.userData,
-    required this.logoPath,
-    required this.templateUrl
+    required this.userId,
+    required this.selectedTemplate,
+    required this.cardInfo,
+    required this.fieldVisibility,
   });
-
-  String generateSvg(Map<String, dynamic> userData) {
-    return """
-    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
-      <text x="10" y="30" font-size="20">${userData['name']}</text>
-      <text x="10" y="60" font-size="15">${userData['position']} - ${userData['department']}</text>
-      <text x="10" y="90" font-size="12">${userData['phone']}</text>
-      <text x="10" y="120" font-size="12">${userData['email']}</text>
-      <text x="10" y="150" font-size="12">${userData['companyName']}</text>
-      <text x="10" y="180" font-size="12">${userData['companyAddress']}</text>
-      <text x="10" y="210" font-size="12">Tel: ${userData['companyNumber']} Fax: ${userData['companyFax']}</text>
-    </svg>
-    """;
-  }
 
 
   @override
   Widget build(BuildContext context) {
-    String svgContent = generateSvg(userData);
-
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Text(svgContent, style: TextStyle(fontSize: 12)),
+      appBar: AppBar(title: Text("미리보기")),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: buildBusinessCard(selectedTemplate, cardInfo),
             ),
-            ElevatedButton(
-              onPressed: () {
-                // 저장
-              },
-              child: Text("명함 추가"),
-            ),
-          ],
-        ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PersonalCardFormScreen(
+                    userId: userId,
+                    selectedTemplate: selectedTemplate,
+                  ),
+                ),
+              );
+            },
+            child: Text("돌아가기"),
+          ),
+        ],
       ),
     );
   }
 }
+
+Widget buildBusinessCard(String template, Map<String, dynamic> cardInfo) {
+  switch (template) {
+    case 'No1':
+      return No1(cardInfo: cardInfo);
+    case 'No2':
+      return No2(cardInfo: cardInfo);
+    case 'No3':
+      return No3(cardInfo: cardInfo);
+    default:
+      return No2(cardInfo: cardInfo); // 기본값
+  }
+}
+
