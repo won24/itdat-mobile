@@ -1,19 +1,15 @@
 class BusinessCard {
-  final int cardId;
-  final String userName;
-  final String phone;
-  final String email;
-  final String companyName;
-  final String companyNumber;
-  final String companyAddress;
-  final String companyFax;
-  final String department;
-  final String position;
-  final String logoUrl;
-  final String svgUrl;
+  late final String userName;
+  late final String phone;
+  late final String email;
+  late final String companyName;
+  late final String companyNumber;
+  late final String companyAddress;
+  late final String companyFax;
+  late final String department;
+  late final String position;
 
   BusinessCard({
-    required this.cardId,
     required this.userName,
     required this.phone,
     required this.email,
@@ -23,24 +19,33 @@ class BusinessCard {
     required this.companyFax,
     required this.department,
     required this.position,
-    required this.logoUrl,
-    required this.svgUrl,
   });
 
   factory BusinessCard.fromJson(Map<String, dynamic> json) {
     return BusinessCard(
-      cardId: json['card_id'],
-      userName: json['user_name'],
+      userName: json['userName'],
       phone: json['phone'],
       email: json['email'],
-      companyName: json['company_name'],
-      companyNumber: json['company_number'],
-      companyAddress: json['company_address'],
-      companyFax: json['company_fax'],
+      companyName: json['companyName'],
+      companyNumber: json['companyNumber'],
+      companyAddress: json['companyAddress'],
+      companyFax: json['companyFax'],
       department: json['department'],
       position: json['position'],
-      logoUrl: json['logo_url'],
-      svgUrl: json['svg_url'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userName': userName,
+      'phone': phone,
+      'email': email,
+      'companyName': companyName,
+      'companyNumber': companyNumber,
+      'companyAddress': companyAddress,
+      'companyFax': companyFax,
+      'position': position,
+      'department': department,
+    };
   }
 }
