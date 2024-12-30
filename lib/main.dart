@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/providers/theme_provider.dart';
 import 'package:itdat/providers/auth_provider.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:itdat/screen/mainLayout.dart';
 import 'package:itdat/widget/login_screen/login_screen.dart';
@@ -10,6 +11,7 @@ import 'package:itdat/providers/locale_provider.dart';
 import 'package:itdat/providers/font_provider.dart'; // FontProvider import 추가
 
 void main() {
+  KakaoSdk.init(nativeAppKey: '387812a6ae2897c3e9e59952c211374e');
   runApp(
     MultiProvider(
       providers: [
