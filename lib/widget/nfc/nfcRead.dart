@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:vibration/vibration.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'dart:async';
 
@@ -13,7 +14,7 @@ class _NfcReadPageState extends State<NfcReadPage> {
   bool _isReading = false;
   bool _isRetryVisible = false;
   Timer? _vibrationTimer;
-  String _baseText = 'NFC 태그를\n가까이 가져다 주세요';
+  late String _baseText = AppLocalizations.of(context)!.nfctag;
   String _dots = '';
   Timer? _textAnimationTimer;
 
@@ -43,7 +44,7 @@ class _NfcReadPageState extends State<NfcReadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('NFC 읽기'),
+        title: Text(AppLocalizations.of(context)!.nfcread),
       ),
       body: Center(
         child: Column(
@@ -54,13 +55,13 @@ class _NfcReadPageState extends State<NfcReadPage> {
               child: Column(
                 children: [
                   Expanded(
-                    flex: 5,
+                    flex: 3,
                     child: _isReading
                         ? Lottie.asset('assets/nfcAnime.json')
                         : SizedBox.shrink(),
                   ),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Center(
                       child: RichText(
                         textAlign: TextAlign.center,
@@ -68,7 +69,9 @@ class _NfcReadPageState extends State<NfcReadPage> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
                           ),
                           children: [
                             TextSpan(text: _baseText),
