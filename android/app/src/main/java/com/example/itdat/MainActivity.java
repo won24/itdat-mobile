@@ -79,6 +79,8 @@ public class MainActivity extends FlutterActivity {
             // Redirect URI 전달
             new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), REDIRECT_URI_CHANNEL)
                     .invokeMethod("onRedirectUriReceived", uri);
+        } else {
+            Log.d("RedirectURI", "No URI received in onNewIntent");
         }
     }
 
