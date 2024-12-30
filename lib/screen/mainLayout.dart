@@ -3,7 +3,6 @@ import 'package:itdat/screen/main/card_wallet_screen.dart';
 import 'package:itdat/screen/main/my_card_screen.dart';
 import 'package:itdat/screen/main/my_info_screen.dart';
 import 'package:itdat/screen/main/open_card_screen.dart';
-import 'package:itdat/widget/nfc/nfcScreen.dart';
 import 'package:itdat/widget/qr_scan/qrScreen.dart';
 import 'package:itdat/widget/setting/settingWidget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -46,9 +45,15 @@ class _MainLayoutState extends State<MainLayout> {
             height: 50, // 원하는 높이로 조정
           ),
           centerTitle: false,
+          titleSpacing: 12,
           actions: [
             IconButton(
-              icon: Icon(Icons.nfc_rounded, size: 28),
+              icon: Image.asset(
+                'assets/nfc.png',
+                width: 25,
+                height: 25,
+                color: isDarkMode ? Colors.grey[200] : Colors.black,
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -58,7 +63,12 @@ class _MainLayoutState extends State<MainLayout> {
 
             ),
             IconButton(
-              icon: Icon(Icons.qr_code, size: 28),
+              icon: Image.asset(
+                'assets/qr.png',
+                width: 26,
+                height: 26,
+                color: isDarkMode ? Colors.grey[200] : Colors.black,
+              ),
               onPressed: () {
                 Navigator.push(
                   context,

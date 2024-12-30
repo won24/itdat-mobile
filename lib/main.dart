@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:itdat/models/login_model.dart';
 import 'package:itdat/providers/theme_provider.dart';
 import 'package:itdat/providers/auth_provider.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:itdat/screen/mainLayout.dart';
 import 'package:itdat/widget/login_screen/login_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/providers/locale_provider.dart';
+import 'package:itdat/providers/font_provider.dart'; // FontProvider import 추가
 
 void main() {
+  KakaoSdk.init(nativeAppKey: '387812a6ae2897c3e9e59952c211374e');
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => LocaleProvider()),
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(create: (context) => AuthProvider()),
-        Provider(create: (context) => LoginModel()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => FontProvider()), // FontProvider 추가
       ],
       child: MyApp(),
     ),
@@ -25,8 +26,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Consumer3<LocaleProvider, ThemeProvider, AuthProvider>(

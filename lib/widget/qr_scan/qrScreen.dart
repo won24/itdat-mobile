@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'qr_scanner_widget.dart';
 import 'qr_generator_widget.dart';
-import 'image_qr_scanner_widget.dart';
 
 class QRScanScreen extends StatefulWidget {
   const QRScanScreen({Key? key}) : super(key: key);
@@ -26,7 +25,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.qrcodescan)),
       body: _screens[_currentIndex],
       bottomNavigationBar: Container(
-        height: 160, // 원하는 높이로 조절
+        height: 180, // 원하는 높이로 조절
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) {
@@ -37,11 +36,11 @@ class _QRScanScreenState extends State<QRScanScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.qr_code_scanner),
-              label: 'Scan',
+              label: AppLocalizations.of(context)!.scan,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.qr_code),
-              label: 'Generate',
+              label: AppLocalizations.of(context)!.generate,
             ),
 
           ],
