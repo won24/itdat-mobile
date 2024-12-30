@@ -15,7 +15,7 @@ class MyCardScreen extends StatefulWidget {
 
 class _MyCardWidgetState extends State<MyCardScreen> {
 
-  final userId = "asd";
+  final userId = "user16";
 
   int _selectedIndex = 0;
   

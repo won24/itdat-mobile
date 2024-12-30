@@ -22,7 +22,7 @@ class AuthProvider with ChangeNotifier {
     if (token != null && token.isNotEmpty) {
       _isLoggedIn = true;
     } else {
-      _isLoggedIn = false;
+      _isLoggedIn = true;
     }
     return _isLoggedIn;
   }

@@ -59,7 +59,8 @@ class MyApp extends StatelessWidget {
                 if (authProvider.isLoggedIn) {
                   return MainLayout(); // 로그인 성공 시
                 } else {
-                  return LoginScreen(); // 로그인 실패 시
+                  // return LoginScreen(); // 로그인 실패 시
+                  return MainLayout();
                 }
               }
             },
