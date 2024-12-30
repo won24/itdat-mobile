@@ -83,7 +83,7 @@ class SocialsModel {
 
   // Naver 로그인
   Future<Map<String, dynamic>> naverLogin(String accessToken) async {
-    final String naverUrl = '$baseUrl/api/oauth/naver';
+    final String naverUrl = '$baseUrl/api/oauth/callback/naver';
     print('Naver API 호출 시작: $naverUrl');
     print('naver 전송 데이터: $accessToken');
 

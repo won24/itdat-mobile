@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
+
 class NaverLoginScreen extends StatelessWidget {
   String? _currentState;
 
@@ -28,12 +29,11 @@ class NaverLoginScreen extends StatelessWidget {
         final userInfo = await _getUserInfo(accessToken);
         print('Naver 사용자 정보: $userInfo');
 
-        // 결과 처리
         if (userInfo != null) {
           Navigator.pushReplacementNamed(context, '/main');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Naver 로그인 실패')),
+            const SnackBar(content: Text('Naver 로그인 실패')),
           );
           Navigator.pop(context);
         }
@@ -47,20 +47,19 @@ class NaverLoginScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(title: Text('Naver 로그인 중...')),
-      body: Center(child: CircularProgressIndicator()),
+      appBar: AppBar(title: const Text('Naver 로그인 중...')),
+      body: const Center(child: CircularProgressIndicator()),
     );
   }
 
   Future<String> _getAuthorizationCode(BuildContext context) async {
-    const clientId = 'Kk0mlnghLzPAi0TpquZj'; // 네이버 개발자 센터에서 발급받은 Client ID
-    const redirectUri = 'myapp://naver-login'; // 네이버 개발자 센터에서 등록한 Redirect URI
+    const String clientId = 'Kk0mlnghLzPAi0TpquZj'; // 네이버 Client ID
+    const String redirectUri = 'myapp://naver-login'; // Redirect URI
 
-    // 랜덤한 state 값 생성 후 전역 변수에 저장
     final uuid = Uuid();
-    _currentState = uuid.v4(); // 전역 변수에 저장
+    _currentState = uuid.v4(); // 랜덤 State 값 생성
 
-    final authorizationUrl =
+    final String authorizationUrl =
         'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=$clientId&redirect_uri=$redirectUri&state=$_currentState';
 
     if (await canLaunch(authorizationUrl)) {
@@ -70,59 +69,33 @@ class NaverLoginScreen extends StatelessWidget {
     }
 
     // Redirect URI 처리
-    final Completer<String> completer = Completer<String>();
-    WidgetsBinding.instance.addObserver(LifecycleEventHandler(
-      resumeCallBack: () async {
-        if (!completer.isCompleted) {
-          try {
-            final Uri redirectUriResult = await _getRedirectUri();
-            final String? code = redirectUriResult.queryParameters['code'];
-            final String? returnedState = redirectUriResult.queryParameters['state'];
-
-            print('요청한 State: $_currentState');
-            print('리다이렉트된 State: $returnedState');
-            print('리다이렉트된 Code: $code');
-
-            if (code == null || returnedState != _currentState) {
-              print('State 또는 인증 코드가 올바르지 않음');
-              completer.completeError('인증 코드 또는 state가 올바르지 않습니다.');
-            } else {
-              print('State와 인증 코드 검증 성공');
-              completer.complete(code);
-            }
-          } catch (e) {
-            completer.completeError('Redirect URI 처리 중 오류 발생: $e');
-          }
-        }
-      },
-    ));
-
-    return completer.future;
-  }
-
-  Future<Uri> _getRedirectUri() async {
-    const MethodChannel channel = MethodChannel('redirect_uri_channel');
-
+    final MethodChannel channel = MethodChannel('redirect_uri_channel');
     try {
       final String? uriString = await channel.invokeMethod('onRedirectUriReceived');
       if (uriString == null) {
         throw Exception('Redirect URI를 받을 수 없습니다.');
       }
-      return Uri.parse(uriString);
+
+      final Uri uri = Uri.parse(uriString);
+      final String? code = uri.queryParameters['code'];
+      final String? returnedState = uri.queryParameters['state'];
+
+      if (code == null || returnedState != _currentState) {
+        throw Exception('인증 코드 또는 state가 일치하지 않습니다.');
+      }
+
+      return code;
     } catch (e) {
       throw Exception('Redirect URI 처리 중 오류 발생: $e');
     }
   }
 
-
-
-
   Future<String> _getAccessToken(String authCode) async {
-    const clientId = 'Kk0mlnghLzPAi0TpquZj';
-    const clientSecret = 'mwNpwGjHrR';
-    const redirectUri = 'myapp://naver-login';
+    const String clientId = 'Kk0mlnghLzPAi0TpquZj';
+    const String clientSecret = 'mwNpwGjHrR';
+    const String redirectUri = 'myapp://naver-login';
 
-    final tokenUrl = 'https://nid.naver.com/oauth2.0/token';
+    final String tokenUrl = 'https://nid.naver.com/oauth2.0/token';
 
     final response = await http.post(
       Uri.parse(tokenUrl),
@@ -139,13 +112,12 @@ class NaverLoginScreen extends StatelessWidget {
       final body = json.decode(response.body);
       return body['access_token'];
     } else {
-      print('토큰 요청 실패: ${response.body}');
-      throw Exception('토큰 요청 실패');
+      throw Exception('Access Token 요청 실패: ${response.body}');
     }
   }
 
   Future<Map<String, dynamic>?> _getUserInfo(String accessToken) async {
-    final userInfoUrl = 'https://openapi.naver.com/v1/nid/me';
+    const String userInfoUrl = 'https://openapi.naver.com/v1/nid/me';
 
     final response = await http.get(
       Uri.parse(userInfoUrl),
@@ -158,21 +130,7 @@ class NaverLoginScreen extends StatelessWidget {
       final body = json.decode(response.body);
       return body['response'];
     } else {
-      print('사용자 정보 요청 실패: ${response.body}');
-      return null;
-    }
-  }
-}
-
-class LifecycleEventHandler extends WidgetsBindingObserver {
-  final AsyncCallback? resumeCallBack;
-
-  LifecycleEventHandler({this.resumeCallBack});
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && resumeCallBack != null) {
-      resumeCallBack!();
+      throw Exception('사용자 정보 요청 실패: ${response.body}');
     }
   }
 }
