@@ -15,29 +15,52 @@ class No2 extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(8),
       ),
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              cardInfo.userName ?? "",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  cardInfo.companyName ?? "",
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold,),
+                ),
+              ],
             ),
-            Text(cardInfo.phone ?? ""),
-            Text(cardInfo.email ?? ""),
-            Divider(thickness: 1, color: Colors.grey.shade300),
-            Text(
-              cardInfo.companyName ?? "",
-              style: TextStyle(fontSize: 18),
-            ),
-            Text(cardInfo.companyAddress ?? ""),
-            Text(cardInfo.companyFax?? ""),
+            const Padding(padding: EdgeInsets.only(top: 10)),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(cardInfo.position ?? "",
+                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      cardInfo.userName ?? "",
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const Divider(thickness: 1, color: Colors.grey),
+                Row(
+                  children: [
+                    Text(cardInfo.phone ?? ""),
+                    Text(cardInfo.email ?? ""),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(cardInfo.companyNumber ?? ""),
+                     Text(cardInfo.companyFax?? ""),
+                  ],
+                ),
+                Text(cardInfo.companyAddress ?? ""),
+              ],
+            )
           ],
         ),
       ),

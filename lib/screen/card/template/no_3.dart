@@ -14,13 +14,12 @@ class No3 extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.black,
-        borderRadius: BorderRadius.circular(10),
       ),
       padding: EdgeInsets.all(16),
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
+            Column(
               children: [
                 CircleAvatar(
                   radius: 30,
@@ -33,35 +32,59 @@ class No3 extends StatelessWidget {
                 SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      cardInfo.userName ?? "",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          cardInfo.userName ?? "",
+                          style: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          cardInfo.position ?? "",
+                          style: const TextStyle(fontSize: 7, color: Colors.white,),
+                        ),
+                      ]
                     ),
                     Text(
-                      cardInfo.position ?? "",
-                      style: TextStyle(color: Colors.white54),
+                      cardInfo.department ?? "",
+                      style: const TextStyle(fontSize: 8, color: Colors.white54),
+                    ),
+                    Text(
+                      cardInfo.phone ?? "",
+                      style: const TextStyle(fontSize: 8, color: Colors.white54),
+                    ),
+                    Text(
+                      cardInfo.email ?? "",
+                      style: const TextStyle(fontSize: 8, color: Colors.white54),
                     ),
                   ],
                 ),
               ],
             ),
-            Divider(thickness: 1, color: Colors.grey),
-            Text(
-              cardInfo.companyName ?? "",
-              style: TextStyle(fontSize: 16, color: Colors.white),
-            ),
-            Text(
-              cardInfo.phone ?? "",
-              style: TextStyle(color: Colors.white70),
-            ),
-            Text(
-              cardInfo.email ?? "",
-              style: TextStyle(color: Colors.white70),
-            ),
+            const Divider(thickness: 1, color: Colors.grey),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  cardInfo.companyName ?? "",
+                  style: const TextStyle(fontSize: 10, color: Colors.white,fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  cardInfo.companyAddress ?? "",
+                  style: const TextStyle(fontSize: 8, color: Colors.white70),
+                ),
+                Text(
+                  cardInfo.companyNumber ?? "",
+                  style: const TextStyle(fontSize: 8, color: Colors.white70),
+                ),
+                Text(
+                  cardInfo.companyFax ?? "",
+                  style: const TextStyle(fontSize: 8, color: Colors.white70),
+                ),
+              ],
+            )
           ],
         ),
       ),
