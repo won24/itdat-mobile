@@ -71,7 +71,6 @@ class FontProvider with ChangeNotifier {
     'ja': [
       'System',
       'Noto Sans JP',
-      'Noto Serif JP',
       'Kosugi',
       'Kosugi Maru',
       'Sawarabi Gothic',

@@ -20,6 +20,9 @@ class ThemeDialog {
               children: [
                 Text(
                   AppLocalizations.of(context)!.selectTheme,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white : Colors.black,
+                  ),
                 ),
                 SizedBox(height: 9),
                 _buildThemeOption(context, ThemeMode.system, AppLocalizations.of(context)!.defaultTheme),

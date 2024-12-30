@@ -32,7 +32,7 @@ class _SettingsState extends State<Settings> {
           _buildSettingItem(Icons.palette_outlined, AppLocalizations.of(context)!.theme, () {
             ThemeDialog.show(context);
           }),
-          _buildSettingItem(Icons.palette_outlined, AppLocalizations.of(context)!.font, () {
+          _buildSettingItem(Icons.font_download_outlined, AppLocalizations.of(context)!.font, () {
             FontDialog.show(context);
           }),
 

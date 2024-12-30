@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:vibration/vibration.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
 
 class NfcWritePage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
   bool _isWriting = false;
   bool _isRetryVisible = false;
   Timer? _vibrationTimer;
-  String _baseText = 'NFC 태그를\n가까이 가져다 주세요';
+  late String _baseText = AppLocalizations.of(context)!.nfctag;
   String _dots = '';
   Timer? _textAnimationTimer;
 
@@ -43,7 +44,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('NFC 쓰기'),
+        title: Text(AppLocalizations.of(context)!.nfcwrite),
       ),
       body: Center(
         child: Column(

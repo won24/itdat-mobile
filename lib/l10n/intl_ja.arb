@@ -22,10 +22,15 @@
   "camera": "カメラ",
   "location": "位置情報",
   "storage": "ストレージ",
-  "nfc" : "NFC",
-  "logout" : "로그아웃",
-  "login" : "로그인",
-  "logoutSuccessful" : "로그아웃 성공",
-  "logoutError" : "로그아웃 오류",
-  "font" : "Font"
+  "nfc": "NFC 書き込み",
+  "logout": "ログアウト",
+  "login": "ログイン",
+  "logoutSuccessful": "ログアウト成功",
+  "logoutError": "ログアウトエラー",
+  "font": "フォント",
+  "nfctag": "NFCタグを\\n近づけてください",
+  "nfcread": "NFC 読み取り",
+  "nfcwrite": "NFC 書き込み",
+  "scan": "スキャン",
+  "generate": "QRを見る"
 }

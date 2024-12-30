@@ -30,8 +30,10 @@ class FontDialog {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.font,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      AppLocalizations.of(context)!.language,
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white : Colors.black,
+                      ),
                     ),
                     SizedBox(height: 16),
                     ...availableFonts.map((fontName) => 
@@ -43,15 +45,15 @@ class FontDialog {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
+                          child: Text(AppLocalizations.of(context)!.cancel),
+                          onPressed: () => Navigator.of(dialogContext).pop(),
+                        ),
+                        TextButton(
                           child: Text(AppLocalizations.of(context)!.confirm),
                           onPressed: () {
                             fontProvider.setFont(selectedFont);
                             Navigator.of(dialogContext).pop();
                           },
-                        ),
-                        TextButton(
-                          child: Text(AppLocalizations.of(context)!.cancel),
-                          onPressed: () => Navigator.of(dialogContext).pop(),
                         ),
                       ],
                     ),

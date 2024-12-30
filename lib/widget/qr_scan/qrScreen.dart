@@ -36,11 +36,11 @@ class _QRScanScreenState extends State<QRScanScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.qr_code_scanner),
-              label: 'Scan',
+              label: AppLocalizations.of(context)!.scan,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.qr_code),
-              label: 'Generate',
+              label: AppLocalizations.of(context)!.generate,
             ),
 
           ],

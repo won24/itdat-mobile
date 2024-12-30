@@ -25,7 +25,9 @@ class LanguageDialog {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.language,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white : Colors.black,
+                         ),
                     ),
                     SizedBox(height: 16),
                     _buildLanguageOption(context, Locale('en'), 'English', selectedLocale, (value) {
@@ -41,15 +43,15 @@ class LanguageDialog {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
+                          child: Text(AppLocalizations.of(context)!.cancel),
+                          onPressed: () => Navigator.of(dialogContext).pop(),
+                        ),
+                        TextButton(
                           child: Text(AppLocalizations.of(context)!.confirm),
                           onPressed: () {
                             localeProvider.setLocale(selectedLocale);
                             Navigator.of(dialogContext).pop();
                           },
-                        ),
-                        TextButton(
-                          child: Text(AppLocalizations.of(context)!.cancel),
-                          onPressed: () => Navigator.of(dialogContext).pop(),
                         ),
                       ],
                     ),
