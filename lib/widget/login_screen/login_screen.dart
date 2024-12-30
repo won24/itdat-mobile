@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:itdat/providers/auth_provider.dart';
+import 'package:itdat/widget/register/register_screen.dart';
 
 import '../../screen/mainLayout.dart';
 
@@ -76,6 +77,26 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10), // 구분 간격 추가
+
+                // 회원가입 폼
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // RegisterScreen으로 이동
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterScreen()),
+                      );
+                    },
+                    child: Text('회원가입'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal, // 버튼 색상
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+
                 Text(
                   "또는",
                   style: TextStyle(color: Colors.grey, fontSize: 16),
