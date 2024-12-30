@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/login_model.dart';
 import 'package:itdat/providers/theme_provider.dart';
 import 'package:itdat/providers/auth_provider.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:itdat/screen/mainLayout.dart';
 import 'package:itdat/widget/login_screen/login_screen.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/providers/locale_provider.dart';
 
 void main() {
+  KakaoSdk.init(nativeAppKey: '387812a6ae2897c3e9e59952c211374e');
   runApp(
     MultiProvider(
       providers: [

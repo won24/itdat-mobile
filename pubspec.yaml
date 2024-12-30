@@ -26,7 +26,13 @@ dependencies:
   dio: ^5.7.0
   flutter_svg: ^2.0.16
   path_provider: ^2.1.5
-  webview_flutter: ^4.0.7
+  webview_flutter: ^4.2.1
+  google_sign_in: ^5.4.0
+  kakao_flutter_sdk: ^1.9.6
+  flutter_naver_login: ^2.0.0
+  firebase_auth: ^4.4.0
+  uuid: ^3.0.6
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_test:
