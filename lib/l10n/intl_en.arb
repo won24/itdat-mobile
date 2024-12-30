@@ -10,7 +10,7 @@
   "about": "AppInformation",
   "qrcodescan" : "QR Code Scan",
   "selectTheme" : "Theme",
-  "defaultTheme" : "Default Theme",
+  "defaultTheme" : "System Theme",
   "dark" : "Dark",
   "light" : "Light",
   "cancel" : "Cancel",
@@ -26,5 +26,11 @@
   "logout" : "Logout",
   "login" : "Login",
   "logoutSuccessful" : "Logout Successful",
-  "logoutError" : "Logout Error"
+  "logoutError" : "Logout Error",
+  "font" : "Font",
+  "nfctag": "Please bring the NFC tag closer",
+  "nfcread": "Read NFC",
+  "nfcwrite": "Write NFC",
+  "scan": "Scan",
+  "generate": "View QR"
 }

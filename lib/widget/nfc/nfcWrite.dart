@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:vibration/vibration.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
 
 class NfcWritePage extends StatefulWidget {
@@ -13,14 +14,9 @@ class _NfcWritePageState extends State<NfcWritePage> {
   bool _isWriting = false;
   bool _isRetryVisible = false;
   Timer? _vibrationTimer;
-  String _baseText = 'NFC 카드를\n가까이 가져다 주세요';
+  late String _baseText = AppLocalizations.of(context)!.nfctag;
   String _dots = '';
   Timer? _textAnimationTimer;
-
-  // 하드코딩된 사용자 정보
-  final String name = "손정원";
-  final String phone = "010-1234-5678";
-  final String email = "son@example.com";
 
   @override
   void initState() {
@@ -33,7 +29,6 @@ class _NfcWritePageState extends State<NfcWritePage> {
   void dispose() {
     _stopVibration();
     _textAnimationTimer?.cancel();
-    NfcManager.instance.stopSession();
     super.dispose();
   }
 
@@ -49,7 +44,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('NFC 쓰기'),
+        title: Text(AppLocalizations.of(context)!.nfcwrite),
       ),
       body: Center(
         child: Column(
@@ -60,13 +55,13 @@ class _NfcWritePageState extends State<NfcWritePage> {
               child: Column(
                 children: [
                   Expanded(
-                    flex: 5,
+                    flex: 3,
                     child: _isWriting
                         ? Lottie.asset('assets/nfcAnime.json')
                         : SizedBox.shrink(),
                   ),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Center(
                       child: RichText(
                         textAlign: TextAlign.center,
@@ -74,7 +69,9 @@ class _NfcWritePageState extends State<NfcWritePage> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
                           ),
                           children: [
                             TextSpan(text: _baseText),
@@ -91,7 +88,12 @@ class _NfcWritePageState extends State<NfcWritePage> {
               IconButton(
                 icon: Icon(Icons.refresh),
                 iconSize: 48,
-                onPressed: _startNfcWrite,
+                onPressed: () {
+                  setState(() {
+                    _isRetryVisible = false;
+                  });
+                  _startNfcWrite();
+                },
                 tooltip: '다시 시도',
               ),
           ],
@@ -100,41 +102,31 @@ class _NfcWritePageState extends State<NfcWritePage> {
     );
   }
 
-  void _startNfcWrite() async {
+  void _startNfcWrite() {
     setState(() {
       _isWriting = true;
-      _isRetryVisible = false;
     });
 
     _startVibration();
 
-    bool isAvailable = await NfcManager.instance.isAvailable();
-    if (!isAvailable) {
-      _showAlert('NFC를 사용할 수 없습니다.');
-      _stopNfcWrite();
-      return;
-    }
-
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      var ndef = Ndef.from(tag);
-      if (ndef == null || !ndef.isWritable) {
-        _showAlert('이 NFC 카드는 쓰기가 불가능합니다.');
-        _stopNfcWrite();
-        return;
-      }
-
       try {
-        // NFC 데이터 쓰기 로직
-        // NdefMessage message = NdefMessage([
-        //   NdefRecord.createText('name: $name'),
-        //   NdefRecord.createText('number: $phone'),
-        //   NdefRecord.createText('email: $email'),
-        // ]);
-        // await ndef.write(message);
-        
-        _showAlert('정보가 성공적으로 기록되었습니다.');
+        var ndef = Ndef.from(tag);
+        if (ndef == null || !ndef.isWritable) {
+          _showAlert('이 NFC 태그는 쓰기가 불가능합니다.');
+          return;
+        }
+
+        // NFC 태그 데이터 쓰기 로직
+        NdefMessage message = NdefMessage([
+          NdefRecord.createText('Sample Data'),
+          // 여기에 더 많은 데이터를 추가할 수 있습니다.
+        ]);
+
+        await ndef.write(message);
+        _showAlert('데이터가 성공적으로 기록되었습니다.');
       } catch (e) {
-        _showAlert('오류가 발생했습니다: $e');
+        _showAlert('NFC 쓰기 오류: $e');
       } finally {
         _stopNfcWrite();
       }
@@ -152,19 +144,19 @@ class _NfcWritePageState extends State<NfcWritePage> {
   }
 
   void _stopNfcWrite() {
+    NfcManager.instance.stopSession();
+    _stopVibration();
+    _textAnimationTimer?.cancel();
     setState(() {
       _isWriting = false;
     });
-    _stopVibration();
-    NfcManager.instance.stopSession();
   }
 
-  void _startVibration() async {
-    if (await Vibration.hasVibrator() ?? false) {
-      _vibrationTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        Vibration.vibrate(duration: 100);
-      });
-    }
+  void _startVibration() {
+    _stopVibration();
+    _vibrationTimer = Timer.periodic(Duration(milliseconds: 1400), (timer) {
+      Vibration.vibrate(duration: 150);
+    });
   }
 
   void _stopVibration() {
@@ -173,17 +165,8 @@ class _NfcWritePageState extends State<NfcWritePage> {
   }
 
   void _showAlert(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: Text(message),
-        actions: [
-          TextButton(
-            child: Text('확인'),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      ),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
     );
   }
 }

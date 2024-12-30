@@ -10,7 +10,7 @@
   "about" : "앱 정보",
   "qrcodescan": "QR 코드 스캔",
   "selectTheme" : "테마 선택",
-  "defaultTheme" : "기본 테마",
+  "defaultTheme" : "시스템 기본 테마",
   "dark" : "다크",
   "light" : "라이트",
   "cancel" : "취소",
@@ -26,6 +26,12 @@
   "logout" : "로그아웃",
   "login" : "로그인",
   "logoutSuccessful" : "로그아웃 성공",
-  "logoutError" : "로그아웃 오류"
+  "logoutError" : "로그아웃 오류",
+  "font" : "글씨체",
+  "nfctag" : "NFC 태그를\\n가까이 가져다 주세요",
+  "nfcread" : "NFC 읽기",
+  "nfcwrite" : "NFC 쓰기",
+  "scan" : "스캔",
+  "generate" : "QR 보기"
 
 }
