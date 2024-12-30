@@ -26,5 +26,6 @@
   "logout" : "로그아웃",
   "login" : "로그인",
   "logoutSuccessful" : "로그아웃 성공",
-  "logoutError" : "로그아웃 오류"
+  "logoutError" : "로그아웃 오류",
+  "font" : "Font"
 }

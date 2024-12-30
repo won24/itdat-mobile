@@ -3,6 +3,7 @@
         android:label="ITDAT"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.App.Splash">
         <activity
             android:name=".MainActivity"

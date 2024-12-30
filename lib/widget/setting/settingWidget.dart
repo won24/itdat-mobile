@@ -6,6 +6,8 @@ import 'package:itdat/widget/setting/languageTranWidget.dart';
 import 'package:itdat/widget/setting/permissionWidget.dart';
 import 'package:itdat/widget/setting/themeTranWidget.dart';
 
+import 'fontSelectWidget.dart';
+
 class Settings extends StatefulWidget {
   const Settings({super.key});
 
@@ -18,7 +20,9 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.setting),
+        title: Text(
+          AppLocalizations.of(context)!.setting,
+      ),
       ),
       body: ListView(
         children: [
@@ -28,6 +32,10 @@ class _SettingsState extends State<Settings> {
           _buildSettingItem(Icons.palette_outlined, AppLocalizations.of(context)!.theme, () {
             ThemeDialog.show(context);
           }),
+          _buildSettingItem(Icons.palette_outlined, AppLocalizations.of(context)!.font, () {
+            FontDialog.show(context);
+          }),
+
           _buildSettingItem(Icons.lock_outline_rounded, AppLocalizations.of(context)!.security, () {
             PermissionManager.navigateToPermissionSettings(context);
           }),
@@ -36,9 +44,6 @@ class _SettingsState extends State<Settings> {
               context,
               MaterialPageRoute(builder: (context) => NfcWritePage()),
             );
-          }),
-          _buildSettingItem(Icons.info_outline, AppLocalizations.of(context)!.about, () {
-            // 앱 정보 페이지로 이동
           }),
           _buildSettingItem(Icons.logout, AppLocalizations.of(context)!.logout, () {
             LogoutWidget.show(context);
@@ -55,11 +60,16 @@ class _SettingsState extends State<Settings> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
         child: Row(
           children: [
-            Icon(icon, size: 24),
+            Icon(icon, size: 24, color: Theme.of(context).iconTheme.color),
             SizedBox(width: 15),
             Text(
               title,
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 18,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
+              ),
             ),
             Spacer(),
           ],

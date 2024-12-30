@@ -54,13 +54,13 @@ class _NfcReadPageState extends State<NfcReadPage> {
               child: Column(
                 children: [
                   Expanded(
-                    flex: 5,
+                    flex: 3,
                     child: _isReading
                         ? Lottie.asset('assets/nfcAnime.json')
                         : SizedBox.shrink(),
                   ),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Center(
                       child: RichText(
                         textAlign: TextAlign.center,
@@ -68,7 +68,9 @@ class _NfcReadPageState extends State<NfcReadPage> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
                           ),
                           children: [
                             TextSpan(text: _baseText),

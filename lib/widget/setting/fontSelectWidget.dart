@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:itdat/providers/font_provider.dart';
 import 'package:itdat/providers/locale_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class LanguageDialog {
+class FontDialog {
   static void show(BuildContext context) {
+    final fontProvider = Provider.of<FontProvider>(context, listen: false);
     final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
-    Locale selectedLocale = localeProvider.locale;
+    String selectedFont = fontProvider.currentFont;
+    String currentLocale = localeProvider.locale.languageCode;
 
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
         return StatefulBuilder(
           builder: (context, setState) {
+            List<String> availableFonts = fontProvider.getAvailableFontsForLocale(currentLocale);
+            
             return Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -24,26 +30,22 @@ class LanguageDialog {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.language,
+                      AppLocalizations.of(context)!.font,
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 16),
-                    _buildLanguageOption(context, Locale('en'), 'English', selectedLocale, (value) {
-                      setState(() => selectedLocale = value!);
-                    }),
-                    _buildLanguageOption(context, Locale('ko'), '한국어', selectedLocale, (value) {
-                      setState(() => selectedLocale = value!);
-                    }),
-                    _buildLanguageOption(context, Locale('ja'), '日本語', selectedLocale, (value) {
-                      setState(() => selectedLocale = value!);
-                    }),
+                    ...availableFonts.map((fontName) => 
+                      _buildFontOption(context, fontName, selectedFont, (value) {
+                        setState(() => selectedFont = value!);
+                      })
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
                           child: Text(AppLocalizations.of(context)!.confirm),
                           onPressed: () {
-                            localeProvider.setLocale(selectedLocale);
+                            fontProvider.setFont(selectedFont);
                             Navigator.of(dialogContext).pop();
                           },
                         ),
@@ -63,13 +65,20 @@ class LanguageDialog {
     );
   }
 
-  static Widget _buildLanguageOption(BuildContext context, Locale locale, String title, Locale groupValue, ValueChanged<Locale?> onChanged) {
-    return RadioListTile<Locale>(
-      title: Text(title),
-      value: locale,
+  static Widget _buildFontOption(BuildContext context, String fontName, String groupValue, ValueChanged<String?> onChanged) {
+    return RadioListTile<String>(
+      title: Text(fontName, style: _getFontStyle(fontName)),
+      value: fontName,
       groupValue: groupValue,
       onChanged: onChanged,
       activeColor: Theme.of(context).primaryColor,
     );
+  }
+
+  static TextStyle _getFontStyle(String fontName) {
+    if (fontName == 'System') {
+      return TextStyle(); // 시스템 기본 폰트
+    }
+    return GoogleFonts.getFont(fontName);
   }
 }

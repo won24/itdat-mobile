@@ -122,57 +122,72 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
   }
 }
 
+
 class ScannerOverlay extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final double scanAreaSize = size.width * 0.2; // Smaller box for the scan area
+    final double scanAreaSize = size.width * 0.15; // 스캔 영역의 크기 설정
     final double left = (size.width - scanAreaSize) / 2;
     final double top = (size.height - scanAreaSize) / 2;
     final double right = left + scanAreaSize;
     final double bottom = top + scanAreaSize;
 
-    // Paint for the box border
-    final Paint borderPaint = Paint()
+    final Paint cornerPaint = Paint()
       ..color = Colors.yellow
-      ..strokeWidth = 3.0;
+      ..strokeWidth = 2.5
+      ..style = PaintingStyle.stroke;
 
-    final double cornerLength = 20.0; // Corner line length
+    final double cornerLength = scanAreaSize * 0.2; // 모서리 선의 길이를 스캔 영역 크기의 20%로 설정
+    final double radius = 5; // 둥근 모서리의 반지름을 작게 설정
 
-    // Draw corner lines for the box
-    // Top-left corner
-    canvas.drawLine(Offset(left, top), Offset(left + cornerLength, top), borderPaint);
-    canvas.drawLine(Offset(left, top), Offset(left, top + cornerLength), borderPaint);
+    // 약간 부드러운 모서리 그리기
+    final Path path = Path();
 
-    // Top-right corner
-    canvas.drawLine(Offset(right, top), Offset(right - cornerLength, top), borderPaint);
-    canvas.drawLine(Offset(right, top), Offset(right, top + cornerLength), borderPaint);
+    // 좌상단 모서리
+    path.moveTo(left + cornerLength, top);
+    path.lineTo(left + radius, top);
+    path.quadraticBezierTo(left, top, left, top + radius);
+    path.lineTo(left, top + cornerLength);
 
-    // Bottom-left corner
-    canvas.drawLine(Offset(left, bottom), Offset(left + cornerLength, bottom), borderPaint);
-    canvas.drawLine(Offset(left, bottom), Offset(left, bottom - cornerLength), borderPaint);
+    // 우상단 모서리
+    path.moveTo(right - cornerLength, top);
+    path.lineTo(right - radius, top);
+    path.quadraticBezierTo(right, top, right, top + radius);
+    path.lineTo(right, top + cornerLength);
 
-    // Bottom-right corner
-    canvas.drawLine(Offset(right, bottom), Offset(right - cornerLength, bottom), borderPaint);
-    canvas.drawLine(Offset(right, bottom), Offset(right, bottom - cornerLength), borderPaint);
+    // 좌하단 모서리
+    path.moveTo(left, bottom - cornerLength);
+    path.lineTo(left, bottom - radius);
+    path.quadraticBezierTo(left, bottom, left + radius, bottom);
+    path.lineTo(left + cornerLength, bottom);
 
-    // Paint for the cross
+    // 우하단 모서리
+    path.moveTo(right, bottom - cornerLength);
+    path.lineTo(right, bottom - radius);
+    path.quadraticBezierTo(right, bottom, right - radius, bottom);
+    path.lineTo(right - cornerLength, bottom);
+
+    // 경로 그리기
+    canvas.drawPath(path, cornerPaint);
+
+    // 십자선 그리기를 위한 Paint 객체
     final Paint crossPaint = Paint()
       ..color = Colors.yellow
       ..strokeWidth = 2.0;
 
-    // Draw the cross in the center of the box
+    // 스캔 영역 중앙에 십자선 그리기
     final double centerX = (left + right) / 2;
     final double centerY = (top + bottom) / 2;
-    final double crossSize = scanAreaSize / 4; // Size of the cross arms
+    final double crossSize = scanAreaSize / 5; // 십자선 크기를 스캔 영역의 1/5로 설정
 
-    // Horizontal line of the cross
+    // 가로선 그리기
     canvas.drawLine(
       Offset(centerX - crossSize / 2, centerY),
       Offset(centerX + crossSize / 2, centerY),
       crossPaint,
     );
 
-    // Vertical line of the cross
+    // 세로선 그리기
     canvas.drawLine(
       Offset(centerX, centerY - crossSize / 2),
       Offset(centerX, centerY + crossSize / 2),
@@ -183,3 +198,5 @@ class ScannerOverlay extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
+
+
