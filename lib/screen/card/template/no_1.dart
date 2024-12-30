@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:itdat/models/BusinessCard.dart';
 
 class No1 extends StatelessWidget {
-  final Map<String, dynamic> cardInfo;
+  final BusinessCard cardInfo;
 
   const No1({
     super.key,
@@ -24,7 +25,7 @@ class No1 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            cardInfo["userName"] ?? "",
+            cardInfo.userName ?? "",
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -32,24 +33,24 @@ class No1 extends StatelessWidget {
             ),
           ),
           Text(
-            cardInfo["phone"] ?? "",
+            cardInfo.phone ?? "",
             style: TextStyle(color: Colors.white70),
           ),
           Text(
-            cardInfo["email"] ?? "",
+            cardInfo.email ?? "",
             style: TextStyle(color: Colors.white70),
           ),
           SizedBox(height: 16),
           Text(
-            cardInfo["companyName"] ?? "",
+            cardInfo.companyName ?? "",
             style: TextStyle(fontSize: 18, color: Colors.white),
           ),
           Text(
-            cardInfo["companyAddress"] ?? "",
+            cardInfo.companyAddress ?? "",
             style: TextStyle(color: Colors.white70),
           ),
           Text(
-            cardInfo["companyFax"] ?? "",
+            cardInfo.companyFax ?? "",
             style: TextStyle(color: Colors.white70),
           ),
         ],

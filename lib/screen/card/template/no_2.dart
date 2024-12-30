@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:itdat/models/BusinessCard.dart';
 
 class No2 extends StatelessWidget {
-  final Map<String, dynamic> cardInfo;
+  final BusinessCard cardInfo;
 
   No2({
     super.key,
@@ -17,26 +18,28 @@ class No2 extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            cardInfo["userName"] ?? "",
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              cardInfo.userName ?? "",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          Text(cardInfo["phone"] ?? ""),
-          Text(cardInfo["email"] ?? ""),
-          Divider(thickness: 1, color: Colors.grey.shade300),
-          Text(
-            cardInfo["companyName"] ?? "",
-            style: TextStyle(fontSize: 18),
-          ),
-          Text(cardInfo["companyAddress"] ?? ""),
-          Text(cardInfo["companyFax"] ?? ""),
-        ],
+            Text(cardInfo.phone ?? ""),
+            Text(cardInfo.email ?? ""),
+            Divider(thickness: 1, color: Colors.grey.shade300),
+            Text(
+              cardInfo.companyName ?? "",
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(cardInfo.companyAddress ?? ""),
+            Text(cardInfo.companyFax?? ""),
+          ],
+        ),
       ),
     );
   }
