@@ -30,7 +30,7 @@ class No2 extends StatelessWidget {
                 ),
               ],
             ),
-            const Padding(padding: EdgeInsets.only(top: 20)),
+            const Padding(padding: EdgeInsets.only(top: 15)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -8,11 +8,11 @@ import 'package:itdat/screen/card/template/no_3.dart';
 
 class TemplateSelectionScreen extends StatefulWidget {
 
-  final String userId;
+  final String userEmail;
 
   const TemplateSelectionScreen({
     super.key,
-    required this.userId,
+    required this.userEmail,
   });
 
   @override
@@ -46,7 +46,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       companyFax: "",
       department: "",
       position: "",
-      userId: widget.userId,
+      userEmail: widget.userEmail,
     );
 
     // templates 초기화
@@ -63,7 +63,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
   Future<void> fetchUserData() async {
     setState(() => isLoading = true);
     try {
-      final data = await cardModel.getUserById(widget.userId);
+      final data = await cardModel.getUserById(widget.userEmail);
       setState(() {
         userData = data;
         _initializeCardWithUserData();
@@ -93,7 +93,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
             companyFax: userData!['companyFax'] ?? "",
             department: userData!['companyDept'] ?? "",
             position: userData!['companyRank'] ?? "",
-            userId: userData!['userId'] ?? "",
+            userEmail: userData!['userEmail'] ?? "",
           );
 
           // 데이터가 업데이트된 후 templates를 다시 초기화
@@ -144,13 +144,6 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                     ),
                   ),
                 )
-                // Card(
-                //   elevation: 4,
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.circular(8),
-                //   ),
-                //   child: template
-                // ),
               );
             },
       ),

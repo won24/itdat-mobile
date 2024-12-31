@@ -8,7 +8,7 @@ import 'package:itdat/widget/login_screen/login_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/providers/locale_provider.dart';
-import 'package:itdat/providers/font_provider.dart'; // FontProvider import 추가
+import 'package:itdat/providers/font_provider.dart';
 
 void main() {
   KakaoSdk.init(nativeAppKey: '387812a6ae2897c3e9e59952c211374e');
@@ -18,7 +18,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
-        ChangeNotifierProvider(create: (_) => FontProvider()), // FontProvider 추가
+        ChangeNotifierProvider(create: (_) => FontProvider()),
       ],
       child: MyApp(),
     ),
@@ -28,12 +28,16 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer3<LocaleProvider, ThemeProvider, AuthProvider>(
-      builder: (context, localeProvider, themeProvider, authProvider, child) {
+    return Consumer4<LocaleProvider, ThemeProvider, AuthProvider, FontProvider>(
+      builder: (context, localeProvider, themeProvider, authProvider, fontProvider, child) {
         return MaterialApp(
           title: 'ITDAT',
-          theme: themeProvider.lightTheme,
-          darkTheme: themeProvider.darkTheme,
+          theme: themeProvider.lightTheme.copyWith(
+            textTheme: fontProvider.currentTextTheme,
+          ),
+          darkTheme: themeProvider.darkTheme.copyWith(
+            textTheme: fontProvider.currentTextTheme,
+          ),
           themeMode: themeProvider.themeMode,
           locale: localeProvider.locale,
           localizationsDelegates: [
@@ -45,22 +49,15 @@ class MyApp extends StatelessWidget {
           supportedLocales: [
             Locale('en', ''), // English
             Locale('ko', ''), // Korean
-            Locale('ja', ''),
+            Locale('ja', ''), // Japanese
           ],
           home: FutureBuilder(
-            future: authProvider.checkLoginStatus(), // 로그인 상태 확인
+            future: authProvider.checkLoginStatus(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                // 로그인 상태를 확인하는 동안 로딩 화면
                 return Center(child: CircularProgressIndicator());
               } else {
-                // 로그인 상태에 따라 다른 화면을 표시
-                if (authProvider.isLoggedIn) {
-                  return MainLayout(); // 로그인 성공 시
-                } else {
-                  // return LoginScreen(); // 로그인 실패 시
-                  return MainLayout();
-                }
+                return authProvider.isLoggedIn ? MainLayout() : LoginScreen();
               }
             },
           ),
