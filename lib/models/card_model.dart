@@ -11,16 +11,16 @@ class CardModel{
 
 
   // 유저 정보 가져오기
-  Future<Map<String, dynamic>> getUserById(String userId) async {
+  Future<Map<String, dynamic>> getUserById(String userEmail) async {
 
     try{
-      final response = await http.get(Uri.parse("$baseUrl/userinfo/$userId"));
+      final response = await http.get(Uri.parse("$baseUrl/userinfo/$userEmail"));
 
       if(response.statusCode == 200){
-        final data = json.decode(response.body);
+        final data = jsonDecode(utf8.decode(response.bodyBytes));
         return data;
       } else {
-        throw Exception('회원 정보 가져오기 실패');
+        throw Exception('회원 정보 가져오기 실패: ${response.statusCode}');
       }
     }catch(e){
       print("회원 정보 가져오기 실패");
@@ -35,14 +35,14 @@ class CardModel{
     try{
         final response = await http.post(
           Uri.parse('$baseUrl/save'),
-          headers: {"Content-Type": "application/json"},
+          headers: {"Content-Type": "application/json; charset=UTF-8" },
           body: json.encode(card.toJson()),
         );
 
         if(response.statusCode == 200){
           return BusinessCard.fromJson(json.decode(response.body));
         }else{
-          throw Exception('명함 생성 실패');
+          throw Exception('명함 저장 실패: ${response.statusCode}');
         }
     }catch(e){
       print("명함 생성 실패");
@@ -52,15 +52,15 @@ class CardModel{
 
 
   // 명함 가져오기
-  Future<List<dynamic>> getBusinessCard(String userId) async {
+  Future<List<dynamic>> getBusinessCard(String userEmail) async {
     try {
-      final response = await http.get(Uri.parse("$baseUrl/$userId"));
+      final response = await http.get(Uri.parse("$baseUrl/$userEmail"));
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+        final data = jsonDecode(utf8.decode(response.bodyBytes));
         return data;
       } else {
-        throw Exception('명함 가져오기 실패');
+        throw Exception('명함 가져오기 실패: ${response.statusCode}');
       }
     } catch (e) {
       throw Exception('getBusinessCard Error: $e');

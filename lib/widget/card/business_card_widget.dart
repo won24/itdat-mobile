@@ -7,11 +7,11 @@ import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/screen/card/template_selection_screen.dart';
 
 class BusinessCardWidget extends StatefulWidget {
-  final String userId;
+  final String userEmail;
 
   const BusinessCardWidget({
     super.key,
-    required this.userId
+    required this.userEmail
   });
 
   @override
@@ -25,7 +25,7 @@ class _BusinessCardWidgetState extends State<BusinessCardWidget> {
   @override
   void initState() {
     super.initState();
-    _businessCards = CardModel().getBusinessCard(widget.userId);
+    _businessCards = CardModel().getBusinessCard(widget.userEmail);
   }
 
   // 명함 템플릿
@@ -58,7 +58,7 @@ class _BusinessCardWidgetState extends State<BusinessCardWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TemplateSelectionScreen(userId: widget.userId),
+                    builder: (context) => TemplateSelectionScreen(userEmail: widget.userEmail),
                   ),
                 );
               },
@@ -83,7 +83,7 @@ class _BusinessCardWidgetState extends State<BusinessCardWidget> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => TemplateSelectionScreen(userId: widget.userId),
+                                    builder: (context) => TemplateSelectionScreen(userEmail: widget.userEmail),
                                   ),
                                 );
                               },
@@ -103,7 +103,7 @@ class _BusinessCardWidgetState extends State<BusinessCardWidget> {
                               companyFax: card['companyFax'],
                               department: card['department'],
                               position: card['position'],
-                              userId: card['userId']
+                              userEmail: card['userEmail']
                           );
 
                           return Container(

@@ -82,26 +82,29 @@ class SocialsModel {
   }
 
   // Naver 로그인
-  Future<Map<String, dynamic>> naverLogin(String accessToken) async {
+  // 네이버 로그인 URL 생성
+  String getNaverAuthorizationUrl(String clientId, String redirectUri, String state) {
+    return 'https://nid.naver.com/oauth2.0/authorize?response_type=code'
+        '&client_id=$clientId'
+        '&redirect_uri=${Uri.encodeComponent(redirectUri)}'
+        '&state=$state';
+  }
+
+  // 네이버 로그인 백엔드 호출
+  Future<Map<String, dynamic>> naverLogin(String code, String state) async {
     final String naverUrl = '$baseUrl/api/oauth/callback/naver';
     print('Naver API 호출 시작: $naverUrl');
-    print('naver 전송 데이터: $accessToken');
+    print('naver 전송 데이터 - code: $code, state: $state');
 
     try {
-      final response = await http.post(
-        Uri.parse(naverUrl),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $accessToken',
-        },
-      );
+      // GET 요청으로 백엔드의 네이버 콜백 엔드포인트 호출
+      final Uri uri = Uri.parse('$naverUrl?code=$code&state=$state');
+      final response = await http.get(uri);
 
       print('Naver API 응답 상태 코드: ${response.statusCode}');
       print('Naver API 응답 데이터: ${response.body}');
 
       final responseBody = jsonDecode(response.body);
-
-      print("Naver 응답 데이터: ${response.body}");
 
       if (response.statusCode == 200) {
         return {
@@ -118,6 +121,37 @@ class SocialsModel {
     } catch (e) {
       print("Naver 로그인 오류: $e");
       return {'success': false, 'message': 'Naver 로그인 실패'};
+    }
+  }
+
+  Future<void> sendCodeAndState(String code, String state) async {
+    final String backendUrl = '$baseUrl/api/oauth/callback/naver?code=$code&state=$state';
+
+    try {
+      final response = await http.get(Uri.parse(backendUrl));
+      if (response.statusCode == 200) {
+        print('서버 응답 성공: ${response.body}');
+      } else {
+        print('서버 응답 실패: ${response.body}');
+      }
+    } catch (e) {
+      print('서버 요청 실패: $e');
+    }
+  }
+
+  // 백엔드에서 로그인 결과 가져오기 (추가적인 별도 호출용)
+  Future<Map<String, dynamic>> fetchBackendLoginResult() async {
+    final String backendUrl = '$baseUrl/api/oauth/callback/naver';
+    try {
+      final response = await http.get(Uri.parse(backendUrl));
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body) as Map<String, dynamic>;
+      } else {
+        throw Exception('백엔드 로그인 결과 요청 실패: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('백엔드 호출 실패: $e');
     }
   }
 }

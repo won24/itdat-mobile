@@ -15,7 +15,7 @@ class MyCardScreen extends StatefulWidget {
 
 class _MyCardWidgetState extends State<MyCardScreen> {
 
-  final userId = "user16";
+  final userEmail = "sksksk4502@naver.com";
 
   int _selectedIndex = 0;
   
@@ -33,8 +33,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
         children: [
           Container(
             width: 385,
-            height: 235,
-            child: BusinessCardWidget(userId: userId),
+            height: 240,
+            child: BusinessCardWidget(userEmail: userEmail),
           ),
 
           Row(

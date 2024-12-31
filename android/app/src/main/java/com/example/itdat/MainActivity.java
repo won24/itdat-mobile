@@ -3,7 +3,8 @@ package com.example.itdat;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.nfc.NfcAdapter;
-import android.util.Log;
+import java.util.HashMap;
+import java.util.Map;
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
@@ -72,17 +73,31 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        setIntent(intent); // 새로운 Intent 저장
+        setIntent(intent);
+
         if (intent != null && intent.getData() != null) {
             String uri = intent.getData().toString();
-            Log.d("RedirectURI", "Received URI: " + uri);
-            // Redirect URI 전달
-            new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), REDIRECT_URI_CHANNEL)
-                    .invokeMethod("onRedirectUriReceived", uri);
-        } else {
-            Log.d("RedirectURI", "No URI received in onNewIntent");
+
+            if (uri.startsWith("myapp://naver-login-success")) { // 네이버 로그인 성공 URI 확인
+                String code = intent.getData().getQueryParameter("code"); // code 추출
+                String state = intent.getData().getQueryParameter("state"); // state 추출
+
+                if (code != null && state != null) {
+                    // Flutter로 전달할 데이터 생성
+                    Map<String, String> data = new HashMap<>();
+                    data.put("code", code);
+                    data.put("state", state);
+
+                    // MethodChannel을 통해 Flutter로 데이터 전달
+                    new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), "redirect_uri_channel")
+                            .invokeMethod("onLoginSuccess", data);
+                } else {
+                    System.err.println("code 또는 state가 null입니다.");
+                }
+            }
         }
     }
+
 
     private void handleNfcIntent(Intent intent) {
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
