@@ -19,7 +19,10 @@ class FontDialog {
           builder: (context, setState) {
             List<String> availableFonts = fontProvider.getAvailableFontsForLocale(currentLocale);
             
-            return Dialog(
+            return
+              SingleChildScrollView(
+              child:
+              Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -36,7 +39,7 @@ class FontDialog {
                       ),
                     ),
                     SizedBox(height: 16),
-                    ...availableFonts.map((fontName) => 
+                    ...availableFonts.map((fontName) =>
                       _buildFontOption(context, fontName, selectedFont, (value) {
                         setState(() => selectedFont = value!);
                       })
@@ -60,6 +63,7 @@ class FontDialog {
                   ],
                 ),
               ),
+            )
             );
           },
         );

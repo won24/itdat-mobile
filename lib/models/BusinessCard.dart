@@ -9,7 +9,7 @@ class BusinessCard {
   String? companyFax;
   String? department;
   String? position;
-  String? userId;
+  String? userEmail;
 
   BusinessCard({
     required this.appTemplate,
@@ -22,7 +22,7 @@ class BusinessCard {
     required this.companyFax,
     required this.department,
     required this.position,
-    required this.userId,
+    required this.userEmail,
   });
 
   factory BusinessCard.fromJson(Map<String, dynamic> json) {
@@ -37,7 +37,7 @@ class BusinessCard {
       companyFax: json['companyFax'],
       department: json['department'],
       position: json['position'],
-      userId: json['userId'],
+      userEmail: json['userEmail'],
     );
   }
 
@@ -53,7 +53,7 @@ class BusinessCard {
       'companyFax': companyFax,
       'position': position,
       'department': department,
-      'userId': userId,
+      'userEmail': userEmail,
     };
   }
 
@@ -68,7 +68,7 @@ class BusinessCard {
     String? companyFax,
     String? department,
     String? position,
-    String? userId,
+    String? userEmail,
   }) {
     return BusinessCard(
       appTemplate: appTemplate ?? this.appTemplate,
@@ -81,7 +81,7 @@ class BusinessCard {
       companyFax: companyFax ?? this.companyFax,
       department: department ?? this.department,
       position: position ?? this.position,
-      userId: userId ?? this.userId,
+      userEmail: userEmail ?? this.userEmail,
     );
   }
 }
