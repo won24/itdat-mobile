@@ -62,7 +62,7 @@ class _FormScreenState extends State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("명함 수정")),
+      appBar: AppBar(title: Text("명함 미리보기")),
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -72,7 +72,6 @@ class _FormScreenState extends State<FormScreen> {
                 Center(
                   child: Container(
                     width: double.infinity,
-                    height: 300,
                     child: buildBusinessCard(widget.cardInfo),
                   )
                 ),

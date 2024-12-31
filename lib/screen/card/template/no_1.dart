@@ -12,9 +12,12 @@ class No1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 380,
+      height: 230,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color.fromRGBO(255, 249, 163, 1), Color.fromRGBO(165, 255, 229, 1)],
+          colors: [Color.fromRGBO(255, 248, 194, 1.0), Color.fromRGBO(
+              203, 255, 239, 1.0)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -22,61 +25,80 @@ class No1 extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          const SizedBox(height: 10,),
           Text(
             cardInfo.userName ?? "",
             style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
+              fontSize: 25,
+              fontWeight: FontWeight.w900,
               color: Colors.black,
             ),
           ),
+          const SizedBox(height: 10,),
           Text(
             cardInfo.companyName ?? "",
-            style: const TextStyle(fontSize: 7, color: Colors.black87),
+            style: const TextStyle(fontSize: 18, color: Colors.black87, fontWeight:FontWeight.w600),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                cardInfo.position ?? "",
-                style: const TextStyle(fontSize: 7,color: Colors.black87),
+                '${cardInfo.department ?? ""}  ',
+                style: const TextStyle(color: Colors.black87),
               ),
               Text(
-                cardInfo.department ?? "",
-                style: const TextStyle(fontSize: 7,color: Colors.black87),
+                cardInfo.position ?? "",
+                style: const TextStyle(color: Colors.black87),
               ),
             ],
           ),
           Text(
             cardInfo.companyAddress ?? "",
-            style: const TextStyle(fontSize: 7,color: Colors.black87),
+            style: const TextStyle(color: Colors.black87),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("M. "),
-              Text(
-                cardInfo.phone ?? "",
-                style: const TextStyle(fontSize: 7,color: Colors.black87),
-              ),
-              Text("E. "),
-              Text(
-                cardInfo.email ?? "",
-                style: const TextStyle(fontSize: 7,color: Colors.black87),
-              ),
+            if(cardInfo.phone != null && cardInfo.phone!.isNotEmpty)
+              ...[
+                const Text("M.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+                Text(
+                  cardInfo.phone ?? "",
+                  style: const TextStyle(color: Colors.black87),
+                ),
+              ],
+              if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
+              ...[
+                const SizedBox(width: 10,),
+                const Text("E.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+                Text(cardInfo.email ?? "",
+                  style: const TextStyle(color: Colors.black87),
+                ),
+              ],
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("T. ",),
-              Text(
-                cardInfo.companyNumber ?? "",
-                style: const TextStyle(fontSize: 7,color: Colors.black87),
-              ),
-              Text("F. "),
+            if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
+              ...[
+                const Text("T.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+                Text(
+                  cardInfo.companyNumber ?? "",
+                  style: const TextStyle(color: Colors.black87),
+                ),
+                const SizedBox(width: 10,),
+              ],
+            if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
+            ...[
+              const Text("F.  ", style: TextStyle(fontWeight: FontWeight.bold),),
               Text(
                 cardInfo.companyFax ?? "",
-                style: const TextStyle(fontSize: 7,color: Colors.black87),
+                style: const TextStyle(color: Colors.black87),
               ),
+            ]
             ],
           ),
           const SizedBox(height: 16),
