@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
-import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/screen/card/template_selection_screen.dart';
 
 class BusinessCardWidget extends StatefulWidget {
-  final String userEmail;
+  final Future<dynamic> businessCards;
 
   const BusinessCardWidget({
     super.key,
-    required this.userEmail
+    required this.businessCards,
   });
 
   @override
@@ -19,14 +18,8 @@ class BusinessCardWidget extends StatefulWidget {
 }
 
 class _BusinessCardWidgetState extends State<BusinessCardWidget> {
-  late Future<dynamic> _businessCards;
   late BusinessCard _cardInfo;
 
-  @override
-  void initState() {
-    super.initState();
-    _businessCards = CardModel().getBusinessCard(widget.userEmail);
-  }
 
   // 명함 템플릿
   Widget buildBusinessCard(BusinessCard cardInfo) {
@@ -45,7 +38,7 @@ class _BusinessCardWidgetState extends State<BusinessCardWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
-      future: _businessCards,
+      future: widget.businessCards,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -58,7 +51,7 @@ class _BusinessCardWidgetState extends State<BusinessCardWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TemplateSelectionScreen(userEmail: widget.userEmail),
+                    builder: (context) => TemplateSelectionScreen(userEmail: snapshot.data['userEmail']),
                   ),
                 );
               },
@@ -83,7 +76,7 @@ class _BusinessCardWidgetState extends State<BusinessCardWidget> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => TemplateSelectionScreen(userEmail: widget.userEmail),
+                                    builder: (context) => TemplateSelectionScreen(userEmail: snapshot.data['userEmail']),
                                   ),
                                 );
                               },
