@@ -77,26 +77,50 @@ public class MainActivity extends FlutterActivity {
 
         if (intent != null && intent.getData() != null) {
             String uri = intent.getData().toString();
+            System.out.println("Received URI in onNewIntent: " + uri);
 
-            if (uri.startsWith("myapp://naver-login-success")) { // 네이버 로그인 성공 URI 확인
+            if (uri.startsWith("myapp://naver-login-success")) {
+                // 네이버 로그인 성공 처리
                 String code = intent.getData().getQueryParameter("code"); // code 추출
                 String state = intent.getData().getQueryParameter("state"); // state 추출
 
                 if (code != null && state != null) {
+                    System.out.println("Extracted code: " + code + ", state: " + state);
+
                     // Flutter로 전달할 데이터 생성
                     Map<String, String> data = new HashMap<>();
                     data.put("code", code);
                     data.put("state", state);
 
-                    // MethodChannel을 통해 Flutter로 데이터 전달
+                    // Flutter로 전달
                     new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), "redirect_uri_channel")
                             .invokeMethod("onLoginSuccess", data);
                 } else {
                     System.err.println("code 또는 state가 null입니다.");
                 }
+            } else if (uri.startsWith("myapp://naver-register")) {
+                // 네이버 회원가입 처리
+                String providerId = intent.getData().getQueryParameter("providerId");
+                String email = intent.getData().getQueryParameter("email");
+
+                if (providerId != null && email != null) {
+                    System.out.println("ProviderId: " + providerId + ", Email: " + email);
+
+                    Map<String, String> data = new HashMap<>();
+                    data.put("providerId", providerId);
+                    data.put("email", email);
+
+                    new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), "redirect_uri_channel")
+                            .invokeMethod("onRegister", data);
+                } else {
+                    System.err.println("providerId 또는 email이 null입니다.");
+                }
             }
+        } else {
+            System.out.println("No Intent Data Found");
         }
     }
+
 
 
     private void handleNfcIntent(Intent intent) {
