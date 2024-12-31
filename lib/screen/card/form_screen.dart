@@ -4,7 +4,7 @@ import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
-import 'package:itdat/screen/main/my_card_screen.dart';
+import 'package:itdat/screen/mainLayout.dart';
 
 
 class FormScreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _FormScreenState extends State<FormScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-        builder: (context) => MyCardScreen(),
+        builder: (context) => MainLayout(),
       )
       );
     } catch (e) {

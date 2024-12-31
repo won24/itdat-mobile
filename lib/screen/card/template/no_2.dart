@@ -26,7 +26,7 @@ class No2 extends StatelessWidget {
               children: [
                 Text(
                   cardInfo.companyName ?? "",
-                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w800,),
+                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w800, color: Colors.black87),
                 ),
               ],
             ),
@@ -38,12 +38,12 @@ class No2 extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(cardInfo.position ?? "",
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
                     ),
                     const SizedBox(width: 5,),
                     Text(
                       cardInfo.userName ?? "",
-                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
                     ),
                   ],
                 ),
@@ -53,30 +53,30 @@ class No2 extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("M. ", style: TextStyle(fontWeight: FontWeight.bold),),
-                    Text(cardInfo.phone ?? ""),
+                    const Text("M. ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
+                    Text(cardInfo.phone ?? "", style: TextStyle(color: Colors.black87),),
                     const SizedBox(width: 10,),
                     if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
-                      const Text("E. ", style: TextStyle(fontWeight: FontWeight.bold),),
-                    Text(cardInfo.email ?? ""),
+                      const Text("E. ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
+                    Text(cardInfo.email ?? "", style: TextStyle(color: Colors.black87),),
                   ],
                 ),
                 Row(
                   children: [
                     if(cardInfo.companyNumber != null && cardInfo.companyNumber!.isNotEmpty)
                       ...[
-                        const Text("T. ", style: TextStyle(fontWeight: FontWeight.bold),),
-                        Text(cardInfo.companyNumber ?? ""),
+                        const Text("T. ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
+                        Text(cardInfo.companyNumber ?? "", style: TextStyle(color: Colors.black87),),
                         const SizedBox(width: 10,),
                       ],
                     if(cardInfo.companyFax != null && cardInfo.companyFax!.isNotEmpty)
                       ...[
-                        const Text("F. ", style: TextStyle(fontWeight: FontWeight.bold),),
-                        Text(cardInfo.companyFax?? ""),
+                        const Text("F. ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
+                        Text(cardInfo.companyFax?? "", style: TextStyle(color: Colors.black87),),
                       ],
                   ],
                 ),
-                Text(cardInfo.companyAddress ?? ""),
+                Text(cardInfo.companyAddress ?? "", style: TextStyle(color: Colors.black87),),
               ],
             )
           ],
