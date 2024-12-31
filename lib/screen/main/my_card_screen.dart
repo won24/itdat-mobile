@@ -33,7 +33,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
         children: [
           Container(
             width: 385,
-            height: 235,
+            height: 240,
             child: BusinessCardWidget(userId: userId),
           ),
 

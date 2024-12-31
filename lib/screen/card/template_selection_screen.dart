@@ -132,13 +132,25 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                       )
                   );
                 },
-                child:
-                  Column(
-                    children: [
-                      Padding(padding: EdgeInsets.only(bottom: 10)),
-                      template
-                    ],
-                  )
+                child: Transform.scale(
+                  scale: 0.9,
+                  child: Container(
+                    child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: template
+                    ),
+                  ),
+                )
+                // Card(
+                //   elevation: 4,
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                //   child: template
+                // ),
               );
             },
       ),
