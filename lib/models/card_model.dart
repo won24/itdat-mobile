@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 
 class CardModel{
 
-  final baseUrl = "http://112.221.66.174:8001/card";  // 원
+  //final baseUrl = "http://112.221.66.174:8001/card";  // 원
+  final baseUrl = "http://112.221.66.174:8000/card"; //정원
   final dio = Dio();
 
 

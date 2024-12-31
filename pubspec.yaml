@@ -8,6 +8,7 @@ environment:
   sdk: ^3.5.4
 
 dependencies:
+  webview_flutter: ^4.10.0
   google_fonts: ^6.2.1
   lottie: ^3.3.0
   vibration: ^2.0.1
