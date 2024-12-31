@@ -4,6 +4,9 @@ import 'package:itdat/providers/auth_provider.dart';
 import 'package:itdat/widget/register/register_screen.dart';
 
 import '../../screen/mainLayout.dart';
+import 'googleLogin_sacreen.dart';
+import 'kakaoLogin_screen.dart';
+import 'naverLogin_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
@@ -110,8 +113,11 @@ class LoginScreen extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // 네이버 로그인 로직 추가
-                          print("네이버 로그인");
+                          // 네이버 로그인 스크린으로 이동
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => NaverLoginScreen()),
+                          );
                         },
                         icon: Icon(Icons.account_circle),
                         label: Text('Naver'),
@@ -121,13 +127,17 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 5), // 버튼 사이 간격
+
                     // 카카오 로그인
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // 카카오 로그인 로직 추가
-                          print("카카오 로그인");
+                          // 카카오 로그인 스크린으로 이동
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => KakaoLoginScreen()),
+                          );
                         },
                         icon: Icon(Icons.chat_bubble),
                         label: Text('Kakao'),
@@ -138,13 +148,17 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 5), // 버튼 사이 간격
+
                     // 구글 로그인
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // 구글 로그인 로직 추가
-                          print("구글 로그인");
+                          // 구글 로그인 스크린으로 이동
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => GoogleLoginScreen()),
+                          );
                         },
                         icon: Icon(Icons.login),
                         label: Text('Google'),
@@ -154,7 +168,8 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
+                )
+
               ],
             ),
           ),

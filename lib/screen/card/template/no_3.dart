@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:itdat/models/BusinessCard.dart';
 
 class No3 extends StatelessWidget {
-  final Map<String, dynamic> cardInfo;
+  final BusinessCard cardInfo;
 
   No3({
     super.key,
@@ -11,57 +12,82 @@ class No3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      width: 380,
+      height: 230,
+      decoration: const BoxDecoration(
         color: Colors.black,
-        borderRadius: BorderRadius.circular(10),
       ),
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.grey.shade800,
-                child: Text(
-                  cardInfo["userName"]?[0] ?? "",
-                  style: TextStyle(fontSize: 24, color: Colors.white),
-                ),
-              ),
-              SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    cardInfo["userName"] ?? "",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      cardInfo.userName ?? "",
+                      style: const TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  Text(
-                    cardInfo["position"] ?? "",
-                    style: TextStyle(color: Colors.white54),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Divider(thickness: 1, color: Colors.grey),
-          Text(
-            cardInfo["companyName"] ?? "",
-            style: TextStyle(fontSize: 16, color: Colors.white),
-          ),
-          Text(
-            cardInfo["phone"] ?? "",
-            style: TextStyle(color: Colors.white70),
-          ),
-          Text(
-            cardInfo["email"] ?? "",
-            style: TextStyle(color: Colors.white70),
-          ),
-        ],
-      ),
-    );
+                    if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
+                      ...[
+                        SizedBox(width: 10,),
+                        Text(
+                          cardInfo.position ?? "",
+                          style: const TextStyle(fontSize:13, color: Colors.white,),
+                        ),
+                      ]
+                  ]
+                ),
+                Text(
+                  cardInfo.department ?? "",
+                  style: const TextStyle(color: Colors.white70),
+                ),
+                Text(
+                  cardInfo.phone ?? "",
+                  style: const TextStyle(color: Colors.white70),
+                ),
+                Text(
+                  cardInfo.email ?? "",
+                  style: const TextStyle(color: Colors.white70),
+                ),
+              ],
+            ),
+            const Divider(thickness: 1, color: Colors.grey),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  cardInfo.companyName ?? "",
+                  style: const TextStyle(fontSize: 18, color: Colors.white,fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  cardInfo.companyAddress ?? "",
+                  style: const TextStyle( color: Colors.white70),
+                ),
+                if(cardInfo.companyNumber != null && cardInfo.companyNumber!.isNotEmpty)
+                  ...[
+                    Text(
+                      "T. ${cardInfo.companyNumber ?? " "}",
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  ],
+                if(cardInfo.companyFax != null && cardInfo.companyFax!.isNotEmpty)
+                  ...[
+                    Text(
+                      "F. ${cardInfo.companyFax ?? " "}",
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  ]
+              ],
+            )
+          ],
+        ),
+      );
   }
 }

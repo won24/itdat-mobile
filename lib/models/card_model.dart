@@ -11,14 +11,14 @@ class CardModel{
 
 
   // 유저 정보 가져오기
-  Future<dynamic> getUserById(String userId) async {
+  Future<Map<String, dynamic>> getUserById(String userId) async {
 
     try{
       final response = await http.get(Uri.parse("$baseUrl/userinfo/$userId"));
 
       if(response.statusCode == 200){
-        final Map<String, dynamic> data = json.decode(response.body);
-        print("유저정보: $data");
+        final data = json.decode(response.body);
+        return data;
       } else {
         throw Exception('회원 정보 가져오기 실패');
       }
@@ -31,10 +31,10 @@ class CardModel{
 
 
   // 명함 저장
-  Future<BusinessCard> createBusinessCard(String userId, BusinessCard card) async {
+  Future<BusinessCard> createBusinessCard(BusinessCard card) async {
     try{
         final response = await http.post(
-          Uri.parse('$baseUrl/save/$userId'),
+          Uri.parse('$baseUrl/save'),
           headers: {"Content-Type": "application/json"},
           body: json.encode(card.toJson()),
         );
@@ -52,18 +52,18 @@ class CardModel{
 
 
   // 명함 가져오기
-  Future<dynamic> getBusinessCard(String userId) async {
+  Future<List<dynamic>> getBusinessCard(String userId) async {
     try {
       final response = await http.get(Uri.parse("$baseUrl/$userId"));
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        print(data);
+        final data = json.decode(response.body);
+        return data;
       } else {
         throw Exception('명함 가져오기 실패');
       }
     } catch (e) {
-      throw Exception('Error: $e');
+      throw Exception('getBusinessCard Error: $e');
     }
   }
 }

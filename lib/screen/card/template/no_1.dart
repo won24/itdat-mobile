@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:itdat/models/BusinessCard.dart';
 
 class No1 extends StatelessWidget {
-  final Map<String, dynamic> cardInfo;
+  final BusinessCard cardInfo;
 
   const No1({
     super.key,
@@ -11,47 +12,96 @@ class No1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      width: 380,
+      height: 230,
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.pinkAccent, Colors.orange],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          colors: [Color.fromRGBO(255, 248, 194, 1.0), Color.fromRGBO(
+              203, 255, 239, 1.0)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
         ),
-        borderRadius: BorderRadius.circular(15),
       ),
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          const SizedBox(height: 10,),
           Text(
-            cardInfo["userName"] ?? "",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+            cardInfo.userName ?? "",
+            style: const TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w900,
+              color: Colors.black,
             ),
           ),
+          const SizedBox(height: 10,),
           Text(
-            cardInfo["phone"] ?? "",
-            style: TextStyle(color: Colors.white70),
+            cardInfo.companyName ?? "",
+            style: const TextStyle(fontSize: 18, color: Colors.black87, fontWeight:FontWeight.w600),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${cardInfo.department ?? ""}  ',
+                style: const TextStyle(color: Colors.black87),
+              ),
+              Text(
+                cardInfo.position ?? "",
+                style: const TextStyle(color: Colors.black87),
+              ),
+            ],
           ),
           Text(
-            cardInfo["email"] ?? "",
-            style: TextStyle(color: Colors.white70),
+            cardInfo.companyAddress ?? "",
+            style: const TextStyle(color: Colors.black87),
           ),
-          SizedBox(height: 16),
-          Text(
-            cardInfo["companyName"] ?? "",
-            style: TextStyle(fontSize: 18, color: Colors.white),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            if(cardInfo.phone != null && cardInfo.phone!.isNotEmpty)
+              ...[
+                const Text("M.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+                Text(
+                  cardInfo.phone ?? "",
+                  style: const TextStyle(color: Colors.black87),
+                ),
+              ],
+              if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
+              ...[
+                const SizedBox(width: 10,),
+                const Text("E.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+                Text(cardInfo.email ?? "",
+                  style: const TextStyle(color: Colors.black87),
+                ),
+              ],
+            ],
           ),
-          Text(
-            cardInfo["companyAddress"] ?? "",
-            style: TextStyle(color: Colors.white70),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
+              ...[
+                const Text("T.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+                Text(
+                  cardInfo.companyNumber ?? "",
+                  style: const TextStyle(color: Colors.black87),
+                ),
+                const SizedBox(width: 10,),
+              ],
+            if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
+            ...[
+              const Text("F.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+              Text(
+                cardInfo.companyFax ?? "",
+                style: const TextStyle(color: Colors.black87),
+              ),
+            ]
+            ],
           ),
-          Text(
-            cardInfo["companyFax"] ?? "",
-            style: TextStyle(color: Colors.white70),
-          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
