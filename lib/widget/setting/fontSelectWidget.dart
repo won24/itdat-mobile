@@ -18,29 +18,38 @@ class FontDialog {
         return StatefulBuilder(
           builder: (context, setState) {
             List<String> availableFonts = fontProvider.getAvailableFontsForLocale(currentLocale);
-            
+
             return Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                padding: EdgeInsets.all(8),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.8, // 화면 높이의 80%로 제한
+                ),
+                padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.language,
+                      AppLocalizations.of(context)!.font,
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).brightness == Brightness.dark
                           ? Colors.white : Colors.black,
                       ),
                     ),
                     SizedBox(height: 16),
-                    ...availableFonts.map((fontName) => 
-                      _buildFontOption(context, fontName, selectedFont, (value) {
-                        setState(() => selectedFont = value!);
-                      })
+                    Flexible(
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: availableFonts.map((fontName) =>
+                            _buildFontOption(context, fontName, selectedFont, (value) {
+                              setState(() => selectedFont = value!);
+                            })
+                        ).toList(),
+                      ),
                     ),
+                    SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
