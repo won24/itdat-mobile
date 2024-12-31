@@ -29,12 +29,14 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Column(
         children: [
-          Expanded(child:
-            BusinessCardWidget(userId: userId),
+          Container(
+            width: 385,
+            height: 235,
+            child: BusinessCardWidget(userId: userId),
           ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -42,17 +44,17 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                 setState(() {
                   _selectedIndex=0;
                 });},
-                child: Text("연락처"),),
-              Text("|"),
+                child: const Text("연락처"),),
+              const Text("|"),
               TextButton(onPressed: () {
                 setState(() {
                   _selectedIndex = 1;
-                });}, child: Text("포트폴리오")),
-              Text("|"),
+                });}, child: const Text("포트폴리오")),
+              const Text("|"),
               TextButton(onPressed: () {
                 setState(() {
                   _selectedIndex = 2;
-                });}, child: Text("히스토리"))
+                });}, child: const Text("히스토리"))
             ],
           ),
           Expanded(child: _widgets[_selectedIndex]),

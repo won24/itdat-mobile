@@ -115,38 +115,32 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       appBar: AppBar(title: Text("템플릿 선택")),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-        ),
-        itemCount: templates.length,
-        itemBuilder: (context, i) {
-          final template = templates[i];
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedTemplate = "No${i + 1}";
-                _card = _card.copyWith(appTemplate: selectedTemplate);
-              });
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FormScreen(cardInfo: _card),
+          : ListView.builder(
+            itemCount: templates.length,
+            itemBuilder: (context, i) {
+              final template = templates[i];
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedTemplate = "No${i + 1}";
+                    _card = _card.copyWith(appTemplate: selectedTemplate);
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FormScreen(cardInfo: _card),
+                      )
+                  );
+                },
+                child:
+                  Column(
+                    children: [
+                      Padding(padding: EdgeInsets.only(bottom: 10)),
+                      template
+                    ],
                   )
               );
             },
-            child:
-                Column(
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: template
-                      ),
-                    ),
-                  ],
-                )
-          );
-        },
       ),
     );
   }
