@@ -21,92 +21,67 @@ class TemplateSelectionScreen extends StatefulWidget {
 
 class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
 
-  final CardModel cardModel = CardModel();
   Map<String, dynamic>? userData;
   late BusinessCard _card;
   late List<Widget> templates;
   bool isLoading = true;
+  int cardNo = 1;
+  String selectedTemplate = "";
 
   @override
   void initState() {
     super.initState();
-    _initializeCard();
-    fetchUserData();
-  }
-
-  void _initializeCard() {
-    _card = BusinessCard(
-      appTemplate: "",
-      userName: "",
-      phone: "",
-      email: "",
-      companyName: "",
-      companyNumber: "",
-      companyAddress: "",
-      companyFax: "",
-      department: "",
-      position: "",
-      userEmail: widget.userEmail,
-    );
-
-    // templates 초기화
-    templates = [
-    No1(cardInfo: _card),
-    No2(cardInfo: _card),
-    No3(cardInfo: _card),
-    ];
+    fetchUserDataAndBusinessCards();
   }
 
 
-
-// 유저 정보 가져오기
-  Future<void> fetchUserData() async {
+  // 기존 정보 가져오기
+  Future<void> fetchUserDataAndBusinessCards() async {
     setState(() => isLoading = true);
+
     try {
-      final data = await cardModel.getUserById(widget.userEmail);
+      final fetchedUserData = await CardModel().getUserById(widget.userEmail);
+      final fetchedBusinessCards = await CardModel().getBusinessCard(widget.userEmail);
+
       setState(() {
-        userData = data;
-        _initializeCardWithUserData();
+        userData = fetchedUserData;
+        cardNo = (fetchedBusinessCards.length) + 1;
+        _initializeCard();
       });
     } catch (e) {
-      print("Error: $e");
+      print("유저 기본 정보, 카드 정보 가져오기 실패 : $e");
     } finally {
       setState(() => isLoading = false);
-      print("유저: $userData");
     }
   }
 
 
-  // 명함 초기화
-    void _initializeCardWithUserData() {
-      if (userData != null) {
-        setState(() {
-          _card = _card.copyWith(
-            appTemplate: selectedTemplate,
-            userName: userData!['userName'] ?? "",
-            phone: userData!['phone'] ?? "",
-            email: userData!['userEmail'] ?? "",
-            companyName: userData!['company'] ?? "",
-            companyNumber: userData!['companyPhone'] ?? "",
-            companyAddress:
-            "${userData!['companyAddr'] ?? ""} ${userData!['companyAddrDetail'] ?? ""}",
-            companyFax: userData!['companyFax'] ?? "",
-            department: userData!['companyDept'] ?? "",
-            position: userData!['companyRank'] ?? "",
-            userEmail: userData!['userEmail'] ?? "",
-          );
+  // 명함 정보 초기화
+  void _initializeCard() {
+    _card = BusinessCard(
+      appTemplate: "",
+      userName: userData?['userName'] ?? "",
+      phone: userData?['phone'] ?? "",
+      email: userData?['userEmail'] ?? "",
+      companyName: userData?['company'] ?? "",
+      companyNumber: userData?['companyPhone'] ?? "",
+      companyAddress:
+      "${userData?['companyAddr'] ?? ""} ${userData?['companyAddrDetail'] ?? ""}",
+      companyFax: userData?['companyFax'] ?? "",
+      department: userData?['companyDept'] ?? "",
+      position: userData?['companyRank'] ?? "",
+      userEmail: widget.userEmail,
+      cardNo: cardNo,
+      cardSide: "FRONT",
+    );
 
-          // 데이터가 업데이트된 후 templates를 다시 초기화
-          templates = [
-            No1(cardInfo: _card),
-            No2(cardInfo: _card),
-            No3(cardInfo: _card),
-          ];
-        });
-      }
+    // 템플릿 초기화
+    templates = [
+      No1(cardInfo: _card),
+      No2(cardInfo: _card),
+      No3(cardInfo: _card),
+    ];
   }
-
-  String selectedTemplate = "";
 
 
   @override

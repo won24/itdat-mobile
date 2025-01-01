@@ -21,19 +21,16 @@ class FormScreen extends StatefulWidget {
 
 class _FormScreenState extends State<FormScreen> {
 
-  final CardModel cardModel = CardModel();
-
-
   // 명함 저장
   void _saveCard() async {
     try {
-      await cardModel.createBusinessCard(widget.cardInfo);
+      await CardModel().createBusinessCard(widget.cardInfo);
       _showSnackBar("새로운 명함이 생성되었습니다.");
       Navigator.push(
-          context,
-          MaterialPageRoute(
+        context,
+        MaterialPageRoute(
         builder: (context) => MainLayout(),
-      )
+        )
       );
     } catch (e) {
       _showSnackBar("명함 생성에 실패했습니다. 다시 시도해주세요.", isError: true);

@@ -93,6 +93,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                             department: card['department'],
                             position: card['position'],
                             userEmail: card['userEmail'],
+                            cardNo: card['cardNo'],
+                            cardSide: card['cardSide'],
                           );
                         });
                       }
@@ -127,6 +129,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                           department: card['department'],
                           position: card['position'],
                           userEmail: card['userEmail'],
+                          cardNo: card['cardNo'],
+                          cardSide: card['cardSide']
                         );
 
                         if (selectedCardInfo == null) {
