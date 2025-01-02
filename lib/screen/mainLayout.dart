@@ -3,6 +3,7 @@ import 'package:itdat/screen/main/card_wallet_screen.dart';
 import 'package:itdat/screen/main/my_card_screen.dart';
 import 'package:itdat/screen/main/my_info_screen.dart';
 import 'package:itdat/screen/main/open_card_screen.dart';
+import 'package:itdat/widget/card/cart_select_widget.dart';
 import 'package:itdat/widget/qr_scan/qrScreen.dart';
 import 'package:itdat/widget/setting/settingWidget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -57,7 +58,8 @@ class _MainLayoutState extends State<MainLayout> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NfcReadPage()),
+                  MaterialPageRoute(builder: (context) => CardSelect()),
+                  //MaterialPageRoute(builder: (context) => NfcReadPage()),
                 );
               },
 

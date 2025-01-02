@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:vibration/vibration.dart';
@@ -115,11 +116,19 @@ class _NfcReadPageState extends State<NfcReadPage> {
         if (ndef == null) {
           return;
         }
-        var records = await ndef.read();
-        // NFC 태그 데이터 처리 로직
-        // 여기에 태그 데이터를 처리하는 코드를 추가하세요
+        var message = await ndef.read();
+        if (message != null && message.records.isNotEmpty) {
+          var record = message.records.first;
+          if (record.typeNameFormat == NdefTypeNameFormat.nfcWellknown &&
+              record.type.length == 1 &&
+              record.type[0] == 0x54) { // 'T' for Text record
+            var languageCodeLength = record.payload[0] & 0x3f;
+            var text = utf8.decode(record.payload.sublist(1 + languageCodeLength));
+            var cardInfo = json.decode(text);
+            _showCardInfoAlert(cardInfo);
+          }
+        }
       } catch (e) {
-        // 오류 처리
         print('NFC 읽기 오류: $e');
       } finally {
         _stopNfcRead();
@@ -156,5 +165,31 @@ class _NfcReadPageState extends State<NfcReadPage> {
   void _stopVibration() {
     _vibrationTimer?.cancel();
     Vibration.cancel();
+  }
+
+  void _showCardInfoAlert(Map<String, dynamic> cardInfo) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('명함 정보'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: cardInfo.entries.map((entry) {
+                return Text('${entry.key}: ${entry.value}');
+              }).toList(),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -1,4 +1,5 @@
 class BusinessCard {
+  String? cardId; // 새로 추가된 필드
   String? appTemplate;
   String? userName;
   String? phone;
@@ -12,6 +13,7 @@ class BusinessCard {
   String? userEmail;
 
   BusinessCard({
+    this.cardId, // 선택적 매개변수로 추가
     required this.appTemplate,
     this.userName = "",
     this.phone = "",
@@ -27,6 +29,7 @@ class BusinessCard {
 
   factory BusinessCard.fromJson(Map<String, dynamic> json) {
     return BusinessCard(
+      cardId: json['cardId'], // JSON에서 cardId 파싱
       appTemplate: json['appTemplate'],
       userName: json['userName'],
       phone: json['phone'],
@@ -43,6 +46,7 @@ class BusinessCard {
 
   Map<String, dynamic> toJson() {
     return {
+      'cardId': cardId, // JSON 변환 시 cardId 포함
       'appTemplate': appTemplate,
       'userName': userName,
       'phone': phone,
@@ -58,6 +62,7 @@ class BusinessCard {
   }
 
   BusinessCard copyWith({
+    String? cardId, // copyWith 메서드에 cardId 추가
     String? appTemplate,
     String? userName,
     String? phone,
@@ -71,6 +76,7 @@ class BusinessCard {
     String? userEmail,
   }) {
     return BusinessCard(
+      cardId: cardId ?? this.cardId, // cardId 복사
       appTemplate: appTemplate ?? this.appTemplate,
       userName: userName ?? this.userName,
       phone: phone ?? this.phone,
@@ -83,5 +89,6 @@ class BusinessCard {
       position: position ?? this.position,
       userEmail: userEmail ?? this.userEmail,
     );
+
   }
 }

@@ -4,8 +4,13 @@ import 'package:vibration/vibration.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
+import 'dart:convert';
 
 class NfcWritePage extends StatefulWidget {
+  final Map<String, dynamic> cardInfo;
+
+  const NfcWritePage({Key? key, required this.cardInfo}) : super(key: key);
+
   @override
   _NfcWritePageState createState() => _NfcWritePageState();
 }
@@ -14,13 +19,14 @@ class _NfcWritePageState extends State<NfcWritePage> {
   bool _isWriting = false;
   bool _isRetryVisible = false;
   Timer? _vibrationTimer;
-  late String _baseText = AppLocalizations.of(context)!.nfctag;
+  late String _baseText;
   String _dots = '';
   Timer? _textAnimationTimer;
 
   @override
   void initState() {
     super.initState();
+    _baseText = AppLocalizations.of(context)!.nfctag;
     _startNfcWrite();
     _startTextAnimation();
   }
@@ -69,9 +75,9 @@ class _NfcWritePageState extends State<NfcWritePage> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                              color: Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
                           ),
                           children: [
                             TextSpan(text: _baseText),
@@ -116,15 +122,16 @@ class _NfcWritePageState extends State<NfcWritePage> {
           _showAlert('이 NFC 태그는 쓰기가 불가능합니다.');
           return;
         }
-
+        // cardInfo를 JSON 문자열로 변환
+        String cardInfoJson = json.encode(widget.cardInfo);
         // NFC 태그 데이터 쓰기 로직
         NdefMessage message = NdefMessage([
-          NdefRecord.createText('Sample Data'),
-          // 여기에 더 많은 데이터를 추가할 수 있습니다.
+          NdefRecord.createText(cardInfoJson),
+         // NdefRecord.createUri(Uri.parse('https://example.com/card')), // 웹 링크
         ]);
 
         await ndef.write(message);
-        _showAlert('데이터가 성공적으로 기록되었습니다.');
+        _showAlert('명함 데이터가 성공적으로 기록되었습니다.');
       } catch (e) {
         _showAlert('NFC 쓰기 오류: $e');
       } finally {
