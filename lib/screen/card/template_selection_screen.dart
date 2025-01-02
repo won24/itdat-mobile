@@ -81,6 +81,8 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       No2(cardInfo: _card),
       No3(cardInfo: _card),
     ];
+
+    print(_card);
   }
 
 
