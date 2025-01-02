@@ -37,6 +37,17 @@
             <meta-data
                 android:name="com.naver.sdk.callbackUrlScheme"
                 android:value="naverKk0mlnghLzPAi0TpquZj" />
+
+            <meta-data
+                android:name="com.google.android.gms.games.APP_ID"
+                android:value="@string/app_id" />
+            <meta-data
+                android:name="com.google.android.gms.appinvite.automatic_launch"
+                android:value="true" />
+            <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
