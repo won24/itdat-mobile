@@ -17,7 +17,8 @@ class MyCardScreen extends StatefulWidget {
 }
 
 class _MyCardWidgetState extends State<MyCardScreen> {
-  final userEmail = "user16@example.com";
+
+  final userEmail = "sksksk4502@naver.com";
   late Future<dynamic> _businessCards;
   BusinessCard? selectedCardInfo;
 

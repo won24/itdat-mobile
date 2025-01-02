@@ -95,5 +95,6 @@ class BusinessCard {
       cardNo: cardNo ?? this.cardNo,
       cardSide: cardSide ?? this.cardSide,
     );
+
   }
 }
