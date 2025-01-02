@@ -39,13 +39,14 @@ class CardModel{
           body: json.encode(card.toJson()),
         );
 
+
         if(response.statusCode == 200){
           return BusinessCard.fromJson(json.decode(response.body));
         }else{
           throw Exception('명함 저장 실패: ${response.statusCode}');
         }
     }catch(e){
-      print("명함 생성 실패");
+      print("명함 생성 실패 $e");
       throw Exception("createBusinessCard Error: $e");
     }
   }
