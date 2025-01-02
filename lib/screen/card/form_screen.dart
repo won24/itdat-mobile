@@ -26,12 +26,10 @@ class _FormScreenState extends State<FormScreen> {
     try {
       await CardModel().createBusinessCard(widget.cardInfo);
       _showSnackBar("새로운 명함이 생성되었습니다.");
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(
-        builder: (context) => MainLayout(),
-        )
-      );
+        MaterialPageRoute(builder: (BuildContext context) =>
+            MainLayout()), (route) => false);
     } catch (e) {
       _showSnackBar("명함 생성에 실패했습니다. 다시 시도해주세요.", isError: true);
     }

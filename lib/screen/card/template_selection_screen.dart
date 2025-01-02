@@ -45,11 +45,32 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
 
       setState(() {
         userData = fetchedUserData;
-        cardNo = (fetchedBusinessCards.length) + 1;
+
+        // 가장 최근에 만들어진 명함 찾기
+        if (fetchedBusinessCards.isNotEmpty) {
+          final latestCard = fetchedBusinessCards.reduce((a, b) {
+            DateTime aDate = DateTime.parse(a['createdAt']);
+            DateTime bDate = DateTime.parse(b['createdAt']);
+
+            return aDate.isAfter(bDate) ? a : b;
+          });
+
+          cardNo = latestCard['cardNo'] + 1;
+        } else {
+          cardNo = 1; // 명함이 없으면 1부터 시작
+        }
+
         _initializeCard();
       });
     } catch (e) {
       print("유저 기본 정보, 카드 정보 가져오기 실패 : $e");
+
+      // 기본값으로 초기화
+      setState(() {
+        userData = {};
+        cardNo = 1; // 기본 카드 번호
+        _initializeCard(); // 안전한 초기화
+      });
     } finally {
       setState(() => isLoading = false);
     }
@@ -81,8 +102,6 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       No2(cardInfo: _card),
       No3(cardInfo: _card),
     ];
-
-    print(_card);
   }
 
 
@@ -111,14 +130,12 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                 },
                 child: Transform.scale(
                   scale: 0.9,
-                  child: Container(
-                    child: Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: template
-                    ),
+                  child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: template
                   ),
                 )
               );
