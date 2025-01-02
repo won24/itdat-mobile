@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
               } else {
-                return authProvider.isLoggedIn ? MainLayout() : MainLayout();
+                return authProvider.isLoggedIn ? LoginScreen() : MainLayout();
               }
             },
           ),

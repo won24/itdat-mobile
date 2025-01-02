@@ -60,7 +60,7 @@ class _BusinessCardWidgetState extends State<BusinessCardList> {
             itemBuilder: (context, index) {
               var card = businessCards[index];
               BusinessCard cardInfo = BusinessCard(
-                  cardId: card['cardId'],
+                 //cardId: card['cardId'],
                   appTemplate: card['appTemplate'],
                   userName: card['userName'],
                   phone: card['phone'],

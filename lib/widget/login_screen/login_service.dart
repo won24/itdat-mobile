@@ -9,7 +9,11 @@ class AuthService {
   // 로그인 메서드
   Future<bool> login(String email, String password) async {
     print("서비스쪽: email = $email, password = $password");
-    var result = await _loginModel.login(email, password);
+    Map<String, String> requestBody = {
+      'email': "sksksk4502@naver.com",
+      'password': "son4970",
+    };
+    var result = await _loginModel.login(requestBody);
 
     // 로그인 성공 시
     if (result['success']) {

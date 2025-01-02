@@ -58,8 +58,7 @@ class _MainLayoutState extends State<MainLayout> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CardSelect()),
-                  //MaterialPageRoute(builder: (context) => NfcReadPage()),
+                  MaterialPageRoute(builder: (context) => NfcReadPage()),
                 );
               },
 
