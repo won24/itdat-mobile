@@ -18,10 +18,11 @@ class MyCardScreen extends StatefulWidget {
 
 class _MyCardWidgetState extends State<MyCardScreen> {
   final userEmail = "user16@example.com";
-  late Future<dynamic> _businessCards;
+  late Future<List<dynamic>> _businessCards;
   BusinessCard? selectedCardInfo;
-
+  final PageController _pageController = PageController();
   int _selectedIndex = 0;
+  int _cardIndex = 0;
 
   @override
   void initState() {
@@ -43,158 +44,183 @@ class _MyCardWidgetState extends State<MyCardScreen> {
     }
   }
 
+  Widget renderCardSlideIcon(List<dynamic> businessCards) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(businessCards.length, (index) {
+        return IconButton(
+          icon: Icon(
+            Icons.circle,
+            size: 10,
+            color: index == _cardIndex ? Color.fromRGBO(0, 202, 145, 1) : Colors.black87,
+          ),
+          onPressed: () {
+            _pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+            setState(() {
+              _cardIndex = index;
+            });
+          },
+        );
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          Container(
-            width: 380,
-            height: 238,
-            child: FutureBuilder<dynamic>(
-              future: _businessCards,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('명함을 가져오는 중 오류가 발생했습니다.'));
-                } else if (!snapshot.hasData || snapshot.data.isEmpty) {
-                  return Center(
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TemplateSelectionScreen(userEmail: userEmail),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.add, size: 64),
-                    ),
-                  );
-                } else {
-                  var businessCards = snapshot.data;
-
-                  return PageView.builder(
-                    itemCount: businessCards.length + 1,
-                    onPageChanged: (index) {
-                      if (index < businessCards.length) {
-                        setState(() {
-                          var card = businessCards[index];
-                          selectedCardInfo = BusinessCard(
-                            appTemplate: card['appTemplate'],
-                            userName: card['userName'],
-                            phone: card['phone'],
-                            email: card['email'],
-                            companyName: card['companyName'],
-                            companyNumber: card['companyNumber'],
-                            companyAddress: card['companyAddress'],
-                            companyFax: card['companyFax'],
-                            department: card['department'],
-                            position: card['position'],
-                            userEmail: card['userEmail'],
-                            cardNo: card['cardNo'],
-                            cardSide: card['cardSide'],
-                          );
-                        });
-                      }
-                    },
-                    itemBuilder: (context, index) {
-                      if (index == businessCards.length) {
-                        return Center(
-                          child: IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      TemplateSelectionScreen(userEmail: userEmail),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.add, size: 64),
-                          ),
-                        );
-                      } else {
-                        var card = businessCards[index];
-                        var cardInfo = BusinessCard(
-                          appTemplate: card['appTemplate'],
-                          userName: card['userName'],
-                          phone: card['phone'],
-                          email: card['email'],
-                          companyName: card['companyName'],
-                          companyNumber: card['companyNumber'],
-                          companyAddress: card['companyAddress'],
-                          companyFax: card['companyFax'],
-                          department: card['department'],
-                          position: card['position'],
-                          userEmail: card['userEmail'],
-                          cardNo: card['cardNo'],
-                          cardSide: card['cardSide']
-                        );
-
-                        if (selectedCardInfo == null) {
-                          selectedCardInfo = cardInfo;
-                        }
-
-                        return Transform.scale(
-                          scale: 0.95,
-                          child: Container(
-                            child: Card(
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: buildBusinessCard(cardInfo),
+          Expanded(
+          flex: 1,
+            child: SizedBox(
+              height: 230,
+              child: FutureBuilder<List<dynamic>>(
+                future: _businessCards,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return const Center(child: Text('명함을 가져오는 중 오류가 발생했습니다.'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TemplateSelectionScreen(userEmail: userEmail),
                             ),
+                          );
+                        },
+                        icon: const Icon(Icons.add, size: 64),
+                      ),
+                    );
+                  } else {
+                    var businessCards = snapshot.data!;
+
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: PageView.builder(
+                            controller: _pageController,
+                            itemCount: businessCards.length + 1,
+                            onPageChanged: (index) {
+                              setState(() {
+                                _cardIndex = index;
+                                if (index < businessCards.length) {
+                                  selectedCardInfo = BusinessCard.fromJson(businessCards[index]);
+                                }
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              if (index == businessCards.length) {
+                                return Center(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              TemplateSelectionScreen(userEmail: userEmail),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.add, size: 64),
+                                  ),
+                                );
+                              } else {
+                                var card = businessCards[index];
+                                var cardInfo = BusinessCard(
+                                  appTemplate: card['appTemplate'],
+                                  userName: card['userName'],
+                                  phone: card['phone'],
+                                  email: card['email'],
+                                  companyName: card['companyName'],
+                                  companyNumber: card['companyNumber'],
+                                  companyAddress: card['companyAddress'],
+                                  companyFax: card['companyFax'],
+                                  department: card['department'],
+                                  position: card['position'],
+                                  userEmail: card['userEmail'],
+                                  cardNo: card['cardNo'],
+                                  cardSide: card['cardSide'],
+                                );
+
+                                selectedCardInfo ??= cardInfo;
+
+                                return Card(
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Flexible(
+                                        child: buildBusinessCard(cardInfo),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
                           ),
-                        );
-                      }
-                    },
-                  );
-                }
-              },
+                        ),
+                        renderCardSlideIcon(businessCards),
+                      ],
+                    );
+                  }
+                },
+              ),
             ),
           ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 0;
-                  });
-                },
-                child: const Text("연락처"),
-              ),
-              const Text("|"),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                },
-                child: const Text("포트폴리오"),
-              ),
-              const Text("|"),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-                child: const Text("히스토리"),
-              ),
-            ],
-          ),
-
           Expanded(
-            child: _selectedIndex == 0 && selectedCardInfo != null
-                ? InfoWidget(businessCards: selectedCardInfo!)
-                : _selectedIndex == 1
-                ? const PortfolioWidget()
-                : const HistoryWidget(),
+            flex: 1,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedIndex = 0;
+                        });
+                      },
+                      child: const Text("연락처"),
+                    ),
+                    const Text("|"),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedIndex = 1;
+                        });
+                      },
+                      child: const Text("포트폴리오"),
+                    ),
+                    const Text("|"),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedIndex = 2;
+                        });
+                      },
+                      child: const Text("히스토리"),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: _selectedIndex == 0 && selectedCardInfo != null
+                      ? InfoWidget(businessCards: selectedCardInfo!)
+                      : _selectedIndex == 1
+                      ? const PortfolioWidget()
+                      : const HistoryWidget(),
+                ),
+              ]
+            ),
           ),
         ],
       ),

@@ -25,8 +25,6 @@ dependencies:
     sdk: flutter
   flutter_localization: ^0.3.0
   intl: ^0.19.0
-  flutter_svg: ^2.0.16
-  path_provider: ^2.1.5
   webview_flutter: ^4.2.1
   google_sign_in: ^5.4.0
   kakao_flutter_sdk: ^1.9.6
@@ -47,6 +45,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/icons/
     - assets/logowhite.png
     - assets/logoblack.png
     - assets/nfcAnime.json
