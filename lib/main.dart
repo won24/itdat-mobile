@@ -184,6 +184,7 @@ class _MyAppState extends State<MyApp> {
             Locale('ko', ''), // Korean
             Locale('ja', ''), // Japanese
           ],
+
           initialRoute: '/',
           routes: {
             '/': (context) => LoginScreen(),
@@ -194,6 +195,7 @@ class _MyAppState extends State<MyApp> {
                 create: (_) => LoginModel(),
                 child: RegisterScreen(registrationData: args),
               );
+
             },
           },
         );

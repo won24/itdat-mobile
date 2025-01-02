@@ -29,6 +29,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<bool> login(String email, String password) async {
     print("프로바이더 로그인 정보확인: email = $email, password = $password");
+
     bool success = await _authService.login(email, password);
     _isLoggedIn = success;
     notifyListeners();
