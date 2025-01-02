@@ -50,21 +50,37 @@ class GoogleLoginScreen extends StatelessWidget {
     );
   }
 
+  bool _isSigningIn = false;
+
   Future<String> _getGoogleIdToken() async {
-    print('Google ID Token 가져오는 중...');
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: ['email'],
-    );
-
-    final GoogleSignInAccount? account = await googleSignIn.signIn();
-    if (account == null) {
-      throw Exception('Google 로그인 취소됨');
+    if (_isSigningIn) {
+      print('Google Sign-In 중복 호출 방지');
+      throw Exception('Google Sign-In is already in progress');
     }
-    print('Google Account: $account');
 
-    final GoogleSignInAuthentication auth = await account.authentication;
-    print('Google ID Token: ${auth.idToken}');
+    _isSigningIn = true;
+    try {
+      print('Google ID Token 가져오는 중...');
+      final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+      final GoogleSignInAccount? account = await googleSignIn.signIn();
+      if (account == null) {
+        throw Exception('Google 로그인 취소됨');
+      }
+      print('Google Account: $account');
 
-    return auth.idToken!;
+      final GoogleSignInAuthentication auth = await account.authentication;
+      if (auth.idToken == null) {
+        throw Exception('Google ID Token을 가져오지 못했습니다.');
+      }
+      print('Google ID Token 가져오기 성공: ${auth.idToken}');
+      return auth.idToken!;
+    } catch (e) {
+      print('Google 로그인 중 오류 발생: $e');
+      rethrow;
+    } finally {
+      _isSigningIn = false;
+    }
   }
+
+
 }

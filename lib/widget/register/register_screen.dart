@@ -6,11 +6,15 @@ import '../register/address_screen.dart';
 import './date_picker.dart';
 
 class RegisterScreen extends StatefulWidget {
+  final Map<String, String>? registrationData;
+
+  RegisterScreen({this.registrationData});
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  String _providerType = "MANUAL"; // 기본값 설정
   final _formKey = GlobalKey<FormState>();
 
   // Form Controllers
@@ -30,8 +34,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _companyAddrDetailController = TextEditingController();
 
   String _userType = "PERSONAL";
-  Map<String, String?> _errors = {};
+  final Map<String, String?> _errors = {};
   Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 소셜 회원가입 데이터를 통해 providerType 및 기본 값 설정
+    if (widget.registrationData != null) {
+      _providerType = widget.registrationData?['providerType'] ?? "MANUAL";
+      _emailController.text = widget.registrationData?['email'] ?? "";
+    }
+  }
 
   // 유효성 검사 함수
   void _validateField(String fieldName, String value) {
@@ -155,7 +170,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "companyPhone": _companyPhoneController.text,
       "companyAddr": _companyAddrController.text,
       "companyAddrDetail": _companyAddrDetailController.text,
+      "providerType": _providerType,
     };
+
+    print("회원가입 데이터: $formData");
 
     final success = await Provider.of<LoginModel>(context, listen: false).register(formData);
     if (success) {
