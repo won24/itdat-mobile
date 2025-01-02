@@ -4,7 +4,7 @@ import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
-import 'package:itdat/screen/main/my_card_screen.dart';
+import 'package:itdat/screen/mainLayout.dart';
 
 
 class FormScreen extends StatefulWidget {
@@ -21,19 +21,16 @@ class FormScreen extends StatefulWidget {
 
 class _FormScreenState extends State<FormScreen> {
 
-  final CardModel cardModel = CardModel();
-
-
   // 명함 저장
   void _saveCard() async {
     try {
-      await cardModel.createBusinessCard(widget.cardInfo);
+      await CardModel().createBusinessCard(widget.cardInfo);
       _showSnackBar("새로운 명함이 생성되었습니다.");
       Navigator.push(
-          context,
-          MaterialPageRoute(
-        builder: (context) => MyCardScreen(),
-      )
+        context,
+        MaterialPageRoute(
+        builder: (context) => MainLayout(),
+        )
       );
     } catch (e) {
       _showSnackBar("명함 생성에 실패했습니다. 다시 시도해주세요.", isError: true);

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:itdat/models/BusinessCard.dart';
 
 class InfoWidget extends StatefulWidget {
+  final BusinessCard businessCards;
 
   const InfoWidget({
     super.key,
+    required this.businessCards,
   });
 
   @override
@@ -17,7 +20,13 @@ class _InfoWidgetState extends State<InfoWidget> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            TextField(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text("휴대전화", style: TextStyle(color: Colors.grey),),
+                Text('${widget.businessCards.phone}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),)
+              ],
             )
           ],
         ),

@@ -11,12 +11,14 @@ class BusinessCard {
   String? department;
   String? position;
   String? userEmail;
+  int? cardNo;
+  String? cardSide;
 
   BusinessCard({
     this.cardId, // 선택적 매개변수로 추가
     required this.appTemplate,
-    this.userName = "",
-    this.phone = "",
+    required this.userName,
+    required this.phone,
     required this.email,
     required this.companyName,
     required this.companyNumber,
@@ -25,6 +27,8 @@ class BusinessCard {
     required this.department,
     required this.position,
     required this.userEmail,
+    required this.cardNo,
+    required this.cardSide,
   });
 
   factory BusinessCard.fromJson(Map<String, dynamic> json) {
@@ -41,6 +45,8 @@ class BusinessCard {
       department: json['department'],
       position: json['position'],
       userEmail: json['userEmail'],
+      cardNo: json['cardNo'],
+      cardSide: json['cardSide'],
     );
   }
 
@@ -58,6 +64,8 @@ class BusinessCard {
       'position': position,
       'department': department,
       'userEmail': userEmail,
+      'cardNo': cardNo,
+      'cardSide': cardSide,
     };
   }
 
@@ -74,6 +82,8 @@ class BusinessCard {
     String? department,
     String? position,
     String? userEmail,
+    int? cardNo,
+    String? cardSide,
   }) {
     return BusinessCard(
       cardId: cardId ?? this.cardId, // cardId 복사
@@ -88,6 +98,8 @@ class BusinessCard {
       department: department ?? this.department,
       position: position ?? this.position,
       userEmail: userEmail ?? this.userEmail,
+      cardNo: cardNo ?? this.cardNo,
+      cardSide: cardSide ?? this.cardSide,
     );
 
   }

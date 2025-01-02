@@ -33,7 +33,7 @@ class No1 extends StatelessWidget {
             style: const TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.w900,
-              color: Colors.black,
+              color: Colors.black87,
             ),
           ),
           const SizedBox(height: 10,),
@@ -63,7 +63,7 @@ class No1 extends StatelessWidget {
             children: [
             if(cardInfo.phone != null && cardInfo.phone!.isNotEmpty)
               ...[
-                const Text("M.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+                const Text("M.  ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
                 Text(
                   cardInfo.phone ?? "",
                   style: const TextStyle(color: Colors.black87),
@@ -72,7 +72,7 @@ class No1 extends StatelessWidget {
               if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
               ...[
                 const SizedBox(width: 10,),
-                const Text("E.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+                const Text("E.  ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
                 Text(cardInfo.email ?? "",
                   style: const TextStyle(color: Colors.black87),
                 ),
@@ -84,7 +84,7 @@ class No1 extends StatelessWidget {
             children: [
             if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
               ...[
-                const Text("T.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+                const Text("T.  ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
                 Text(
                   cardInfo.companyNumber ?? "",
                   style: const TextStyle(color: Colors.black87),
@@ -93,7 +93,7 @@ class No1 extends StatelessWidget {
               ],
             if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
             ...[
-              const Text("F.  ", style: TextStyle(fontWeight: FontWeight.bold),),
+              const Text("F.  ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
               Text(
                 cardInfo.companyFax ?? "",
                 style: const TextStyle(color: Colors.black87),
