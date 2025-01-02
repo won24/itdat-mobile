@@ -79,27 +79,19 @@ public class MainActivity extends FlutterActivity {
             String uri = intent.getData().toString();
             System.out.println("Received URI in onNewIntent: " + uri);
 
-            if (uri.startsWith("myapp://naver-login-success")) {
-                // 네이버 로그인 성공 처리
-                String code = intent.getData().getQueryParameter("code"); // code 추출
-                String state = intent.getData().getQueryParameter("state"); // state 추출
+            if (uri.startsWith("myapp://main")) {
+                String token = intent.getData().getQueryParameter("token");
 
-                if (code != null && state != null) {
-                    System.out.println("Extracted code: " + code + ", state: " + state);
-
-                    // Flutter로 전달할 데이터 생성
-                    Map<String, String> data = new HashMap<>();
-                    data.put("code", code);
-                    data.put("state", state);
+                if (token != null) {
+                    System.out.println("Extracted token: " + token);
 
                     // Flutter로 전달
                     new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), "redirect_uri_channel")
-                            .invokeMethod("onLoginSuccess", data);
+                            .invokeMethod("onLoginSuccess", token);
                 } else {
-                    System.err.println("code 또는 state가 null입니다.");
+                    System.err.println("Token이 null입니다.");
                 }
-            } else if (uri.startsWith("myapp://naver-register")) {
-                // 네이버 회원가입 처리
+            } else if (uri.startsWith("myapp://register")) {
                 String providerId = intent.getData().getQueryParameter("providerId");
                 String email = intent.getData().getQueryParameter("email");
 
@@ -115,11 +107,14 @@ public class MainActivity extends FlutterActivity {
                 } else {
                     System.err.println("providerId 또는 email이 null입니다.");
                 }
+            } else {
+                System.out.println("Unhandled URI: " + uri);
             }
         } else {
             System.out.println("No Intent Data Found");
         }
     }
+
 
 
 

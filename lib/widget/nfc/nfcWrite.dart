@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:vibration/vibration.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
+import 'dart:convert';
 
 class NfcWritePage extends StatefulWidget {
+  final Map<String, dynamic> cardInfo;
+
+  const NfcWritePage({Key? key, required this.cardInfo}) : super(key: key);
+
   @override
   _NfcWritePageState createState() => _NfcWritePageState();
 }
@@ -14,7 +20,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
   bool _isWriting = false;
   bool _isRetryVisible = false;
   Timer? _vibrationTimer;
-  late String _baseText = AppLocalizations.of(context)!.nfctag;
+  String _baseText = '';  // 초기값을 빈 문자열로 설정
   String _dots = '';
   Timer? _textAnimationTimer;
 
@@ -42,6 +48,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
 
   @override
   Widget build(BuildContext context) {
+    _baseText = AppLocalizations.of(context)!.nfctag;
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.nfcwrite),
@@ -69,9 +76,9 @@ class _NfcWritePageState extends State<NfcWritePage> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                              color: Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
                           ),
                           children: [
                             TextSpan(text: _baseText),
@@ -106,9 +113,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
     setState(() {
       _isWriting = true;
     });
-
     _startVibration();
-
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       try {
         var ndef = Ndef.from(tag);
@@ -116,15 +121,26 @@ class _NfcWritePageState extends State<NfcWritePage> {
           _showAlert('이 NFC 태그는 쓰기가 불가능합니다.');
           return;
         }
-
+        final storage = FlutterSecureStorage();
+        String? myEmail = await storage.read(key: 'email');
+        if (myEmail == null || myEmail.isEmpty) {
+          throw Exception('저장된 이메일이 없습니다. 다시 로그인해주세요.');
+        }
+        // cardInfo에서 userEmail과 CardNo만 추출
+        Map<String, dynamic> nfcData = {
+          'userEmail': widget.cardInfo['userEmail'],
+          'CardNo': widget.cardInfo['cardNo'],
+          'myEmail' : myEmail
+        };
+        // 추출된 데이터를 JSON 문자열로 변환
+        String nfcDataJson = json.encode(nfcData);
         // NFC 태그 데이터 쓰기 로직
         NdefMessage message = NdefMessage([
-          NdefRecord.createText('Sample Data'),
-          // 여기에 더 많은 데이터를 추가할 수 있습니다.
+          NdefRecord.createText(nfcDataJson),
         ]);
 
         await ndef.write(message);
-        _showAlert('데이터가 성공적으로 기록되었습니다.');
+        _showAlert('명함 데이터가 성공적으로 기록되었습니다.');
       } catch (e) {
         _showAlert('NFC 쓰기 오류: $e');
       } finally {

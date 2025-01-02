@@ -63,7 +63,6 @@ class LoginScreen extends StatelessWidget {
                       print("버튼 눌림"); // 버튼이 눌렸는지 확인하기 위한 로그
                       final email = _emailController.text;
                       final password = _passwordController.text;
-
                       bool success = await Provider.of<AuthProvider>(context, listen: false).login(email, password);
 
                       if (success) {

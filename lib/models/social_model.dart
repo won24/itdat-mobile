@@ -11,6 +11,7 @@ class SocialsModel {
     print('google 전송 데이터: $idToken');
 
     try {
+      print('Google API 요청 시작');
       final response = await http.post(
         Uri.parse(googleUrl),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
@@ -38,6 +39,44 @@ class SocialsModel {
     } catch (e) {
       print("Google 로그인 오류: $e");
       return {'success': false, 'message': 'Google 로그인 실패'};
+    }
+  }
+
+  // Kakao OAuth 인증 코드 전달 및 처리
+  Future<Map<String, dynamic>> handleKakaoAuthCode(String code) async {
+    final String kakaoUrl = '$baseUrl/api/oauth/callback/kakao';
+    print('Kakao Authorization Code 전달 시작: $kakaoUrl');
+    print('전송 데이터: $code');
+
+    try {
+      final response = await http.post(
+        Uri.parse(kakaoUrl),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({'code': code}),
+      );
+
+      print('Kakao 서버 응답 상태 코드: ${response.statusCode}');
+      print('Kakao 서버 응답 데이터: ${response.body}');
+
+      final responseBody = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return {
+          'success': true,
+          'requiresRegistration': responseBody['requiresRegistration'] ?? false,
+          'data': responseBody,
+        };
+      } else {
+        return {
+          'success': false,
+          'message': 'Kakao 인증 처리 실패: ${response.body}',
+        };
+      }
+    } catch (e) {
+      print("Kakao 인증 처리 중 오류 발생: $e");
+      return {'success': false, 'message': 'Kakao 인증 처리 중 오류'};
     }
   }
 
@@ -78,6 +117,28 @@ class SocialsModel {
     } catch (e) {
       print("Kakao 로그인 오류: $e");
       return {'success': false, 'message': 'Kakao 로그인 실패'};
+    }
+  }
+
+  Future<void> sendAuthorizationCode(String code) async {
+    final client = http.Client();
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8082/api/oauth/callback/kakao'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'code': code}),
+      );
+
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        return result;
+      } else {
+        throw Exception('Kakao 인증 실패: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('HTTP 요청 실패: $e');
+    } finally {
+      client.close();
     }
   }
 

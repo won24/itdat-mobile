@@ -1,38 +1,60 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-class LoginModel {
+class LoginModel extends ChangeNotifier{
   //final String baseUrl = 'http://112.221.66.174:8001'; // 원
-   final String baseUrl = 'http://10.0.2.2:8082';     // 김
-  // final String baseUrl = 'http://112.221.66.174:8000'; // son
+  final String baseUrl = 'http://10.0.2.2:8082';     // 김
+  //final String baseUrl = 'http://112.221.66.174:8000/api/auth'; // son
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(Map<String,String> requestLogin) async {
     try {
-      print("모델" + email);
+      print("Request: $requestLogin");
+      print("URL: $baseUrl/login");
       final response = await http.post(
-        Uri.parse('$baseUrl/api/auth/login'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'email': email,
-          'password': password,
-        }),
+        Uri.parse('http://112.221.66.174:8000/api/auth/login'),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode(requestLogin),
       );
-      Map<String, dynamic> responseBody = jsonDecode(response.body);
 
-      // Extract the token
-      String? token = responseBody['token'];
-      print(token);
+      print("Response Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
       if (response.statusCode == 200) {
-        return {
-          'success': true,
-          'data': {'token': token},
-        };
+        if (response.body.isNotEmpty) {
+          try {
+            Map<String, dynamic> responseBody = jsonDecode(response.body);
+            String? token = responseBody['token'];
+            print("Token: $token");
+
+            if (token != null) {
+              return {
+                'success': true,
+                'data': {'token': token},
+              };
+            } else {
+              return {
+                'success': false,
+                'message': 'Token not found in response.',
+              };
+            }
+          } catch (e) {
+            print('Error decoding JSON: $e');
+            return {
+              'success': false,
+              'message': 'Invalid response format.',
+            };
+          }
+        } else {
+          return {
+            'success': false,
+            'message': 'Empty response from server.',
+          };
+        }
       } else {
         return {
           'success': false,
-          'message': 'Login failed. Please try again.',
+          'message': 'Login failed. Status code: ${response.statusCode}',
         };
       }
     } catch (e) {
