@@ -203,6 +203,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: _emailController,
                 label: "이메일",
                 fieldName: "userEmail",
+                enabled: !["NAVER", "KAKAO", "GOOGLE"].contains(_providerType),
               ),
               _buildTextField(
                 controller: _passwordController,
@@ -296,6 +297,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required String label,
     required String fieldName,
     bool obscureText = false,
+    bool enabled = true,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -305,6 +307,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           TextFormField(
             controller: controller,
             obscureText: obscureText,
+            enabled: enabled,
             decoration: InputDecoration(
               labelText: label,
               errorText: _errors[fieldName],

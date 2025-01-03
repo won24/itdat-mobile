@@ -12,7 +12,7 @@ class LoginModel extends ChangeNotifier{
       print("Request: $requestLogin");
       print("URL: $baseUrl/login");
       final response = await http.post(
-        Uri.parse('http://112.221.66.174:8000/api/auth/login'),
+        Uri.parse('$baseUrl/api/auth/login'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(requestLogin),
       );
