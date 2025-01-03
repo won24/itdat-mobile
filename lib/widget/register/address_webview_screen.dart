@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -13,58 +12,63 @@ class _AddressWebViewState extends State<AddressWebView> {
   @override
   void initState() {
     super.initState();
+
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
-        'sendAddress',
+        'flutter_inappwebview', // JavaScript 채널 이름
         onMessageReceived: (JavaScriptMessage message) {
           final address = message.message;
           print("받은 주소: $address");
-          Navigator.pop(context, address); // Flutter로 주소 전달 후 닫기
+
+          // WebView에서 받은 주소를 Flutter로 전달
+          Navigator.pop(context, address); // 주소 전달 후 WebView 닫기
         },
       )
-      ..loadRequest(Uri.parse('data:text/html;charset=utf-8,' +
-          Uri.encodeComponent('''
-          <!DOCTYPE html>
-          <html lang="ko">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>주소 검색</title>
-            <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-          </head>
-          <body>
-            <div id="layer" style="width:100%;height:100%;"></div>
-            <script>
-              (function() {
-                const targetOrigin = "*"; // 유효한 origin을 명시적으로 설정
-                new daum.Postcode({
-                  oncomplete: function(data) {
-                    const address = data.address;
-                    console.log("선택한 주소: " + address);
+      ..loadHtmlString(''' 
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>주소 검색</title>
+      <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    </head>
+    <body>
+      <div id="layer" style="width:100%;height:100%;"></div>
+      <script>
+        (function() {
+          const postcode = new daum.Postcode({
+            oncomplete: function(data) {
+              const address = data.address; // 선택한 주소
+              console.log("선택한 주소: " + address);
 
-                    // Flutter로 메시지 전송
-                    if (window.sendAddress) {
-                      window.sendAddress.postMessage(address);
-                    } else {
-                      console.error("sendAddress 채널이 정의되지 않았습니다.");
-                    }
-                  }
-                }).embed(document.getElementById('layer'));
-              })();
-            </script>
-          </body>
-          </html>
-        ''')));
+              // WebView에 메시지 전달
+              if (window.flutter_inappwebview) {
+                window.flutter_inappwebview.postMessage(address);
+              } else {
+                console.error("flutter_inappwebview 채널이 정의되지 않았습니다.");
+              }
+            },
+            alwaysShowEngAddr: false,
+          });
+          postcode.embed(document.getElementById('layer'));
+        })();
+      </script>
+    </body>
+    </html>
+  ''');
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('주소 검색'),
       ),
-      body: WebViewWidget(controller: _controller),
+      body: WebViewWidget(
+        controller: _controller,
+      ),
     );
   }
 }

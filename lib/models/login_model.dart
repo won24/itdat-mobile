@@ -94,24 +94,25 @@ class LoginModel extends ChangeNotifier{
     }
   }
 
-  Future<bool> checkUserIdAvailability(String userId) async {
-    final String url = '$baseUrl/api/auth/check-availability?type=userId&value=$userId';
+  Future<bool> checkAvailability(String type, String value) async {
+    final String url = '$baseUrl/api/auth/check-availability?type=$type&value=$value';
 
     try {
-      print("요청 URL: $url");
-
+      // print("요청 URL: $url");
       final response = await http.get(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
       );
 
+      // print("응답 상태 코드: ${response.statusCode}");
+      // print("응답 데이터: ${response.body}");
+
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        print("서버 응답: $responseBody");
+        // print("중복 여부: ${responseBody['available']}");
         return responseBody['available'] ?? false;
       } else {
         print("서버 오류: 상태 코드 ${response.statusCode}");
-        print("응답 데이터: ${response.body}");
         return false;
       }
     } catch (e) {
@@ -119,5 +120,6 @@ class LoginModel extends ChangeNotifier{
       return false;
     }
   }
+
 
 }
