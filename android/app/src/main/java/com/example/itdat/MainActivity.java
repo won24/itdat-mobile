@@ -115,9 +115,6 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
-
-
-
     private void handleNfcIntent(Intent intent) {
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
             if (nfcChannel != null) {

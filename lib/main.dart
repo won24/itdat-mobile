@@ -33,6 +33,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => FontProvider()),
+        ChangeNotifierProvider(create: (_) => LoginModel()),
       ],
       child: MyApp(),
     ),
@@ -191,18 +192,11 @@ class _MyAppState extends State<MyApp> {
             '/main': (context) => const MainLayout(),
             '/register': (context) {
               final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-              if (args != null) {
-                return ChangeNotifierProvider(
-                  create: (_) => LoginModel(),
-                  child: RegisterScreen(
-                    registrationData: args.map((key, value) => MapEntry(key, value.toString())),
-                  ),
-                );
-              }
-              return LoginScreen(); // null인 경우 기본 화면으로 이동
+              return RegisterScreen(
+                registrationData: args?.map((key, value) => MapEntry(key, value.toString())),
+              );
             },
           },
-
         );
       },
     );
