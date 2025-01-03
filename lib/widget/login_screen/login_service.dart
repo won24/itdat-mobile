@@ -23,7 +23,7 @@ class AuthService {
         if (token != null) {
           await storage.write(key: 'auth_token', value: token);
           await storage.write(key: 'email', value: email);
-          print("토큰, 이메일 저장 완료");
+          print("토큰, 아이디 저장 완료");
           return true;
         } else {
           print("토큰이 없습니다.");
