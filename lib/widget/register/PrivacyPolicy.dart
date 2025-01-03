@@ -39,9 +39,9 @@ class PrivacyPolicy extends StatelessWidget {
 
 제 7 조 (문의처)
 회사의 개인정보 보호책임자:
-이름: 홍길동
-이메일: privacy@example.com
-전화번호: 02-1234-5678
+이름: 김동규
+이메일: zzsehdrb@naver.com.com
+전화번호: 010-6816-4788
 
 부칙
 본 개인정보 처리방침은 2025년 1월 1일부터 시행됩니다.
