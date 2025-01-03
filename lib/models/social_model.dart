@@ -8,10 +8,9 @@ class SocialsModel {
   Future<Map<String, dynamic>> googleLogin(String idToken) async {
     final String googleUrl = '$baseUrl/api/oauth/google';
     print('Google API 호출 시작: $googleUrl');
-    print('google 전송 데이터: $idToken');
+    print('전송 데이터: $idToken');
 
     try {
-      print('Google API 요청 시작');
       final response = await http.post(
         Uri.parse(googleUrl),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
@@ -20,27 +19,23 @@ class SocialsModel {
       print('Google API 응답 상태 코드: ${response.statusCode}');
       print('Google API 응답 데이터: ${response.body}');
 
-      final responseBody = jsonDecode(response.body);
-
-      print("Google 응답 데이터: ${response.body}");
-
       if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
         return {
           'success': true,
           'requiresRegistration': responseBody['requiresRegistration'] ?? false,
           'data': responseBody,
         };
       } else {
-        return {
-          'success': false,
-          'message': 'Google 로그인 실패: ${response.body}',
-        };
+        print('Google 로그인 실패: ${response.body}');
+        return {'success': false, 'message': 'Google 로그인 실패: ${response.body}'};
       }
     } catch (e) {
-      print("Google 로그인 오류: $e");
-      return {'success': false, 'message': 'Google 로그인 실패'};
+      print('Google 로그인 오류: $e');
+      return {'success': false, 'message': 'Google 로그인 실패: $e'};
     }
   }
+
 
   // Kakao OAuth 인증 코드 전달 및 처리
   Future<Map<String, dynamic>> handleKakaoAuthCode(String code) async {

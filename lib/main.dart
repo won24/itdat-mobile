@@ -190,14 +190,19 @@ class _MyAppState extends State<MyApp> {
             '/': (context) => LoginScreen(),
             '/main': (context) => const MainLayout(),
             '/register': (context) {
-              final args = ModalRoute.of(context)?.settings.arguments as Map<String, String>?;
-              return ChangeNotifierProvider(
-                create: (_) => LoginModel(),
-                child: RegisterScreen(registrationData: args),
-              );
-
+              final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+              if (args != null) {
+                return ChangeNotifierProvider(
+                  create: (_) => LoginModel(),
+                  child: RegisterScreen(
+                    registrationData: args.map((key, value) => MapEntry(key, value.toString())),
+                  ),
+                );
+              }
+              return LoginScreen(); // null인 경우 기본 화면으로 이동
             },
           },
+
         );
       },
     );
