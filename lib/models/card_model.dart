@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'dart:convert';
@@ -52,6 +54,35 @@ class CardModel{
   }
 
 
+  // 명함 뒤면 저장
+  Future<void> saveBusinessCardWithLogo({
+    required BusinessCard cardInfo,
+    required File? logo,
+  }) async {
+    try{
+      final uri = Uri.parse('$baseUrl/save/back');
+      final request = http.MultipartRequest('POST', uri);
+
+      request.fields['businessCard'] = jsonEncode(cardInfo.toJson());
+
+      if (logo != null) {
+        request.files.add(await http.MultipartFile.fromPath('logo', logo.path));
+      }
+
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        print("명함 저장 성공");
+      } else {
+        print("명함 저장 실패: ${response.statusCode}");
+      }
+    }catch(e){
+      print("명함 생성 실패 $e");
+      throw Exception("saveBusinessCardWithLogo Error: $e");
+    }
+  }
+
+
   // 명함 가져오기
   Future<List<dynamic>> getBusinessCard(String userEmail) async {
     try {
@@ -67,6 +98,7 @@ class CardModel{
       throw Exception('getBusinessCard Error: $e');
     }
   }
+
 }
 
 

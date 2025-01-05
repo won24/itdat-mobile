@@ -94,6 +94,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       userEmail: widget.userEmail,
       cardNo: cardNo,
       cardSide: "FRONT",
+      logoPath: "",
     );
 
     // 템플릿 초기화

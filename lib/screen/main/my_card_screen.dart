@@ -45,29 +45,54 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   }
 
   Widget renderCardSlideIcon(List<dynamic> businessCards) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(businessCards.length, (index) {
-        return IconButton(
-          icon: Icon(
-            Icons.circle,
-            size: 10,
-            color: index == _cardIndex ? Color.fromRGBO(0, 202, 145, 1) : Colors.black87,
-          ),
-          onPressed: () {
-            _pageController.animateToPage(
-              index,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-            setState(() {
-              _cardIndex = index;
-            });
-          },
-        );
+    return Wrap(
+      spacing: 5,
+      alignment: WrapAlignment.center,
+      children: List.generate(businessCards.length + 1, (index) {
+        if (index == businessCards.length) {
+          return IconButton(
+            icon: Icon(
+              Icons.add,
+              size: 10,
+              color: index == businessCards.length
+                  ? const Color.fromRGBO(0, 202, 145, 1)
+                  : Theme.of(context).iconTheme.color
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TemplateSelectionScreen(userEmail: userEmail),
+                ),
+              );
+            },
+          );
+        } else {
+          return IconButton(
+            icon: Icon(
+              Icons.circle,
+              size: 10,
+              color: index == _cardIndex
+                  ? const Color.fromRGBO(0, 202, 145, 1)
+                  : Theme.of(context).iconTheme.color
+            ),
+            onPressed: () {
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+              setState(() {
+                _cardIndex = index;
+              });
+            },
+          );
+        }
       }),
     );
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +173,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                   userEmail: card['userEmail'],
                                   cardNo: card['cardNo'],
                                   cardSide: card['cardSide'],
+                                  logoPath: card['logoPath'],
                                 );
 
                                 selectedCardInfo ??= cardInfo;
