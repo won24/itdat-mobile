@@ -74,6 +74,7 @@ class _BusinessCardWidgetState extends State<BusinessCardList> {
                   userEmail: card['userEmail'],
                  cardNo: card['cardNo'],
                  cardSide: card['cardSide'],
+                logoPath: card['logoPath']
               );
               return GestureDetector(
                 onTap: () {
