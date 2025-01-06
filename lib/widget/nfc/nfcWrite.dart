@@ -130,7 +130,8 @@ class _NfcWritePageState extends State<NfcWritePage> {
         Map<String, dynamic> nfcData = {
           'userEmail': widget.cardInfo['userEmail'],
           'CardNo': widget.cardInfo['cardNo'],
-          'myEmail' : myEmail
+          //'myEmail' : myEmail
+          'myEmail': "user16@example.com"
         };
         // 추출된 데이터를 JSON 문자열로 변환
         String nfcDataJson = json.encode(nfcData);
