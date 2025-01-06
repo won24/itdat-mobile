@@ -646,7 +646,7 @@ packages:
     source: hosted
     version: "1.15.0"
   mime:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: mime
       sha256: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
@@ -678,7 +678,7 @@ packages:
     source: hosted
     version: "3.5.0"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
@@ -946,14 +946,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
-  uni_links:
+  uni_links5:
     dependency: "direct main"
     description:
-      name: uni_links
-      sha256: "051098acfc9e26a9fde03b487bef5d3d228ca8f67693480c6f33fd4fbb8e2b6e"
+      name: uni_links5
+      sha256: f68641c0f1e4040f3e5b7e364d50484b0a4edc8425066353a9d1d2e174bfc1c4
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "0.5.4"
   uni_links_platform_interface:
     dependency: transitive
     description:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
+import 'package:itdat/screen/card/back_form_screen.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
@@ -22,16 +23,61 @@ class FormScreen extends StatefulWidget {
 class _FormScreenState extends State<FormScreen> {
 
   // 명함 저장
-  void _saveCard() async {
+  void _saveCard() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context){
+          return Container(
+            height: 150,
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text("현재 명함의 뒷면을 만드시겠습니까?", style: TextStyle(fontSize: 18),),
+                SizedBox(height: 20,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextButton(onPressed: (){
+                      moveToBackFormScreen();
+                    }, child: Text("명함 뒷면 만들기")),
+                    TextButton(onPressed: (){
+                      _createCard();
+                    }, child: Text("현재 명함만 저장"))
+                  ],
+                )
+              ],
+            ),
+          );
+    });
+  }
+
+  void moveToBackFormScreen() async {
+    try{
+      await CardModel().createBusinessCard(widget.cardInfo);
+      Navigator.push(context, MaterialPageRoute(
+          builder: (BuildContext context) =>
+              BackFormScreen(cardInfo: widget.cardInfo)
+      ));
+    }catch (e) {
+      _showSnackBar(
+          "명함 생성에 실패했습니다. 다시 시도해주세요.", isError: true);
+    }
+  }
+
+  void _createCard() async {
     try {
       await CardModel().createBusinessCard(widget.cardInfo);
       _showSnackBar("새로운 명함이 생성되었습니다.");
       Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) =>
-            MainLayout()), (route) => false);
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  MainLayout()), (route) => false);
     } catch (e) {
-      _showSnackBar("명함 생성에 실패했습니다. 다시 시도해주세요.", isError: true);
+      _showSnackBar(
+          "명함 생성에 실패했습니다. 다시 시도해주세요.", isError: true);
     }
   }
 

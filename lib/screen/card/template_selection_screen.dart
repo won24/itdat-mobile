@@ -82,7 +82,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
     _card = BusinessCard(
       appTemplate: "",
       userName: userData?['userName'] ?? "",
-      phone: userData?['phone'] ?? "",
+      phone: userData?['userPhone'] ?? "",
       email: userData?['userEmail'] ?? "",
       companyName: userData?['company'] ?? "",
       companyNumber: userData?['companyPhone'] ?? "",
