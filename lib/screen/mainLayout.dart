@@ -104,19 +104,19 @@ class _MainLayoutState extends State<MainLayout> {
           unselectedItemColor: isDarkMode ? Colors.grey[400] : Colors.grey[600],
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.credit_card_rounded),
+              icon: Icon(Icons.credit_card_sharp),
               label: AppLocalizations.of(context)!.myCard,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.wallet),
+              icon: Icon(Icons.wallet_sharp),
               label: AppLocalizations.of(context)!.cardWallet,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.people_rounded),
+              icon: Icon(Icons.people_sharp),
               label: AppLocalizations.of(context)!.openCard,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
+              icon: Icon(Icons.account_circle_sharp),
               label: AppLocalizations.of(context)!.myInfo,
             ),
           ],

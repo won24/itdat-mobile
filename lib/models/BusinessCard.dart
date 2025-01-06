@@ -12,6 +12,7 @@ class BusinessCard {
   String? userEmail;
   int? cardNo;
   String? cardSide;
+  String? logoPath;
 
   BusinessCard({
     required this.appTemplate,
@@ -27,6 +28,7 @@ class BusinessCard {
     required this.userEmail,
     required this.cardNo,
     required this.cardSide,
+    required this.logoPath,
   });
 
   factory BusinessCard.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class BusinessCard {
       userEmail: json['userEmail'],
       cardNo: json['cardNo'],
       cardSide: json['cardSide'],
+      logoPath: json['logoPath'],
     );
   }
 
@@ -79,6 +82,7 @@ class BusinessCard {
     String? userEmail,
     int? cardNo,
     String? cardSide,
+    String? logoPath,
   }) {
     return BusinessCard(
       appTemplate: appTemplate ?? this.appTemplate,
@@ -94,6 +98,7 @@ class BusinessCard {
       userEmail: userEmail ?? this.userEmail,
       cardNo: cardNo ?? this.cardNo,
       cardSide: cardSide ?? this.cardSide,
+      logoPath: logoPath ?? this.logoPath,
     );
 
   }
