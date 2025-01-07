@@ -13,7 +13,14 @@ class EmailVerificationService {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
-      return response.statusCode == 200;
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print("서버 응답 상태 코드: ${response.statusCode}");
+        print("서버 응답 메시지: ${response.body}");
+        return false;
+      }
     } catch (e) {
       print("이메일 발송 실패: $e");
       return false;
