@@ -21,6 +21,8 @@ class _No1BackState extends State<No1Back> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        width: 380,
+        height: 230,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color.fromRGBO(255, 248, 194, 1.0), Color.fromRGBO(
@@ -34,16 +36,21 @@ class _No1BackState extends State<No1Back> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Image.file(
-              widget.image!,
-              width: 200,
-              height: 200,
-              fit: BoxFit.cover,
-            ),
-            Text(
-              widget.cardInfo.companyName ?? "",
-              style: const TextStyle(fontSize: 20, color: Colors.black87, fontWeight:FontWeight.w600),
-            )
+            widget.image == null
+              ? Text(widget.cardInfo.companyName ?? "",
+                    style: const TextStyle(fontSize: 20, color: Colors.black87, fontWeight:FontWeight.w600),
+              )
+              : FittedBox(
+                  fit: BoxFit.contain, // 이미지의 비율을 유지하면서 크기 조절
+                  child: SizedBox(
+                    width: 200, // 최대 가로 크기
+                    height: 190, // 최대 세로 크기
+                    child: Image.file(
+                      widget.image!,
+                      fit: BoxFit.contain, // 이미지를 최대 크기에 맞춰 비율을 유지
+                    ),
+                  ),
+              ),
           ],
         )
     );
