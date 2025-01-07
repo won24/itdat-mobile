@@ -37,20 +37,20 @@ class _No1BackState extends State<No1Back> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             widget.image == null
-                ? Text(widget.cardInfo.companyName ?? "",
-                      style: const TextStyle(fontSize: 20, color: Colors.black87, fontWeight:FontWeight.w600),
-                )
-                : FittedBox(
-                    fit: BoxFit.contain, // 이미지의 비율을 유지하면서 크기 조절
-                    child: SizedBox(
-                      width: 200, // 최대 가로 크기
-                      height: 190, // 최대 세로 크기
-                      child: Image.file(
-                        widget.image!,
-                        fit: BoxFit.contain, // 이미지를 최대 크기에 맞춰 비율을 유지
-                      ),
+              ? Text(widget.cardInfo.companyName ?? "",
+                    style: const TextStyle(fontSize: 20, color: Colors.black87, fontWeight:FontWeight.w600),
+              )
+              : FittedBox(
+                  fit: BoxFit.contain, // 이미지의 비율을 유지하면서 크기 조절
+                  child: SizedBox(
+                    width: 200, // 최대 가로 크기
+                    height: 190, // 최대 세로 크기
+                    child: Image.file(
+                      widget.image!,
+                      fit: BoxFit.contain, // 이미지를 최대 크기에 맞춰 비율을 유지
                     ),
-                ),
+                  ),
+              ),
           ],
         )
     );

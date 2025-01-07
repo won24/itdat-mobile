@@ -68,7 +68,6 @@ class _BackFormScreenState extends State<BackFormScreen> {
 
     try {
       await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
-
       _showSnackBar("명함 뒷면이 제작되었습니다.");
       Navigator.pushAndRemoveUntil(
           context,
