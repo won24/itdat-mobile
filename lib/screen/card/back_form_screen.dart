@@ -58,16 +58,16 @@ class _BackFormScreenState extends State<BackFormScreen> {
   // 명함 저장
   void _saveCard() async {
 
+    widget.cardInfo.cardSide = 'BACK';
+    widget.cardInfo.logoPath = _image?.path;
+
     if (_image == null) {
       _showSnackBar("로고 이미지를 선택해주세요.", isError: true);
       return;
     }
 
     try {
-      await CardModel().saveBusinessCardWithLogo(
-        cardInfo: widget.cardInfo,
-        logo: _image,
-      );
+      await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
 
       _showSnackBar("명함 뒷면이 제작되었습니다.");
       Navigator.pushAndRemoveUntil(
@@ -94,11 +94,11 @@ class _BackFormScreenState extends State<BackFormScreen> {
   // 명함 템플릿
   Widget buildBusinessCard(BusinessCard cardInfo) {
     switch (cardInfo.appTemplate) {
-      case 'No1Back':
+      case 'No1':
         return No1Back(cardInfo: cardInfo, image: _image);
-      case 'No2Back':
+      case 'No2':
         return No2Back(cardInfo: cardInfo, image: _image);
-      case 'No3Back':
+      case 'No3':
         return No3Back(cardInfo: cardInfo, image: _image);
       default:
         return No2Back(cardInfo: cardInfo, image: _image); // 기본값
@@ -171,7 +171,6 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         if (imageFile != null) {
                           setState(() {
                             _image = imageFile;
-                            widget.cardInfo.cardSide = 'BACK';
                           });
                         }
                       }else{

@@ -12,6 +12,8 @@ class No1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 380,
+      height: 230,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [

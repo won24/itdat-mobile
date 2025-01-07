@@ -1,15 +1,16 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
+import 'package:mime/mime.dart';
 
 class CardModel{
 
-  //final baseUrl = "http://112.221.66.174:8001/card";  // 원
-  final baseUrl = "http://112.221.66.174:8000/card"; //정원
-  final dio = Dio();
+  final baseUrl = "http://112.221.66.174:8001/card";  // 원
+  // final baseUrl = "http://112.221.66.174:8000/card"; //정원
+
 
 
   // 유저 정보 가져오기
@@ -41,8 +42,8 @@ class CardModel{
           body: json.encode(card.toJson()),
         );
 
-
         if(response.statusCode == 200){
+          print("명함저장 성공");
           return BusinessCard.fromJson(json.decode(response.body));
         }else{
           throw Exception('명함 저장 실패: ${response.statusCode}');
@@ -54,33 +55,38 @@ class CardModel{
   }
 
 
-  // 명함 뒤면 저장
-  Future<void> saveBusinessCardWithLogo({
-    required BusinessCard cardInfo,
-    required File? logo,
-  }) async {
-    try{
-      final uri = Uri.parse('$baseUrl/save/back');
-      final request = http.MultipartRequest('POST', uri);
 
-      request.fields['businessCard'] = jsonEncode(cardInfo.toJson());
+  // 로고있는 명함 저장
+  Future<void> saveBusinessCardWithLogo(BusinessCard cardInfo) async {
+      final url = Uri.parse('$baseUrl/save/logo');
 
-      if (logo != null) {
-        request.files.add(await http.MultipartFile.fromPath('logo', logo.path));
+      var request = http.MultipartRequest('POST', url);
+      request.fields['cardInfo'] = jsonEncode(cardInfo.toJson());
+
+      if (cardInfo.logoPath != null && cardInfo.logoPath!.isNotEmpty) {
+        File logoFile = File(cardInfo.logoPath!);
+        String? mimeType = lookupMimeType(logoFile.path); // 파일의 MIME 타입 동적 확인
+        String fileName = path.basename(logoFile.path); // 파일 이름 추출
+
+        request.files.add(http.MultipartFile.fromBytes(
+          'logo',
+          await logoFile.readAsBytes(),
+          contentType: mimeType != null ? DioMediaType.parse(mimeType) : DioMediaType('application', 'octet-stream'),
+          filename: fileName,
+        ));
       }
 
-      final response = await request.send();
+      var response = await request.send();
 
       if (response.statusCode == 200) {
         print("명함 저장 성공");
       } else {
-        print("명함 저장 실패: ${response.statusCode}");
+        var responseBody = await response.stream.bytesToString();
+        print("명함 저장 실패: ${response.statusCode} - $responseBody");
+        throw Exception("명함 저장 실패");
       }
-    }catch(e){
-      print("명함 생성 실패 $e");
-      throw Exception("saveBusinessCardWithLogo Error: $e");
-    }
   }
+
 
 
   // 명함 가져오기
