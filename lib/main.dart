@@ -13,7 +13,6 @@ import 'package:itdat/providers/locale_provider.dart';
 import 'package:itdat/providers/font_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uni_links3/uni_links.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 

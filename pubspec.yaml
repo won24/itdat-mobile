@@ -34,10 +34,10 @@ dependencies:
   uuid: ^3.0.6
   url_launcher: ^6.1.7
   cupertino_icons: ^1.0.8
+  uni_links5: ^0.5.4
 
 dependency_overrides:
   http: ^1.2.2
-  uni_links5: ^0.5.4
   path: ^1.9.0
   mime: ^2.0.0
 

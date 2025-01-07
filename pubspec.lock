@@ -654,7 +654,7 @@ packages:
     source: hosted
     version: "1.15.0"
   mime:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       name: mime
       sha256: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
@@ -686,7 +686,7 @@ packages:
     source: hosted
     version: "3.5.0"
   path:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       name: path
       sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
