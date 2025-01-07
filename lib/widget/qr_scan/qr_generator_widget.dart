@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+import '../card/cart_select_widget.dart';
 
 class QRGeneratorWidget extends StatefulWidget {
   @override
@@ -7,49 +10,24 @@ class QRGeneratorWidget extends StatefulWidget {
 }
 
 class _QRGeneratorWidgetState extends State<QRGeneratorWidget> {
-  final String name = "소니";
-  final String phoneNumber = "+1234567890";
-  String qrData = '';
+  String? _myEmail;
 
   @override
   void initState() {
     super.initState();
-    qrData = "Name: $name\nPhone: $phoneNumber";
+    _loadEmail();
+
   }
+  Future<void> _loadEmail() async {
+    final storage = FlutterSecureStorage();
+    _myEmail = await storage.read(key: 'email');
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: QrImageView(
-                data: qrData,
-                version: QrVersions.auto,
-                size: 200.0,
-                backgroundColor: Colors.white,
-              ),
-            ),
-            SizedBox(height: 20),
-
-          ],
-        ),
-      ),
+      body: CardSelect(source: 'qr')
     );
   }
 }

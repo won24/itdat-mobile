@@ -140,7 +140,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
         ]);
 
         await ndef.write(message);
-        _showAlert('명함 데이터가 성공적으로 기록되었습니다.');
+        _showSuccessDialog('명함 데이터 기록 성공', '명함 데이터가 NFC 태그에 성공적으로 기록되었습니다.');
       } catch (e) {
         _showAlert('NFC 쓰기 오류: $e');
       } finally {
@@ -185,4 +185,26 @@ class _NfcWritePageState extends State<NfcWritePage> {
       SnackBar(content: Text(message)),
     );
   }
+  void _showSuccessDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+                Navigator.of(context).pop(); // NfcWritePage 닫기
+                Navigator.of(context).pop(); // 이전 페이지로 돌아가기
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+

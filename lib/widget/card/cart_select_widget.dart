@@ -1,19 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:itdat/widget/card/qr_business_card_list.dart';
 import 'business_card_List.dart';
 
-class CardSelect extends StatelessWidget {
-  const CardSelect({Key? key}) : super(key: key);
+class CardSelect extends StatefulWidget {
+  final String source; // 'qr' 또는 'nfc'
 
-  // 하드코딩된 이메일 사용
-  final String userEmail = "sksksk4502@naver.com";
+  const CardSelect({Key? key, required this.source}) : super(key: key);
+
+  @override
+  _CardSelectState createState() => _CardSelectState();
+}
+
+class _CardSelectState extends State<CardSelect> {
+  String? userEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserEmail();
+  }
+
+  Future<void> _loadUserEmail() async {
+    final storage = FlutterSecureStorage();
+    String? email = await storage.read(key: 'email');
+    setState(() {
+      userEmail = email;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("내 명함"),
+      appBar: widget.source == 'qr'
+          ? null  // QR 스캔인 경우 AppBar를 표시하지 않음
+          : AppBar(
+        title: Text('NFC 스캔 명함'),
       ),
-      body: BusinessCardList(userEmail: userEmail),
+      body: widget.source == 'qr' ? QrBusinessCardList(userEmail: userEmail!):BusinessCardList(userEmail: userEmail!),
     );
   }
 }

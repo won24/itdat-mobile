@@ -88,7 +88,9 @@ class LoginScreen extends StatelessWidget {
                       // RegisterScreen으로 이동
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegisterScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => RegisterScreen(),
+                        ),
                       );
                     },
                     child: Text('회원가입'),

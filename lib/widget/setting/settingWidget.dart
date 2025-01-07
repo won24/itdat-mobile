@@ -43,7 +43,7 @@ class _SettingsState extends State<Settings> {
           _buildSettingItem(Icons.nfc_rounded, AppLocalizations.of(context)!.nfc, () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CardSelect()),
+              MaterialPageRoute(builder: (context) => CardSelect(source: 'nfc')),
             );
           }),
           _buildSettingItem(Icons.logout, AppLocalizations.of(context)!.logout, () {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'address_webview_screen.dart';
 
 class AddressSearch extends StatefulWidget {
-  final TextEditingController addressController; // 주소 입력 필드 컨트롤러
-  final TextEditingController detailedAddressController; // 상세주소 입력 필드 컨트롤러
+  final TextEditingController addressController;
+  final TextEditingController detailedAddressController;
 
   const AddressSearch({
     required this.addressController,
@@ -16,20 +16,20 @@ class AddressSearch extends StatefulWidget {
 }
 
 class _AddressSearchState extends State<AddressSearch> {
-  bool _showDetailField = false; // 상세주소 필드 표시 여부
+  bool _showDetailField = false;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 주소 입력 필드 (항상 표시)
+        // 주소 입력 필드
         _buildStyledTextField(
           controller: widget.addressController,
           label: "주소",
           isRequired: true,
           hintText: "주소를 검색해주세요.",
-          isReadOnly: true, // 읽기 전용 (주소 검색으로만 입력 가능)
+          isReadOnly: true,
         ),
         const SizedBox(height: 10),
         // 주소 검색 버튼
@@ -45,20 +45,20 @@ class _AddressSearchState extends State<AddressSearch> {
 
               if (result != null && result is String) {
                 setState(() {
-                  widget.addressController.text = result; // 주소 필드에 선택된 주소 입력
-                  _showDetailField = true; // 상세주소 필드 표시
+                  widget.addressController.text = result;
+                  _showDetailField = true;
                 });
               }
             },
             child: const Text("주소 검색"),
             style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              textStyle: TextStyle(fontSize: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              textStyle: const TextStyle(fontSize: 16),
             ),
           ),
         ),
         const SizedBox(height: 10),
-        // 상세 주소 입력 필드 (주소 선택 후 표시)
+        // 상세 주소 입력 필드
         if (_showDetailField)
           _buildStyledTextField(
             controller: widget.detailedAddressController,
@@ -84,10 +84,10 @@ class _AddressSearchState extends State<AddressSearch> {
           children: [
             Text(
               label,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             if (isRequired)
-              Text(
+              const Text(
                 " *",
                 style: TextStyle(color: Colors.red, fontSize: 16),
               ),
