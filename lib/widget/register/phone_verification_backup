@@ -1,0 +1,166 @@
+  final TextEditingController _verificationCodeController = TextEditingController();
+
+
+
+bool _isVerificationSent = false; // 인증번호 발송 상태
+  bool _isVerified = false; // 인증 완료 여부
+  String _verificationError = ""; // 인증 실패 메시지
+  Timer? _timer; // 타이머
+  int _timeRemaining = 300; // 5분 타이머 (300초)
+
+  final _phoneVerificationService = PhoneVerificationService();
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  // 타이머 시작
+  void _startTimer() {
+    _timeRemaining = 300; // 5분
+    _timer?.cancel();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_isVerified) {
+        timer.cancel(); // 인증 완료 시 타이머 멈춤
+      } else if (_timeRemaining > 0) {
+        setState(() {
+          _timeRemaining--;
+        });
+      } else {
+        timer.cancel(); // 시간이 다 되면 타이머 멈춤
+        setState(() {
+          _isVerificationSent = false; // 인증번호 무효화
+        });
+      }
+    });
+  }
+
+  // 인증번호 발송
+  Future<void> _sendVerificationCode() async {
+    final phoneNumber = _phoneController.text;
+    if (phoneNumber.isEmpty || phoneNumber.length != 11) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("올바른 전화번호를 입력해주세요.")),
+      );
+      return;
+    }
+
+    final isSent = await _phoneVerificationService.sendVerificationCode(phoneNumber);
+
+    if (isSent) {
+      setState(() {
+        _isVerificationSent = true;
+        _verificationError = "";
+      });
+      _startTimer();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("인증번호가 발송되었습니다.")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("인증번호 발송에 실패했습니다. 다시 시도해주세요.")),
+      );
+    }
+  }
+
+  // 인증번호 확인
+  Future<void> _verifyCode() async {
+    final phoneNumber = _phoneController.text;
+    final code = _verificationCodeController.text;
+
+    if (code.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("인증번호를 입력해주세요.")),
+      );
+      return;
+    }
+
+    final isVerified = await _phoneVerificationService.verifyCode(phoneNumber, code);
+
+    if (isVerified) {
+      setState(() {
+        _isVerified = true;
+        _verificationError = "";
+        _timer?.cancel(); // 타이머 종료
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("인증이 완료되었습니다.")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("인증번호가 올바르지 않습니다.")),
+      );
+    }
+  }
+
+
+_buildPhoneVerificationField({
+    required TextEditingController phoneController,
+    required TextEditingController verificationCodeController,
+    required Function() onSendCode,
+    required Function() onVerifyCode,
+    bool isCodeSent = false,
+    bool isCodeVerified = false,
+    int timer = 0,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: phoneController,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    labelText: "전화번호",
+                    hintText: "전화번호를 입력해주세요.",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: onSendCode,
+                child: Text("인증번호 발송"),
+              ),
+            ],
+          ),
+          if (isCodeSent) ...[
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: verificationCodeController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: "인증번호",
+                      hintText: "인증번호를 입력해주세요.",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: isCodeVerified ? null : onVerifyCode,
+                  child: Text(isCodeVerified ? "인증 완료" : "인증 확인"),
+                ),
+              ],
+            ),
+            if (!isCodeVerified)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  "남은 시간: ${timer ~/ 60}:${(timer % 60).toString().padLeft(2, '0')}",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
