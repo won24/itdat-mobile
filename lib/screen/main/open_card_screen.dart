@@ -46,7 +46,6 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
       });
     }
   }
-
   // 에러 메시지 표시
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(

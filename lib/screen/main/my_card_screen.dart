@@ -214,7 +214,6 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                     builder: (context, constraints) {
                                       // constraints.maxHeight를 사용하여 높이를 제한
                                       double cardHeight = constraints.maxHeight; // 부모 높이에 맞게 설정
-
                                       return SingleChildScrollView(
                                         child: Container(
                                           height: cardHeight, // 높이를 명시적으로 설정

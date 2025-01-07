@@ -139,10 +139,7 @@ class _NfcReadPageState extends State<NfcReadPage> {
       } catch (e) {
         print('NFC 읽기 오류: $e');
         _showErrorAlert('NFC 읽기 중 오류가 발생했습니다.');
-      } finally {
-        _stopNfcRead();
-      }
-    });
+      }});
 
     // 30초 후에 자동으로 중지 및 "다시 시도" 버튼 표시
     Future.delayed(Duration(seconds: 30), () {
@@ -198,7 +195,9 @@ class _NfcReadPageState extends State<NfcReadPage> {
             TextButton(
               child: Text('확인'),
               onPressed: () {
-                Navigator.of(context).pop();
+                _stopNfcRead();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.of(context).pushReplacementNamed('/main', arguments: {'initialIndex': 1});
               },
             ),
           ],
