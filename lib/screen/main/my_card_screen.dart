@@ -21,7 +21,7 @@ class MyCardScreen extends StatefulWidget {
 class _MyCardWidgetState extends State<MyCardScreen> {
 
   late String _userEmail;
-  late Future<List<dynamic>> _businessCards;
+  late Future<List<dynamic>>? _businessCards;
   BusinessCard? selectedCardInfo;
   final PageController _pageController = PageController();
   int _selectedIndex = 0;
@@ -30,26 +30,35 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   @override
   void initState() {
     super.initState();
+    _businessCards = null;
     _loadEmail();
   }
+
+  void _setInitialCard(List<dynamic> filteredCards) {
+    if (filteredCards.isNotEmpty && selectedCardInfo == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          selectedCardInfo = filteredCards[0];
+        });
+      });
+    }
+  }
+
 
   // 로그인 이메일로 명함 데이터 가져오기
   Future<void> _loadEmail() async {
     final storage = FlutterSecureStorage();
     String? userEmail = await storage.read(key: 'email');
 
-    if(userEmail != null){
+    if (userEmail != null) {
       setState(() {
         _userEmail = userEmail;
         _businessCards = CardModel().getBusinessCard(_userEmail);
       });
-    }else{
-      setState(() {
-        Navigator.pushReplacementNamed(context, '/');
-      });
+    } else {
+      Navigator.pushReplacementNamed(context, '/');
     }
   }
-
 
   // 명함 템플릿
   Widget buildBusinessCard(BusinessCard cardInfo) {
@@ -122,12 +131,14 @@ class _MyCardWidgetState extends State<MyCardScreen> {
             child: FutureBuilder<List<dynamic>>(
               future: _businessCards,
               builder: (context, snapshot) {
+                if (_businessCards == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return const Center(child: Text('명함을 가져오는 중 오류가 발생했습니다.'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  // 현재 저장된 명함이 없다면 명함 추가 버튼 렌더링
                   return Center(
                     child: IconButton(
                       onPressed: () {
@@ -142,20 +153,22 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                     ),
                   );
                 } else {
-
                   // 최근 만들어진 순으로 정렬
                   var businessCards = snapshot.data!
-                      .map((data) => BusinessCard.fromJson(data))
-                      .toList()..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
+                      .map((data) => BusinessCard.fromJson(data)).toList()
+                    ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
 
                   // 명함 앞면만 렌더링 / 뒷면은 명함 클릭 시 볼 수 있음
                   var filteredCards = businessCards
                       .where((card) => card.cardSide == 'FRONT' && card.userEmail == _userEmail)
                       .toList();
 
+                  // 초기 명함 설정
+                  _setInitialCard(filteredCards);
+
                   return Column(
                     children: [
-                      Expanded(
+                      Flexible(
                         child: PageView.builder(
                           controller: _pageController,
                           itemCount: filteredCards.length + 1,
@@ -207,23 +220,16 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                     )
                                   );
                                 },
-                                child: Card(
-                                  elevation: 4,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
-                                  child: LayoutBuilder( // 부모의 크기를 알 수 있도록 LayoutBuilder 사용
-                                    builder: (context, constraints) {
-                                      // constraints.maxHeight를 사용하여 높이를 제한
-                                      double cardHeight = constraints.maxHeight; // 부모 높이에 맞게 설정
-
-                                      return SingleChildScrollView(
-                                        child: Container(
-                                          height: cardHeight, // 높이를 명시적으로 설정
-                                          child: buildBusinessCard(cardInfo),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                                child:
+                                  Container(
+                                    width: 380,
+                                    height: 230,
+                                    child: Card(
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+                                      child: buildBusinessCard(cardInfo),
+                                      ),
+                                  )
                               );
                             }
                           },
