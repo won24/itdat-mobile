@@ -37,6 +37,7 @@ dependencies:
   path: ^1.9.0
   mime: ^2.0.0
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -50,7 +51,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/logowhite.png
-    - assets/logoblack.png
+    - assets/logoblack.pngpu
     - assets/nfcAnime.json
     - assets/nfc.png
     - assets/qr.png
