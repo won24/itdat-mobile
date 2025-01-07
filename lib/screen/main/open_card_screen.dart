@@ -24,7 +24,7 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
     _fetchAllPublicCards();
   }
 
-  // 모든 공개 명함 불러오기
+  // 공개 명함 불러오기
   Future<void> _fetchAllPublicCards() async {
     setState(() {
       _isLoading = true;
@@ -34,7 +34,9 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
       final cards = await _cardModel.getAllPublicCards();
       setState(() {
         // Map<String, dynamic> 데이터를 BusinessCard 객체로 변환
-        _publicCards = cards.map<BusinessCard>((card) => BusinessCard.fromJson(card as Map<String, dynamic>)).toList();
+        _publicCards = (cards as List)
+            .map((card) => BusinessCard.fromJson(card))
+            .toList();
       });
     } catch (e) {
       _showErrorSnackBar("공개 명함을 불러오는 중 오류가 발생했습니다.");
@@ -79,7 +81,6 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
           ? const Center(child: Text("공개된 명함이 없습니다."))
           : ListView.builder(
         itemCount: _publicCards.length,
-        // ListView.builder 내부의 Card 레이아웃 수정
         itemBuilder: (context, index) {
           final cardInfo = _publicCards[index];
           return Card(
@@ -87,11 +88,12 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            margin: const EdgeInsets.symmetric(
+                vertical: 8.0, horizontal: 16.0),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                mainAxisSize: MainAxisSize.min, // 자식 크기에 맞게 동적으로 크기 설정
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // 명함 템플릿
                   buildBusinessCard(cardInfo),
@@ -100,7 +102,6 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
             ),
           );
         },
-
       ),
     );
   }

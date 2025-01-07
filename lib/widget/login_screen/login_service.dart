@@ -5,7 +5,6 @@ class AuthService {
   final FlutterSecureStorage storage = FlutterSecureStorage();
   final LoginModel _loginModel = LoginModel();
 
-  // 로그인 메서드
   Future<bool> login(String email, String password) async {
     print("서비스쪽: email = $email, password = $password");
 
@@ -16,14 +15,13 @@ class AuthService {
 
     var result = await _loginModel.login(requestBody);
 
-    // 로그인 성공 시
     if (result['success']) {
       try {
         var token = result['data']['token'];
         if (token != null) {
           await storage.write(key: 'auth_token', value: token);
           await storage.write(key: 'email', value: email);
-          print("토큰, 아이디 저장 완료");
+          print("토큰 및 이메일 저장 완료");
           return true;
         } else {
           print("토큰이 없습니다.");
@@ -39,10 +37,8 @@ class AuthService {
     }
   }
 
-  // 로그아웃 메서드
   Future<bool> logout() async {
     try {
-      // 토큰을 안전한 저장소에서 삭제
       await storage.delete(key: 'auth_token');
       print("로그아웃 완료");
       return true;

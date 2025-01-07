@@ -12,7 +12,7 @@ class PublicCardModel {
       final response = await http.get(Uri.parse("$baseUrl/all"));
 
       if (response.statusCode == 200) {
-        print("응답 성공: ${response.body}");
+        // print("응답 성공: ${response.body}");
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
         print("응답 실패: ${response.statusCode}");
