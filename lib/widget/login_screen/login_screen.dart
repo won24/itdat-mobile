@@ -78,8 +78,8 @@ class LoginScreen extends StatelessWidget {
                       }
                     },
                     child: Text('로그인'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal,
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Colors.teal),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.0),
                       ),
