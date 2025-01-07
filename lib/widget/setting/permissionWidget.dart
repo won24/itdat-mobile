@@ -22,6 +22,7 @@ class _PermissionSettingsScreenState extends State<PermissionSettingsScreen> {
     _getPermissionStatuses();
   }
 
+
   Future<void> _getPermissionStatuses() async {
     for (var permission in permissions) {
       final status = await permission.status;

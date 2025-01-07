@@ -8,6 +8,7 @@ environment:
   sdk: ^3.5.4
 
 dependencies:
+  image_gallery_saver_plus: ^3.0.5
   google_fonts: ^6.2.1
   lottie: ^3.2.0
   vibration: ^2.0.1
@@ -33,8 +34,9 @@ dependencies:
   uuid: ^3.0.6
   url_launcher: ^6.1.7
   cupertino_icons: ^1.0.8
-  uni_links: ^0.5.1
-
+  uni_links3: ^0.5.3
+dependency_overrides:
+  http: ^1.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:itdat/widget/login_screen/login_screen.dart';
 import 'package:itdat/screen/mainLayout.dart';
@@ -13,6 +12,7 @@ import 'package:itdat/providers/locale_provider.dart';
 import 'package:itdat/providers/font_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uni_links3/uni_links.dart';
 
 import 'models/login_model.dart';
 import 'models/social_model.dart';

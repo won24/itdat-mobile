@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../models/nfc_model.dart';
 
 class QRScannerWidget extends StatefulWidget {
   @override
@@ -10,6 +13,8 @@ class QRScannerWidget extends StatefulWidget {
 class _QRScannerWidgetState extends State<QRScannerWidget> {
   MobileScannerController? _controller;
   bool _isFlashOn = false;
+  final NfcModel _nfcModel = NfcModel();
+  bool _isProcessing = false; // 추가: QR 코드 처리 중인지 추적
 
   @override
   void initState() {
@@ -49,10 +54,101 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     }
   }
 
-  void _showQRCodeResult(String result) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(result)),
-    );
+  void _showQRCodeResult(String result) async {
+    if (_isProcessing) return; // 이미 처리 중이면 추가 처리 방지
+    setState(() {
+      _isProcessing = true; // 처리 시작
+    });
+
+    try {
+      print('Raw QR 코드 데이터: $result');
+
+      // 쉼표로 분리된 데이터 처리
+      List<String> parts = result.split(',');
+      if (parts.length != 2) {
+        throw FormatException('QR 코드 데이터 형식이 올바르지 않습니다.');
+      }
+
+      Map<String, dynamic> qrData = {
+        'CardNo': parts[0],
+        'userEmail': parts[1],
+      };
+
+      // SecureStorage에서 현재 사용자의 이메일 가져오기
+      final storage = FlutterSecureStorage();
+      String? myEmail = await storage.read(key: 'email');
+      print('저장된 이메일: $myEmail');
+
+      if (myEmail == null || myEmail.isEmpty) {
+        print('저장된 이메일이 없습니다. 다시 로그인해주세요.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('로그인 정보가 없습니다. 다시 로그인해주세요.')),
+        );
+        return;
+      }
+
+      // 폼 데이터 생성
+      Map<String, dynamic> formData = {
+        'userEmail': qrData['userEmail'],
+        'CardNo': qrData['CardNo'],
+        'myEmail': myEmail,
+      };
+
+      // 필수 데이터 확인
+      if (formData['userEmail'].isEmpty || formData['CardNo'].isEmpty) {
+        throw FormatException('QR 코드에 필요한 데이터가 누락되었습니다.');
+      }
+
+      print('서버로 전송할 데이터: $formData');
+
+      // 서버로 데이터 전송
+      await _sendDataToServer(formData);
+
+      // 스캐너 일시 중지
+      _controller?.stop();
+
+      // 성공 메시지 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('QR 코드 데이터가 성공적으로 처리되었습니다.')),
+      );
+
+      // CardWalletScreen으로 이동
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.of(context).pushReplacementNamed('/main', arguments: {'initialIndex': 1});
+
+    } catch (e) {
+      print('QR 코드 데이터 처리 중 오류 발생: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('QR 코드 데이터 처리 중 오류가 발생했습니다.'),
+          action: SnackBarAction(
+            label: '다시 시도',
+            onPressed: _resetScanner,
+          ),
+        ),
+      );
+    } finally {
+      setState(() {
+        _isProcessing = false; // 처리 완료
+      });
+    }
+  }
+
+  Future<void> _sendDataToServer(Map<String, dynamic> data) async {
+    try {
+      await _nfcModel.processCardInfo(data); // NFCModel의 메서드를 사용하여 데이터 전송
+      print('데이터가 성공적으로 서버로 전송되었습니다.');
+    } catch (e) {
+      print('서버로 데이터 전송 중 오류 발생: $e');
+      throw e; // 상위 메서드에서 처리할 수 있도록 예외를 다시 던집니다.
+    }
+  }
+
+  void _resetScanner() {
+    setState(() {
+      _isProcessing = false;
+    });
+    _controller?.start(); // 스캐너 재시작
   }
 
   @override
@@ -62,9 +158,12 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
         MobileScanner(
           controller: _controller,
           onDetect: (capture) {
-            final List<Barcode> barcodes = capture.barcodes;
-            for (final barcode in barcodes) {
-              _showQRCodeResult(barcode.rawValue ?? 'No data');
+            if (!_isProcessing) {
+              final List<Barcode> barcodes = capture.barcodes;
+              for (final barcode in barcodes) {
+                _showQRCodeResult(barcode.rawValue ?? 'No data');
+                break; // 첫 번째 바코드만 처리
+              }
             }
           },
         ),
@@ -104,23 +203,36 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                     ? Colors.black
                     : Colors.white,
               ),
-    label: Text(
-    'Image',
-    style: TextStyle(
-    color: Theme.of(context).brightness == Brightness.light
-    ? Colors.black
-        : Colors.white,
-    ),
-    ),
+              label: Text(
+                'Image',
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.black
+                      : Colors.white,
+                ),
+              ),
               style: ElevatedButton.styleFrom(
               ),
             ),
           ),
         ),
+        if (_isProcessing)
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('처리 중...'),
+              ],
+            ),
+          ),
       ],
     );
   }
 }
+
+
 
 
 class ScannerOverlay extends CustomPainter {

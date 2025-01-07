@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
@@ -17,7 +18,7 @@ class MyCardScreen extends StatefulWidget {
 }
 
 class _MyCardWidgetState extends State<MyCardScreen> {
-  final userEmail = "user16@example.com";
+  String? userEmail;
   late Future<List<dynamic>> _businessCards;
   BusinessCard? selectedCardInfo;
   final PageController _pageController = PageController();
@@ -27,7 +28,15 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   @override
   void initState() {
     super.initState();
-    _businessCards = CardModel().getBusinessCard(userEmail);
+    _loadUserEmail();
+  }
+  Future<void> _loadUserEmail() async {
+    final storage = FlutterSecureStorage();
+    String? email = await storage.read(key: 'email');
+    setState(() {
+      userEmail = email;
+      _businessCards = CardModel().getBusinessCard(userEmail!);
+    });
   }
 
   // 명함 템플릿
@@ -62,7 +71,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TemplateSelectionScreen(userEmail: userEmail),
+                  builder: (context) => TemplateSelectionScreen(userEmail: userEmail!),
                 ),
               );
             },
@@ -117,7 +126,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TemplateSelectionScreen(userEmail: userEmail),
+                              builder: (context) => TemplateSelectionScreen(userEmail: userEmail!),
                             ),
                           );
                         },
@@ -150,7 +159,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              TemplateSelectionScreen(userEmail: userEmail),
+                                              TemplateSelectionScreen(userEmail: userEmail!),
                                         ),
                                       );
                                     },

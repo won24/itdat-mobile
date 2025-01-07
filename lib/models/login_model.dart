@@ -4,13 +4,12 @@ import 'package:http/http.dart' as http;
 
 class LoginModel extends ChangeNotifier{
   //final String baseUrl = 'http://112.221.66.174:8001'; // 원
-  final String baseUrl = 'http://10.0.2.2:8082';     // 김
-  //final String baseUrl = 'http://112.221.66.174:8000/api/auth'; // son
+  final String baseUrl = 'http://112.221.66.174:8000'; // son
 
   Future<Map<String, dynamic>> login(Map<String,String> requestLogin) async {
     try {
       print("Request: $requestLogin");
-      print("URL: $baseUrl/login");
+      print("URL: $baseUrl/api/auth/login");
       final response = await http.post(
         Uri.parse('$baseUrl/api/auth/login'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
