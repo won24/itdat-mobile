@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:itdat/models/login_model.dart';
 import 'package:provider/provider.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -16,20 +15,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
     nativeAppKey: '387812a6ae2897c3e9e59952c211374e',
     javaScriptAppKey: '159e7d3d7b574fff05fa693174bfa8a8',
     loggingEnabled: true,
   );
-  // 네이버 지도 초기화
-  await NaverMapSdk.instance.initialize(
-      clientId: 'ybfzmcy3ht',
-      onAuthFailed: (error) {
-        print('Auth failed: $error');
-      });
-
   runApp(
     MultiProvider(
       providers: [
@@ -51,14 +43,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   StreamSubscription? _sub;
-  bool _isLoading = true; // 초기 로딩 상태
-  bool _isLoggedIn = false; // 로그인 상태
+  bool _isLoading = true;
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
     _initializeApp();
-    _checkLoginStatus();
   }
 
   @override
@@ -68,8 +59,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initializeApp() async {
-   // await _checkLoginStatus(); // 로그인 상태 확인
-    _handleIncomingLinks(); // URI 링크 처리
+    await _checkLoginStatus();
+    _handleIncomingLinks();
   }
 
   Future<void> _checkLoginStatus() async {
@@ -77,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     bool isLoggedIn = await authProvider.checkLoginStatus();
     setState(() {
       _isLoggedIn = isLoggedIn;
-      _isLoading = false; // 로딩 완료
+      _isLoading = false;
     });
   }
 
@@ -124,20 +115,23 @@ class _MyAppState extends State<MyApp> {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: const [
-            Locale('en', ''), // English
-            Locale('ko', ''), // Korean
-            Locale('ja', ''), // Japanese
+            Locale('en', ''),
+            Locale('ko', ''),
+            Locale('ja', ''),
           ],
-          initialRoute: _isLoggedIn ? '/main' : '/',
-          routes: {
-            '/': (context) => LoginScreen(),
-            '/main': (context) => const MainLayout(),
-            '/register': (context) {
-              final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-              return RegisterScreen(
-                registrationData: args?.map((key, value) => MapEntry(key, value.toString())),
+          home: _isLoggedIn
+              ? const MainLayout()
+              : LoginScreen(),
+          onGenerateRoute: (settings) {
+            if (settings.name == '/register') {
+              final args = settings.arguments as Map<String, dynamic>?;
+              return MaterialPageRoute(
+                builder: (context) => RegisterScreen(
+                  registrationData: args?.map((key, value) => MapEntry(key, value.toString())),
+                ),
               );
-            },
+            }
+            return null;
           },
         );
       },
