@@ -205,6 +205,35 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
     }
   }
 
+  Future<void> _moveCardToFolder(String userEmail, String folderName, BusinessCard card) async {
+    try {
+      // 서버에 명함 이동 요청
+      final success = await _walletModel.moveCardToFolder(userEmail, card.cardNo!, folderName);
+
+      if (success) {
+        setState(() {
+          // 성공 시 명함을 UI에서 제거
+          _cards.removeWhere((c) => c.cardNo == card.cardNo);
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("명함이 폴더로 이동되었습니다.")),
+        );
+      } else {
+        // 실패 시 메시지 출력
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("명함 이동에 실패했습니다.")),
+        );
+      }
+    } catch (e) {
+      // 예외 발생 시 메시지 출력
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("명함 이동 중 오류가 발생했습니다.")),
+      );
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -299,7 +328,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
           ),
           Divider(),
           Expanded(
-            flex: 3,
+            flex: 6,
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -311,35 +340,52 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               itemBuilder: (context, index) {
                 final card = _cards[index];
-                return Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
+
+                // Draggable 적용
+                return Draggable<BusinessCard>(
+                  data: card, // 드래그 시 전송할 데이터
+                  feedback: Material(
+                    elevation: 4,
                     borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      padding: const EdgeInsets.all(12.0),
+                      width: 120,
+                      color: Colors.white,
+                      child: Text(
+                        card.userName ?? '이름 없음',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          card.userName ?? '이름 없음',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        const SizedBox(height: 8.0),
-                        Text(
-                          "회사: ${card.companyName ?? '정보 없음'}",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        const SizedBox(height: 4.0),
-                        Text(
-                          "이메일: ${card.userEmail ?? '이메일 없음'}",
-                          style: TextStyle(fontSize: 14),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ],
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            card.userName ?? '이름 없음',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            "회사: ${card.companyName ?? '정보 없음'}",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          const SizedBox(height: 4.0),
+                          Text(
+                            "이메일: ${card.userEmail ?? '이메일 없음'}",
+                            style: TextStyle(fontSize: 14),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
