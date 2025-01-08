@@ -18,7 +18,7 @@ class No1 extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             Color.fromRGBO(255, 255, 255, 1.0),
-            Color.fromRGBO(133, 200, 181, 1.0)
+            Color.fromRGBO(177, 221, 210, 1.0)
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
