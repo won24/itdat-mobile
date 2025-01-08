@@ -8,6 +8,7 @@ import 'package:itdat/screen/card/template/no_2_back.dart';
 import 'package:itdat/screen/card/template/no_3_back.dart';
 import 'package:itdat/screen/mainLayout.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:path/path.dart' as path;
 
 class BackFormScreen extends StatefulWidget {
   final BusinessCard cardInfo;
@@ -57,7 +58,6 @@ class _BackFormScreenState extends State<BackFormScreen> {
 
   // 명함 저장
   void _saveCard() async {
-
     widget.cardInfo.cardSide = 'BACK';
     widget.cardInfo.logoPath = _image?.path;
 
@@ -68,7 +68,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
 
     try {
       await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
-      _showSnackBar("명함 뒷면이 제작되었습니다.");
+      _showSnackBar("명함이 제작되었습니다.");
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (BuildContext context) =>
@@ -122,15 +122,15 @@ class _BackFormScreenState extends State<BackFormScreen> {
               ),
               const SizedBox(height: 20),
 
-              TextFormField(
-                initialValue: widget.cardInfo.companyName?? "",
-                decoration: InputDecoration(labelText: "회사 이름"),
-                onChanged: (value){
-                  setState(() {
-                    widget.cardInfo.companyName = value;
-                  });
-                }
-              ),
+              // TextFormField(
+              //   initialValue: widget.cardInfo.companyName?? "",
+              //   decoration: InputDecoration(labelText: "회사 이름"),
+              //   onChanged: (value){
+              //     setState(() {
+              //       widget.cardInfo.companyName = value;
+              //     });
+              //   }
+              // ),
               // TextFormField(
               //     initialValue: widget.cardInfo.companyNumber?? "",
               //     decoration: InputDecoration(labelText: "회사 연락처"),
@@ -158,44 +158,108 @@ class _BackFormScreenState extends State<BackFormScreen> {
               //       });
               //     }
               // ),
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
 
-              Row(
+              Column(
                 children: [
-                  Text("로고 선택"),
-                  IconButton(
-                    onPressed: () async {
-                      if(await requestStoragePermission()){
-                        File? imageFile = await getImageFromGallery();
-                        if (imageFile != null) {
-                          setState(() {
-                            _image = imageFile;
-                          });
-                        }
-                      }else{
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context){
-                            return AlertDialog(
-                              title: Text("권한 거부"),
-                              content: Text("갤러리 접근 권한이 필요합니다."),
-                              actions: <Widget>[
-                                TextButton(
-                                    onPressed: (){Navigator.of(context).pop();},
-                                    child: Text("확인")
-                                )
-                              ],
-                            );
-                        });
-                      }
-                    },
-                    icon: Icon(Icons.photo, size: 20,))
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("로고 선택",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.grey.shade200,
+                              width: 1),
+                        ),
+                        child: IconButton(
+                          onPressed: () async {
+                            if (await requestStoragePermission()) {
+                              File? imageFile = await getImageFromGallery();
+                              if (imageFile != null) {
+                                setState(() {
+                                  _image = imageFile;
+                                });
+                              }
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("권한 거부"),
+                                      content: Text("갤러리 접근 권한이 필요합니다."),
+                                      actions: <Widget>[
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("확인")
+                                        )
+                                      ],
+                                    );
+                                  });
+                            }
+                          },
+                          icon: Icon(
+                            Icons.add_photo_alternate_sharp, size: 30,),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _image != null
+                          ? "선택된 이미지: ${path.basename(_image!.path)}"
+                          : "선택된 이미지가 없습니다.",
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ),
                 ],
               ),
 
-              ElevatedButton(
-                onPressed: _saveCard,
-                child: const Text("저장"),
+              SizedBox(height:100),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _saveCard,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(0, 202, 145, 1),
+                        foregroundColor: Colors.white,
+                        textStyle: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      child: const Text("저장"),
+                    ),
+                    const SizedBox(width: 10), // 버튼 간 간격
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    MainLayout()), (route) => false
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey.shade400,
+                        foregroundColor: Colors.white,
+                        textStyle: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      child: const Text("취소"),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
