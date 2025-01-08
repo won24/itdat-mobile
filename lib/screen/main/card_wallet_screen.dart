@@ -305,7 +305,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                 final card = _cards[index];
                 return Card(
                   child: ListTile(
-                    subtitle: Text("카드 번호: ${card.cardNo}"),
+                    title: Text("카드 번호: ${card.cardNo}"),
                   ),
                 );
               },
