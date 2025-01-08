@@ -34,7 +34,13 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
+                Theme.of(context).brightness == Brightness.dark
+                    ? Image.asset(
+                  'assets/logowhite.png',
+                  width: 80,
+                  height: 100,
+                )
+                    : Image.asset(
                   'assets/logoblack.png',
                   width: 80,
                   height: 100,

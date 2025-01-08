@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:itdat/widget/setting/exitWidget.dart';
+import 'package:itdat/widget/setting/passwordChange.dart';
 import 'package:itdat/widget/setting/settingWidget.dart';
 import 'package:itdat/models/user_model.dart';
 
@@ -25,6 +27,7 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
   Future<void> _loadUserInfo() async {
     try {
       final info = await _userModel.getUserInfo();
+      print(info);
       setState(() {
         userInfo = info;
         isLoading = false;
@@ -55,52 +58,87 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
               alignment: Alignment.topLeft,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '사용자 정보',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      PopupMenuButton<String>(
-                        icon: Icon(Icons.edit, size: 24),
-                        onSelected: (String result) async {
-                          switch (result) {
-                            case 'edit':
-                              final editResult = await Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => EditProfileScreen(userInfo: userInfo)),
-                              );
-                              if (editResult == true) {
-                                _loadUserInfo(); // 프로필이 수정되었을 때만 정보를 다시 로드
-                              }
-                              break;
-                            case 'password':
-                            // 계정 삭제 로직을 여기에 구현
-                             // _showDeleteAccountConfirmation();
-                              break;
-                          }
-                        },
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                          const PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Text('기본프로필 수정'),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '사용자 정보',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
                           ),
-                          const PopupMenuItem<String>(
-                            value: 'password',
-                            child: Text('비밀번호 변경'),
+                        ),
+                        PopupMenuButton<String>(
+                          icon: Icon(
+                            Icons.edit,
+                            size: 24,
+                            color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  _buildInfoRow('이름', userInfo['userName']),
-                  _buildInfoRow('전화번호', _formatPhoneNumber(userInfo['userPhone'])),
-                  _buildInfoRow('이메일', userInfo['userEmail']),
-                  // 필요한 다른 사용자 정보 필드를 여기에 추가
-                ],
+                          onSelected: (String result) async {
+                            switch (result) {
+                              case 'edit':
+                                final editResult = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => EditProfileScreen(userInfo: userInfo)),
+                                );
+                                if (editResult == true) {
+                                  _loadUserInfo(); // 프로필이 수정되었을 때만 정보를 다시 로드
+                                }
+                                break;
+                              case 'password':
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => PasswordChangeScreen(userEmail: userInfo['userEmail'])),
+                                );
+                                break;
+                              case 'exit':
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => AccountDeletionScreen(userEmail: userInfo['userEmail'])),
+                                );
+                                break;
+                            }
+                          },
+                          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: 'edit',
+                              child: Text(
+                                '프로필 수정',
+                                style: TextStyle(
+                                  color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                                ),
+                              ),
+                            ),
+                            PopupMenuItem<String>(
+                              value: 'password',
+                              child: Text(
+                                '비밀번호 변경',
+                                style: TextStyle(
+                                  color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                                ),
+                              ),
+                            ),
+                            PopupMenuItem<String>(
+                              value: 'exit',
+                              child: Text(
+                                '회원 탈퇴',
+                                style: TextStyle(
+                                  color: Colors.redAccent,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    _buildInfoRow('이름', userInfo['userName']),
+                    _buildInfoRow('전화번호', _formatPhoneNumber(userInfo['userPhone'])),
+                    _buildInfoRow('이메일', userInfo['userEmail']),
+                    // 필요한 다른 사용자 정보 필드를 여기에 추가
+                  ]
               ),
             ),
             Divider(
@@ -129,11 +167,19 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
             width: 80,
             child: Text(
               '$label:',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+              ),
             ),
           ),
           Expanded(
-            child: Text(value ?? '정보 없음'),
+            child: Text(
+              value ?? '정보 없음',
+              style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+              ),
+            ),
           ),
         ],
       ),
