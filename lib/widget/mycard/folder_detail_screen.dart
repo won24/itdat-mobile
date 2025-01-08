@@ -55,13 +55,47 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
           ? Center(child: CircularProgressIndicator())
           : _cards.isEmpty
           ? Center(child: Text("폴더에 명함이 없습니다."))
-          : ListView.builder(
+          : GridView.builder(
+        padding: const EdgeInsets.all(16.0),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 한 행에 2개의 카드
+          crossAxisSpacing: 16.0,
+          mainAxisSpacing: 16.0,
+          childAspectRatio: 5 / 3, // 카드의 가로 세로 비율
+        ),
         itemCount: _cards.length,
         itemBuilder: (context, index) {
           final card = _cards[index];
           return Card(
-            child: ListTile(
-              subtitle: Text("카드 번호: ${card.cardNo}"),
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    card.userName ?? '이름 없음',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    "회사: ${card.companyName ?? '정보 없음'}",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(height: 4.0),
+                  Text(
+                    "이메일: ${card.userEmail ?? '이메일 없음'}",
+                    style: TextStyle(fontSize: 14),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1, // 이메일은 한 줄로 제한
+                  ),
+                ],
+              ),
             ),
           );
         },
