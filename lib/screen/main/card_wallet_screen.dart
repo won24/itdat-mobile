@@ -36,7 +36,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
       _isLoading = true;
     });
 
-    await Future.wait([_fetchFolders(userEmail), _fetchCards(userEmail)]);
+    await Future.wait([_fetchFolders(userEmail), _fetchBusinessCards(userEmail)]);
 
     setState(() {
       _isLoading = false;
@@ -54,13 +54,11 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
     }
   }
 
-  Future<void> _fetchCards(String userEmail) async {
+  Future<void> _fetchBusinessCards(String userEmail) async {
     try {
-      final cards = await _walletModel.getCards(userEmail);
+      final cards = await _walletModel.getAllCards(userEmail);
       setState(() {
-        _cards = (cards as List)
-            .map((card) => BusinessCard.fromJson(card as Map<String, dynamic>))
-            .toList();
+        _cards = cards.map((card) => BusinessCard.fromJson(card)).toList();
       });
     } catch (e) {
       _showErrorSnackBar("명함 목록을 가져오는 중 오류가 발생했습니다.");
@@ -71,7 +69,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void _createFolder(String userEmail) async {
+  Future<void> _createFolder(String userEmail) async {
     final folderNameController = TextEditingController();
 
     final folderName = await showDialog<String>(
@@ -207,9 +205,10 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final userEmail = Provider.of<AuthProvider>(context).userEmail;
+    final userEmail = Provider.of<AuthProvider>(context).userEmail ?? "unknown";
 
     return Scaffold(
       appBar: AppBar(
@@ -217,7 +216,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () => _createFolder(userEmail!),
+            onPressed: () => _createFolder(userEmail),
           ),
           IconButton(
             icon: Icon(_isEditMode ? Icons.check : Icons.edit),
@@ -251,13 +250,13 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                     InkWell(
                       onTap: () {
                         if (_isEditMode) {
-                          _editFolderDialog(userEmail!, folder['folderName']);
+                          _editFolderDialog(userEmail, folder['folderName']);
                         } else {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => FolderDetailScreen(
-                                  folderName: folder['folderName']),
+                              builder: (context) =>
+                                  FolderDetailScreen(folderName: folder['folderName']),
                             ),
                           );
                         }
@@ -275,7 +274,9 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                             folder['folderName'],
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 14.0, fontWeight: FontWeight.bold),
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
@@ -299,13 +300,47 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
           Divider(),
           Expanded(
             flex: 3,
-            child: ListView.builder(
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16.0,
+                mainAxisSpacing: 16.0,
+                childAspectRatio: 5 / 3,
+              ),
               itemCount: _cards.length,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               itemBuilder: (context, index) {
                 final card = _cards[index];
                 return Card(
-                  child: ListTile(
-                    title: Text("카드 번호: ${card.cardNo}"),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          card.userName ?? '이름 없음',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          "회사: ${card.companyName ?? '정보 없음'}",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        const SizedBox(height: 4.0),
+                        Text(
+                          "이메일: ${card.userEmail ?? '이메일 없음'}",
+                          style: TextStyle(fontSize: 14),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
