@@ -36,7 +36,7 @@ dependencies:
   url_launcher: ^6.1.7
   cupertino_icons: ^1.0.8
   uni_links5: ^0.5.4
-  google_maps_flutter: ^2.10.0
+  path_provider: ^2.1.5
 
 
 dependency_overrides:

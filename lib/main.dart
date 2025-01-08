@@ -15,7 +15,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
     nativeAppKey: '387812a6ae2897c3e9e59952c211374e',
