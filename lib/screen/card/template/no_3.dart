@@ -12,8 +12,8 @@ class No3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 380,
-      height: 230,
+      width: 400,
+      height: 240,
       decoration: const BoxDecoration(
         color: Colors.black,
       ),

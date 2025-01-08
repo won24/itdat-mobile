@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
+import 'package:itdat/screen/card/template/load_no1_back.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_1_back.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
@@ -38,16 +39,17 @@ class ExpandedCardScreen extends StatelessWidget {
 
     // 뒷면 렌더링
     Widget buildBackCardWithLogo(BusinessCard cardInfo) {
-      print(cardInfo.logoPath);
+      String imageUrl = 'http://112.221.66.174:8001' + cardInfo.logoPath!;
       switch (cardInfo.appTemplate) {
         case 'No1':
-          return No1Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!));
+          // return LoadNo1Back(cardInfo: cardInfo, imageUrl:imageUrl);
+          return No1Back(cardInfo: cardInfo, image: File(""));
         case 'No2':
-          return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!));
+          return No2Back(cardInfo: cardInfo, image: File(""));
         case 'No3':
-          return No3Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!));
+          return No3Back(cardInfo: cardInfo, image: File(""));
         default:
-          return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!)); // 기본값
+          return No2Back(cardInfo: cardInfo, image: File("")); // 기본값
       }
     }
 

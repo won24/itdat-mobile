@@ -14,16 +14,14 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 화면 크기 가져오기
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // 원하는 비율로 크기 설정
-    final containerWidth = screenWidth * 0.8; // 화면의 너비
-    final containerHeight = screenHeight * 0.95; // 화면의 높이
+    final containerWidth = screenWidth * 0.8;
+    final containerHeight = screenHeight * 0.95;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false, // 키보드가 올라올 때 화면 크기 조정 방지
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Center(
           child: Container(
@@ -38,29 +36,32 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/logoblack.png',
-                  width: 80, // 로고의 너비 조정
-                  height: 100, // 로고의 높이 조정
+                  width: 80,
+                  height: 100,
                 ),
                 SizedBox(height: 20),
                 TextField(
                   controller: _emailController,
-                  decoration: InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
+                  ),
                 ),
-                SizedBox(height: 10), // 이메일 입력 필드와 비밀번호 입력 필드 사이 간격
+                SizedBox(height: 10),
                 TextField(
                   controller: _passwordController,
-                  decoration: InputDecoration(labelText: 'Password'),
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: Icon(Icons.lock),
+                  ),
                   obscureText: true,
                 ),
-                SizedBox(height: 20), // 비밀번호 입력 필드와 버튼 사이 간격
+                SizedBox(height: 20),
 
-                // 로그인 버튼
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    child: Text('Login'),
                     onPressed: () async {
-                      print("버튼 눌림"); // 버튼이 눌렸는지 확인하기 위한 로그
                       final email = _emailController.text;
                       final password = _passwordController.text;
                       bool success = await Provider.of<AuthProvider>(context, listen: false).login(email, password);
@@ -76,16 +77,20 @@ class LoginScreen extends StatelessWidget {
                         );
                       }
                     },
+                    child: Text('로그인'),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Colors.teal),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(height: 10), // 구분 간격 추가
-
-                // 회원가입 폼
+                SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     onPressed: () {
-                      // RegisterScreen으로 이동
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -94,8 +99,11 @@ class LoginScreen extends StatelessWidget {
                       );
                     },
                     child: Text('회원가입'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal, // 버튼 색상
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Colors.teal),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
                     ),
                   ),
                 ),
@@ -106,71 +114,51 @@ class LoginScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 SizedBox(height: 10),
-                // 소셜 로그인 버튼들
-                Column(
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // 네이버 로그인
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          // 네이버 로그인 스크린으로 이동
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => NaverLoginScreen()),
-                          );
-                        },
-                        icon: Icon(Icons.account_circle),
-                        label: Text('Naver'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green, // 네이버 색상
-                        ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => NaverLoginScreen()),
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/icons/btnG.png',
+                        width: 60,
+                        height: 60,
                       ),
                     ),
-                    SizedBox(height: 5), // 버튼 사이 간격
-
-                    // 카카오 로그인
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          // 카카오 로그인 스크린으로 이동
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => KakaoLoginScreen()),
-                          );
-                        },
-                        icon: Icon(Icons.chat_bubble),
-                        label: Text('Kakao'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.yellow, // 카카오 색상
-                          foregroundColor: Colors.black, // 텍스트 색상
-                        ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => KakaoLoginScreen()),
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/icons/kakaologin.png',
+                        width: 60,
+                        height: 60,
                       ),
                     ),
-                    SizedBox(height: 5), // 버튼 사이 간격
-
-                    // 구글 로그인
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          // 구글 로그인 스크린으로 이동
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => GoogleLoginScreen()),
-                          );
-                        },
-                        icon: Icon(Icons.login),
-                        label: Text('Google'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue, // 구글 색상
-                        ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => GoogleLoginScreen()),
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/icons/android_light_rd_na@4x.png',
+                        width: 60,
+                        height: 60,
                       ),
                     ),
                   ],
-                )
-
+                ),
               ],
             ),
           ),

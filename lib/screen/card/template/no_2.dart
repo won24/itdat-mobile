@@ -12,8 +12,8 @@ class No2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 380,
-      height: 230,
+      width: 400,
+      height: 240,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey.shade300),
@@ -31,7 +31,7 @@ class No2 extends StatelessWidget {
                 ),
               ],
             ),
-            const Padding(padding: EdgeInsets.only(top: 15)),
+            const Padding(padding: EdgeInsets.only(top: 20)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

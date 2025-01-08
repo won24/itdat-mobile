@@ -36,85 +36,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _faxController = TextEditingController();
   final TextEditingController _companyPhoneController = TextEditingController();
 
-  final TextEditingController _verificationCodeController = TextEditingController();
-  final EmailVerificationService _emailService = EmailVerificationService();
-
-  bool _isCodeSent = false;
-  bool _isVerified = false;
-  String _verificationError = ""; // 인증 실패 메시지
-  Timer? _timer;
-  int _remainingTime = 300; // 5분 (300초)
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    _emailController.dispose();
-    _verificationCodeController.dispose();
-    super.dispose();
-  }
-
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_remainingTime > 0) {
-          _remainingTime--;
-        } else {
-          timer.cancel();
-          _isCodeSent = false; // 인증번호 만료 처리
-        }
-      });
-    });
-  }
-
-  Future<void> _sendVerificationEmail() async {
-    final email = _emailController.text.trim();
-    if (email.isEmpty) {
-      setState(() {
-        _verificationError = "이메일을 입력해주세요.";
-      });
-      return;
-    }
-
-    final isSent = await _emailService.sendVerificationCode(email);
-    if (isSent) {
-      setState(() {
-        _isCodeSent = true;
-        _verificationError = "";
-        _remainingTime = 300;
-      });
-      _startTimer();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("인증 코드가 발송되었습니다.")));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("인증 코드 발송 실패. 다시 시도해주세요.")));
-    }
-  }
-
-  Future<void> _verifyCode() async {
-    final email = _emailController.text.trim();
-    final code = _verificationCodeController.text.trim();
-
-    if (code.isEmpty) {
-      setState(() {
-        _verificationError = "인증 코드를 입력해주세요.";
-      });
-      return;
-    }
-
-    final isVerified = await _emailService.verifyCode(email, code);
-    if (isVerified) {
-      setState(() {
-        _isVerified = true;
-        _verificationError = "";
-        _timer?.cancel(); // 타이머 종료
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("인증 성공!")));
-    } else {
-      setState(() {
-        _verificationError = "인증 실패: 잘못된 코드입니다.";
-      });
-    }
-  }
-
   String _userType = "PERSONAL";
   bool _acceptedTerms = false;
   bool _acceptedPrivacyPolicy = false;
@@ -292,94 +213,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
-  Widget _emailStyledField({
-    required TextEditingController emailController,
-    required TextEditingController codeController,
-    required VoidCallback onSendCode,
-    required VoidCallback onVerifyCode,
-    bool isCodeSent = false,
-    bool isVerified = false,
-    int remainingTime = 0,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "이메일",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        hintText: "이메일을 입력해주세요.",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: isVerified ? null : onSendCode,
-                    child: Text(isCodeSent ? "다시 보내기" : "코드 발송"),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        if (isCodeSent)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "인증 코드",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: codeController,
-                        decoration: InputDecoration(
-                          hintText: "인증 코드를 입력하세요.",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: isVerified ? null : onVerifyCode,
-                      child: Text(isVerified ? "인증 완료" : "확인"),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                if (!isVerified)
-                  Text(
-                    "남은 시간: ${remainingTime ~/ 60}:${(remainingTime % 60).toString().padLeft(2, '0')}",
-                    style: TextStyle(color: Colors.red),
-                  ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-
-
-
   void _submitForm() async {
     // 필수 입력 필드 유효성 검사
     _validateField("아이디", _userIdController.text, isRequired: true, label: "아이디");
@@ -487,14 +320,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 hintText: "실명을 적어주세요.",
                 isRequired: true,
               ),
-              _emailStyledField(
-                emailController: _emailController,
-                codeController: _verificationCodeController,
-                onSendCode: _sendVerificationEmail, // 인증 코드 발송 함수
-                onVerifyCode: _verifyCode, // 인증 코드 확인 함수
-                isCodeSent: _isCodeSent,
-                isVerified: _isVerified,
-                remainingTime: _remainingTime,
+              _buildStyledField(
+                controller: _emailController,
+                label: "이메일",
+                fieldName: "userEmail",
+                hintText: "이메일을 적어주세요.",
+                isRequired: true,
+                onChanged: (value) {
+                  _validateField("userEmail", value!, isRequired: true, label: "이메일");
+                },
               ),
               _buildStyledField(
                 controller: _phoneController,

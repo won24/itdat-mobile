@@ -12,13 +12,13 @@ class No1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 380,
-      height: 230,
+      width: 400,
+      height: 240,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color.fromRGBO(255, 248, 194, 1.0),
-            Color.fromRGBO(203, 255, 239, 1.0)
+            Color.fromRGBO(255, 255, 255, 1.0),
+            Color.fromRGBO(133, 200, 181, 1.0)
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -85,7 +85,7 @@ class No1 extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
+              if(cardInfo.companyNumber != null && cardInfo.companyNumber!.isNotEmpty)
                 ...[
                   const Text("T.  ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
                   Text(
@@ -94,7 +94,7 @@ class No1 extends StatelessWidget {
                   ),
                   const SizedBox(width: 10,),
                 ],
-              if(cardInfo.email != null && cardInfo.email!.isNotEmpty)
+              if(cardInfo.companyFax != null && cardInfo.companyFax!.isNotEmpty)
                 ...[
                   const Text("F.  ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
                   Text(
