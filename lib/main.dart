@@ -58,6 +58,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _initializeApp();
+    _checkLoginStatus();
   }
 
   @override
@@ -67,7 +68,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initializeApp() async {
-    await _checkLoginStatus(); // 로그인 상태 확인
+   // await _checkLoginStatus(); // 로그인 상태 확인
     _handleIncomingLinks(); // URI 링크 처리
   }
 

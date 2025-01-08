@@ -23,7 +23,8 @@ class _MainLayoutState extends State<MainLayout> {
     MyCardScreen(),
     CardWalletScreen(),
     OpenCardScreen(),
-    MyInfoScreen()
+    MyInfoScreen(),
+    //Settings()
   ];
   void onTapped(int index) {
     setState(() {
@@ -76,15 +77,15 @@ class _MainLayoutState extends State<MainLayout> {
                 );
               },
             ),
-            IconButton(
-              icon: Icon(Icons.settings, size: 28),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Settings()),
-                );
-              },
-            ),
+            // IconButton(
+            //   icon: Icon(Icons.settings, size: 28),
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => Settings()),
+            //     );
+            //   },
+            // ),
             SizedBox(width: 12),
           ],
           toolbarHeight: 70,

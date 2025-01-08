@@ -68,7 +68,6 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       if (parts.length != 2) {
         throw FormatException('QR 코드 데이터 형식이 올바르지 않습니다.');
       }
-
       Map<String, dynamic> qrData = {
         'CardNo': parts[0],
         'userEmail': parts[1],
@@ -140,7 +139,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       print('데이터가 성공적으로 서버로 전송되었습니다.');
     } catch (e) {
       print('서버로 데이터 전송 중 오류 발생: $e');
-      throw e; // 상위 메서드에서 처리할 수 있도록 예외를 다시 던집니다.
+      throw e; // 상위 메서드에서 처리할 수 있도록 예외
     }
   }
 
