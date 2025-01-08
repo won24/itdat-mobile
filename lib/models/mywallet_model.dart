@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 class MyWalletModel {
   final String baseUrl = "http://10.0.2.2:8082/api/mywallet";
+  final String baseUrl2 = "http://10.0.2.2:8082/api/auth";
 
   // 명함 가져오기
   Future<List<dynamic>> getCards(String myEmail) async {
@@ -116,4 +117,28 @@ class MyWalletModel {
     );
     return response.statusCode == 200;
   }
+
+  Future<Map<String, String>> getUserInfoByEmail(String email) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl2/info?email=$email'),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to fetch user info');
+    }
+  }
+
+  Future<List<dynamic>> getAllCards(String userEmail) async {
+    final url = '$baseUrl/allCards?userEmail=$userEmail';
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Failed to fetch business cards");
+    }
+  }
+
 }

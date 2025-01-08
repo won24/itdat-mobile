@@ -15,7 +15,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main(){
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
     nativeAppKey: '387812a6ae2897c3e9e59952c211374e',
@@ -51,6 +50,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _initializeApp();
+    _checkLoginStatus();
   }
 
   @override
@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initializeApp() async {
-    await _checkLoginStatus(); // 로그인 상태 확인
+   // await _checkLoginStatus(); // 로그인 상태 확인
     _handleIncomingLinks(); // URI 링크 처리
   }
 
