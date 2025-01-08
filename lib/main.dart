@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:itdat/models/login_model.dart';
 import 'package:provider/provider.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -15,13 +16,20 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
     nativeAppKey: '387812a6ae2897c3e9e59952c211374e',
     javaScriptAppKey: '159e7d3d7b574fff05fa693174bfa8a8',
     loggingEnabled: true,
   );
+  // 네이버 지도 초기화
+  await NaverMapSdk.instance.initialize(
+      clientId: 'ybfzmcy3ht',
+      onAuthFailed: (error) {
+        print('Auth failed: $error');
+      });
+
   runApp(
     MultiProvider(
       providers: [
