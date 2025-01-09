@@ -118,8 +118,8 @@ class MyWalletModel {
         }),
       );
 
-      debugPrint("응답 상태 코드: ${response.statusCode}");
-      debugPrint("응답 본문: ${response.body}");
+      // debugPrint("응답 상태 코드: ${response.statusCode}");
+      // debugPrint("응답 본문: ${response.body}");
 
       if (response.statusCode == 200) {
         return true;
@@ -156,4 +156,27 @@ class MyWalletModel {
     }
   }
 
+  // 폴더에 속하지 않은 명함 가져오기
+  Future<List<dynamic>> getCardsWithoutFolder(String myEmail) async {
+    final response = await http.get(
+      Uri.parse("$baseUrl/cards/withoutFolder?myEmail=$myEmail"),
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Failed to load cards without folder");
+    }
+  }
+
+  // 특정 폴더의 명함 가져오기
+  Future<List<dynamic>> getCardsByFolder(String myEmail, String folderName) async {
+    final response = await http.get(
+      Uri.parse("$baseUrl/cards/byFolder?myEmail=$myEmail&folderName=$folderName"),
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Failed to load cards by folder");
+    }
+  }
 }
