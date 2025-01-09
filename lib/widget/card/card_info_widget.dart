@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class InfoWidget extends StatefulWidget {
+class CardInfoWidget extends StatefulWidget {
   final BusinessCard businessCards;
 
-  const InfoWidget({
+  const CardInfoWidget({
     super.key,
     required this.businessCards,
   });
 
   @override
-  State<InfoWidget> createState() => _InfoWidgetState();
+  State<CardInfoWidget> createState() => _InfoWidgetState();
 }
 
-class _InfoWidgetState extends State<InfoWidget> {
+class _InfoWidgetState extends State<CardInfoWidget> {
 
   Uri get _telUrl => Uri.parse('tel:${widget.businessCards.phone}');
   Uri get _smsUrl => Uri.parse('sms:${widget.businessCards.phone}');
@@ -77,19 +77,22 @@ class _InfoWidgetState extends State<InfoWidget> {
   void _showMapSelectionBottomSheet() {
     showModalBottomSheet(
       context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+      ),
       builder: (context) => Container(
-        height: 150,
-        width:  350,
+        height: 200,
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("어플 선택"),
+            const Text(
+              "어플 선택",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
                   onTap: () {
@@ -136,10 +139,6 @@ class _InfoWidgetState extends State<InfoWidget> {
             ),
           ],
         )
-
-      ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
       ),
     );
   }

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
@@ -10,9 +9,10 @@ import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_2_back.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/screen/card/template/no_3_back.dart';
-import 'package:itdat/widget/card/history_widget.dart';
-import 'package:itdat/widget/card/info_widget.dart';
-import 'package:itdat/widget/card/portfolio_widget.dart';
+import 'package:itdat/widget/card/card_info_widget.dart';
+import 'package:itdat/widget/card/history/history_widget.dart';
+import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
+
 
 class CardDetailScreen extends StatefulWidget {
   const CardDetailScreen({super.key});
@@ -228,10 +228,10 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                   ),
                   Expanded(
                     child: _selectedIndex == 0
-                        ? InfoWidget(businessCards: cardInfo!)
+                        ? CardInfoWidget(businessCards: cardInfo!)
                         : _selectedIndex == 1
-                        ? const PortfolioWidget()
-                        : const HistoryWidget(),
+                        ? PortfolioWidget(currentUserEmail: _userEmail,)
+                        : HistoryWidget(),
                   ),
                 ]
             ),

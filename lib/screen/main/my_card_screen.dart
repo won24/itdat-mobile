@@ -7,9 +7,9 @@ import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/screen/card/template_selection_screen.dart';
-import 'package:itdat/widget/card/info_widget.dart';
-import 'package:itdat/widget/card/portfolio_widget.dart';
-import 'package:itdat/widget/card/history_widget.dart';
+import 'package:itdat/widget/card/card_info_widget.dart';
+import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
+import 'package:itdat/widget/card/history/history_widget.dart';
 
 class MyCardScreen extends StatefulWidget {
   const MyCardScreen({super.key});
@@ -34,6 +34,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
     _loadEmail();
   }
 
+  // 카드 정보 초기화
   void _setInitialCard(List<dynamic> filteredCards) {
     if (filteredCards.isNotEmpty && selectedCardInfo == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -61,7 +62,25 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   }
 
   // 명함 템플릿
-  Widget buildBusinessCard(BusinessCard cardInfo) {
+  Widget buildBusinessCard(BusinessCard cardInfo, BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final cardWidth = screenWidth * 0.9; // 화면 너비의 90%
+    final cardHeight = screenHeight * 0.3; // 화면 높이의 30%
+
+    return SizedBox(
+      width: cardWidth,
+      height: cardHeight,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: _getTemplateWidget(cardInfo), // No1, No2, No3 중 해당 위젯 반환
+      ),
+    );
+  }
+
+  Widget _getTemplateWidget(BusinessCard cardInfo) {
     switch (cardInfo.appTemplate) {
       case 'No1':
         return No1(cardInfo: cardInfo);
@@ -70,10 +89,9 @@ class _MyCardWidgetState extends State<MyCardScreen> {
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No2(cardInfo: cardInfo); // 기본값
+        return No2(cardInfo: cardInfo);
     }
   }
-
 
   // 명함의 총 개수를 알 수 있고 아이콘 클릭 시 해당 명함 렌더링
   Widget renderCardSlideIcon(List<dynamic> filteredCards) {
@@ -210,26 +228,25 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                       break;
                                     }
                                   }
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context)=> ExpandedCardScreen(
-                                          cardInfo: cardInfo, backCard:backCard
-                                      ),
-                                    )
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: true, // 외부 영역을 탭하면 닫힘
+                                    builder: (context) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                        child: ExpandedCardScreen(
+                                          cardInfo: cardInfo,
+                                          backCard: backCard,
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
-                                child:
-                                  Container(
-                                    width: 380,
-                                    height: 230,
-                                    child: Card(
-                                      elevation: 4,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
-                                      child: buildBusinessCard(cardInfo),
-                                      ),
-                                  )
+                                child: Container(
+                                  child: buildBusinessCard(cardInfo, context),
+                                ),
                               );
                             }
                           },
@@ -243,6 +260,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
               },
             ),
           ),
+          // 하단 위젯
           Expanded(
             child: Column(
               children: [
@@ -279,10 +297,10 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                 ),
                 Expanded(
                   child: _selectedIndex == 0 && selectedCardInfo != null
-                      ? InfoWidget(businessCards: selectedCardInfo!)
+                      ? CardInfoWidget(businessCards: selectedCardInfo!)
                       : _selectedIndex == 1
-                      ? const PortfolioWidget()
-                      : const HistoryWidget(),
+                      ? PortfolioWidget(currentUserEmail: _userEmail)
+                      : HistoryWidget(),
                 ),
               ]
             ),
