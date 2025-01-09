@@ -1,6 +1,7 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:itdat/widget/card/cart_select_widget.dart';
+import 'package:itdat/widget/card/openCardList.dart';
 import 'package:itdat/widget/login_screen/logoutWidget.dart';
 import 'package:itdat/widget/setting/languageTranWidget.dart';
 import 'package:itdat/widget/setting/permissionWidget.dart';
@@ -50,6 +51,12 @@ class _SettingsState extends State<Settings> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CardSelect(source: 'nfc')),
+              );
+            }),
+            _buildSettingItem(Icons.people_alt_sharp, AppLocalizations.of(context)!.openCard, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OpenBusinessCardList()),
               );
             }),
             _buildSettingItem(Icons.logout, AppLocalizations.of(context)!.logout, () {

@@ -13,6 +13,7 @@ class BusinessCard {
   int? cardNo;
   String? cardSide;
   String? logoPath;
+  bool? isPublic;
 
   BusinessCard({
     required this.appTemplate,
@@ -29,7 +30,17 @@ class BusinessCard {
     required this.cardNo,
     required this.cardSide,
     required this.logoPath,
+    this.isPublic,
   });
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! BusinessCard) return false;
+    return other.cardNo == cardNo; // 비교할 유니크한 속성
+  }
+
+  @override
+  int get hashCode => cardNo.hashCode;
 
   factory BusinessCard.fromJson(Map<String, dynamic> json) {
     return BusinessCard(
@@ -47,6 +58,7 @@ class BusinessCard {
       cardNo: json['cardNo'],
       cardSide: json['cardSide'],
       logoPath: json['logoPath'],
+      isPublic: json['isPublic']== true,
     );
   }
 
@@ -65,6 +77,8 @@ class BusinessCard {
       'userEmail': userEmail,
       'cardNo': cardNo,
       'cardSide': cardSide,
+      'logoPath': logoPath,
+      'isPublic': isPublic,
     };
   }
 
@@ -83,6 +97,7 @@ class BusinessCard {
     int? cardNo,
     String? cardSide,
     String? logoPath,
+    bool? isPublic,
   }) {
     return BusinessCard(
       appTemplate: appTemplate ?? this.appTemplate,
@@ -99,8 +114,8 @@ class BusinessCard {
       cardNo: cardNo ?? this.cardNo,
       cardSide: cardSide ?? this.cardSide,
       logoPath: logoPath ?? this.logoPath,
+      isPublic: isPublic ?? this.isPublic,
     );
-
   }
   @override
   String toString() {

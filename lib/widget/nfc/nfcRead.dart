@@ -103,7 +103,7 @@ class _NfcReadPageState extends State<NfcReadPage> {
                   });
                   _startNfcRead();
                 },
-                tooltip: '다시 시도',
+                tooltip: AppLocalizations.of(context)!.retryTooltip,
               ),
           ],
         ),
@@ -138,8 +138,9 @@ class _NfcReadPageState extends State<NfcReadPage> {
         }
       } catch (e) {
         print('NFC 읽기 오류: $e');
-        _showErrorAlert('NFC 읽기 중 오류가 발생했습니다.');
-      }});
+        _showErrorAlert(AppLocalizations.of(context)!.nfcReadError);
+      }
+    });
 
     // 30초 후에 자동으로 중지 및 "다시 시도" 버튼 표시
     Future.delayed(Duration(seconds: 30), () {
@@ -157,10 +158,10 @@ class _NfcReadPageState extends State<NfcReadPage> {
       // NfcModel을 사용하여 카드 정보 처리
       print('Processing card info: $cardInfo');
       await _nfcModel.processCardInfo(cardInfo);
-      _showSuccessAlert('명함 정보가 성공적으로 처리되었습니다.');
+      _showSuccessAlert(AppLocalizations.of(context)!.cardProcessSuccess);
     } catch (e) {
       print('카드 정보 처리 오류: $e');
-      _showErrorAlert('명함 정보 처리 중 오류가 발생했습니다.');
+      _showErrorAlert(AppLocalizations.of(context)!.cardProcessError);
     }
   }
 
@@ -189,15 +190,15 @@ class _NfcReadPageState extends State<NfcReadPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('성공'),
+          title: Text(AppLocalizations.of(context)!.success),
           content: Text(message),
           actions: <Widget>[
             TextButton(
-              child: Text('확인'),
+              child: Text(AppLocalizations.of(context)!.confirm),
               onPressed: () {
                 _stopNfcRead();
                 Navigator.of(context).popUntil((route) => route.isFirst);
-                Navigator.of(context).pushReplacementNamed('/main', arguments: {'initialIndex': 1});
+                Navigator.of(context).pushReplacementNamed('/main');
               },
             ),
           ],
@@ -211,11 +212,11 @@ class _NfcReadPageState extends State<NfcReadPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('오류'),
+          title: Text(AppLocalizations.of(context)!.error),
           content: Text(message),
           actions: <Widget>[
             TextButton(
-              child: Text('확인'),
+              child: Text(AppLocalizations.of(context)!.confirm),
               onPressed: () {
                 Navigator.of(context).pop();
               },
