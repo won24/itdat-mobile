@@ -27,6 +27,31 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
     _initializeData();
   }
 
+  void updateAllCards(BusinessCard card) {
+    setState(() {
+      _allCards.add(card);
+    });
+  }
+
+  Future<void> refreshAllCards() async {
+    final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+
+    if (userEmail != null) {
+      try {
+        // 전체 명함 목록 다시 로드
+        final allCardsResponse = await _walletModel.getAllCards(userEmail);
+        setState(() {
+          _allCards = (allCardsResponse as List)
+              .map((card) => BusinessCard.fromJson(card as Map<String, dynamic>))
+              .toList();
+        });
+      } catch (e) {
+        debugPrint("명함 새로고침 중 오류: $e");
+      }
+    }
+  }
+
+
   Future<void> _initializeData() async {
     final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
 
@@ -327,7 +352,11 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                                     folderName: folder['folderName'],
                                   ),
                                 ),
-                              );
+                              ).then((result) {
+                                if (result == true) {
+                                  refreshAllCards();
+                                }
+                              });
                             }
                           },
                           child: Column(
