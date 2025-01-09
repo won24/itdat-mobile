@@ -95,6 +95,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       cardNo: cardNo,
       cardSide: "FRONT",
       logoPath: "",
+      isPublic: userData?['isPublic'] ?? false,
     );
 
     // 템플릿 초기화

@@ -20,7 +20,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
   bool _isWriting = false;
   bool _isRetryVisible = false;
   Timer? _vibrationTimer;
-  String _baseText = '';  // 초기값을 빈 문자열로 설정
+  String _baseText = '';
   String _dots = '';
   Timer? _textAnimationTimer;
 
@@ -101,7 +101,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
                   });
                   _startNfcWrite();
                 },
-                tooltip: '다시 시도',
+                tooltip: AppLocalizations.of(context)!.retry,
               ),
           ],
         ),
@@ -118,35 +118,33 @@ class _NfcWritePageState extends State<NfcWritePage> {
       try {
         var ndef = Ndef.from(tag);
         if (ndef == null || !ndef.isWritable) {
-          _showAlert('이 NFC 태그는 쓰기가 불가능합니다.');
+          _showAlert(AppLocalizations.of(context)!.nfcNotWritable);
           return;
         }
         final storage = FlutterSecureStorage();
         String? myEmail = await storage.read(key: 'email');
         if (myEmail == null || myEmail.isEmpty) {
-          throw Exception('저장된 이메일이 없습니다. 다시 로그인해주세요.');
+          throw Exception(AppLocalizations.of(context)!.noStoredEmail);
         }
-        // cardInfo에서 userEmail과 CardNo만 추출
         Map<String, dynamic> nfcData = {
           'userEmail': widget.cardInfo['userEmail'],
           'CardNo': widget.cardInfo['cardNo'],
-          'myEmail' : myEmail
         };
-        // 추출된 데이터를 JSON 문자열로 변환
         String nfcDataJson = json.encode(nfcData);
-        // NFC 태그 데이터 쓰기 로직
         NdefMessage message = NdefMessage([
           NdefRecord.createText(nfcDataJson),
         ]);
 
         await ndef.write(message);
-        _showSuccessDialog('명함 데이터 기록 성공', '명함 데이터가 NFC 태그에 성공적으로 기록되었습니다.');
+        _showSuccessDialog(
+          AppLocalizations.of(context)!.nfcWriteSuccess,
+          AppLocalizations.of(context)!.nfcWriteSuccessMessage
+        );
       } catch (e) {
-        _showAlert('NFC 쓰기 오류: $e');
+        _showAlert(AppLocalizations.of(context)!.nfcWriteError);
       }
     });
 
-    // 30초 후에 자동으로 중지 및 "다시 시도" 버튼 표시
     Future.delayed(Duration(seconds: 30), () {
       if (_isWriting) {
         _stopNfcWrite();
@@ -183,6 +181,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
       SnackBar(content: Text(message)),
     );
   }
+
   void _showSuccessDialog(String title, String message) {
     showDialog(
       context: context,
@@ -192,11 +191,11 @@ class _NfcWritePageState extends State<NfcWritePage> {
           content: Text(message),
           actions: <Widget>[
             TextButton(
-              child: Text('확인'),
+              child: Text(AppLocalizations.of(context)!.confirm),
               onPressed: () {
                 _stopNfcWrite();
                 Navigator.of(context).pop(); // 다이얼로그 닫기
-                Navigator.of(context).pop(); // NfcWritePage 닫기i
+                Navigator.of(context).pop(); // NfcWritePage 닫기
                 Navigator.of(context).pop();
               },
             ),
@@ -206,4 +205,3 @@ class _NfcWritePageState extends State<NfcWritePage> {
     );
   }
 }
-

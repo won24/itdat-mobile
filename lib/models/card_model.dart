@@ -96,6 +96,7 @@ class CardModel{
 
       if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
+        print('명함 가져오기$data');
         return data;
       } else {
         throw Exception('명함 가져오기 실패: ${response.statusCode}');
@@ -105,6 +106,89 @@ class CardModel{
     }
   }
 
+   // Future<int> toggleCardPublicStatus(String userEmail, int cardNo) async {
+   //   try {
+   //     final response = await http.post(
+   //       Uri.parse('$baseUrl/toggle-public'),
+   //       headers: {"Content-Type": "application/json"},
+   //       body: json.encode({
+   //         'userEmail': userEmail,
+   //         'cardNo': cardNo,
+   //       }),
+   //     );
+   //
+   //     if (response.statusCode == 200) {
+   //       final data = jsonDecode(response.body);
+   //       return data['isPublic']; // 서버에서 변경된 공개 상태를 반환한다고 가정
+   //     } else {
+   //       throw Exception('명함 공개 상태 변경 실패: ${response.statusCode}');
+   //     }
+   //   } catch (e) {
+   //     print("명함 공개 상태 변경 실패: $e");
+   //     throw Exception("toggleCardPublicStatus Error: $e");
+   //   }
+   // }
+   // Future<void> updateCardsPublicStatus(
+   //     String userEmail, List<int?> cardNos, bool makePublic) async {
+   //   try {
+   //     final response = await http.post(
+   //       Uri.parse('$baseUrl/update-public-status'),
+   //       headers: {"Content-Type": "application/json"},
+   //       body: json.encode({
+   //         'userEmail': userEmail,
+   //         'cardNos': cardNos,
+   //         'isPublic': makePublic ? 1 : 0,
+   //       }),
+   //     );
+   //
+   //     if (response.statusCode != 200) {
+   //       throw Exception('명함 상태 업데이트 실패: ${response.statusCode}');
+   //     }
+   //   } catch (e) {
+   //     print("명함 상태 업데이트 실패: $e");
+   //     throw Exception("updateCardsPublicStatus Error: $e");
+   //   }
+   // }
+
+   Future<void> updateCardsPublicStatus(List<Map<String, dynamic>> cardData) async {
+     try {
+       final response = await http.post(
+         Uri.parse('$baseUrl/public'),
+         headers: {"Content-Type": "application/json"},
+         body: json.encode(cardData),
+       );
+
+       print('Server response: ${response.body}');
+
+       if (response.statusCode == 200) {
+         // 응답 본문이 비어있지 않은 경우에만 JSON 파싱 시도
+         if (response.body.isNotEmpty) {
+           try {
+             var decodedResponse = jsonDecode(response.body);
+             if (decodedResponse['success'] == true) {
+               print('Cards public status updated successfully');
+             } else {
+               print('Failed to update cards public status: ${decodedResponse['message']}');
+             }
+           } catch (e) {
+             // JSON 파싱 실패 시 응답 본문을 그대로 출력
+             print('Failed to parse JSON response. Raw response: ${response.body}');
+           }
+         } else {
+           print('Server returned an empty response');
+         }
+       } else {
+         print('Failed to update cards public status. Status code: ${response.statusCode}');
+       }
+     } catch (e) {
+       print('Error in updateCardsPublicStatus: $e');
+     }
+   }
+   // final response = await http.post(
+   // Uri.parse('$baseUrl/public'),
+   // headers: {"Content-Type": "application/json"},
+   // body: json.encode(cardData),
+   // );
+
+
 }
-
-

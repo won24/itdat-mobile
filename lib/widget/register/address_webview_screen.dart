@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AddressWebView extends StatefulWidget {
   @override
   _AddressWebViewState createState() => _AddressWebViewState();
@@ -64,7 +64,7 @@ class _AddressWebViewState extends State<AddressWebView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("주소 검색"),
+        title: Text(AppLocalizations.of(context)!.addressSearch),
       ),
       body: WebViewWidget(
         controller: _controller,

@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class NfcModel {
   final String baseUrl = "http://112.221.66.174:8000/nfc";
   final Dio _dio = Dio();
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   NfcModel() {
     _dio.options.baseUrl = baseUrl;
@@ -12,6 +14,11 @@ class NfcModel {
 
   Future<void> processCardInfo(Map<String, dynamic> cardInfo) async {
     try {
+      String? userEmail = await _storage.read(key: 'email');
+      if (userEmail == null) {
+        throw Exception('사용자 이메일을 찾을 수 없습니다.');
+      }
+      cardInfo['myEmail'] = userEmail;
       final response = await _dio.post(
         '/save',
         data: jsonEncode(cardInfo),

@@ -3,6 +3,7 @@ import 'package:itdat/widget/setting/exitWidget.dart';
 import 'package:itdat/widget/setting/passwordChange.dart';
 import 'package:itdat/widget/setting/settingWidget.dart';
 import 'package:itdat/models/user_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../widget/setting/editProfileWidget.dart';
 
@@ -63,7 +64,7 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '사용자 정보',
+                          AppLocalizations.of(context)!.userinfo,
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -105,7 +106,7 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
                             PopupMenuItem<String>(
                               value: 'edit',
                               child: Text(
-                                '프로필 수정',
+                                AppLocalizations.of(context)!.profilemodify,
                                 style: TextStyle(
                                   color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
                                 ),
@@ -114,7 +115,7 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
                             PopupMenuItem<String>(
                               value: 'password',
                               child: Text(
-                                '비밀번호 변경',
+                                AppLocalizations.of(context)!.passwordChange,
                                 style: TextStyle(
                                   color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
                                 ),
@@ -123,7 +124,7 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
                             PopupMenuItem<String>(
                               value: 'exit',
                               child: Text(
-                                '회원 탈퇴',
+                                AppLocalizations.of(context)!.userdelete,
                                 style: TextStyle(
                                   color: Colors.redAccent,
                                 ),
@@ -134,9 +135,9 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
                       ],
                     ),
                     SizedBox(height: 20),
-                    _buildInfoRow('이름', userInfo['userName']),
-                    _buildInfoRow('전화번호', _formatPhoneNumber(userInfo['userPhone'])),
-                    _buildInfoRow('이메일', userInfo['userEmail']),
+                    _buildInfoRow(AppLocalizations.of(context)!.name, userInfo['userName']),
+                    _buildInfoRow(AppLocalizations.of(context)!.phone, _formatPhoneNumber(userInfo['userPhone'])),
+                    _buildInfoRow(AppLocalizations.of(context)!.email, userInfo['userEmail']),
                     // 필요한 다른 사용자 정보 필드를 여기에 추가
                   ]
               ),
@@ -175,7 +176,7 @@ class _MyInfoScreenState extends State<MyInfoScreen> {
           ),
           Expanded(
             child: Text(
-              value ?? '정보 없음',
+              value ?? AppLocalizations.of(context)!.notfound,
               style: TextStyle(
                 color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
               ),

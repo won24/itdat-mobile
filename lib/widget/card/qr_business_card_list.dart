@@ -65,7 +65,7 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
                       QrImageView(
                         data: qrData,
                         version: QrVersions.auto,
-                        size: 200.0,
+                        size: 300.0,
                       ),
                       SizedBox(height: 20),
                       ElevatedButton(

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-
-import '../card/cart_select_widget.dart';
+import '../card/qr_business_card_list.dart';
 
 class QRGeneratorWidget extends StatefulWidget {
   @override
@@ -10,24 +8,30 @@ class QRGeneratorWidget extends StatefulWidget {
 }
 
 class _QRGeneratorWidgetState extends State<QRGeneratorWidget> {
-  String? _myEmail;
+  final Future<String?> _emailFuture = _loadEmail();
 
-  @override
-  void initState() {
-    super.initState();
-    _loadEmail();
-
-  }
-  Future<void> _loadEmail() async {
+  static Future<String?> _loadEmail() async {
     final storage = FlutterSecureStorage();
-    _myEmail = await storage.read(key: 'email');
+    return await storage.read(key: 'email');
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CardSelect(source: 'qr')
+      body: FutureBuilder<String?>(
+        future: _emailFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.data == null) {
+            return Center(child: Text('No email found'));
+          } else {
+            return QrBusinessCardList(userEmail: snapshot.data!);
+          }
+        },
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../card/cart_select_widget.dart';
 import 'qr_scanner_widget.dart';
 import 'qr_generator_widget.dart';
 
@@ -25,7 +26,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.qrcodescan)),
       body: _screens[_currentIndex],
       bottomNavigationBar: Container(
-        height: 180, // 원하는 높이로 조절
+        height: 150, // 원하는 높이로 조절
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) {

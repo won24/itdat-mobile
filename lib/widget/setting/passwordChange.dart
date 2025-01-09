@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/models/user_model.dart';
 import 'package:itdat/widget/login_screen/login_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PasswordChangeScreen extends StatefulWidget {
   final String userEmail;
@@ -104,108 +105,132 @@ class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text('비밀번호 변경'),
+        title: Text(l10n.passwordChange),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _currentPasswordController,
-                decoration: InputDecoration(
-                  labelText: '현재 비밀번호',
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscureCurrentPassword ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        _obscureCurrentPassword = !_obscureCurrentPassword;
-                      });
-                    },
-                  ),
-                ),
-                obscureText: _obscureCurrentPassword,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '현재 비밀번호를 입력해주세요.';
-                  }
-                  return null;
-                },
-              ),
-              ElevatedButton(
-                onPressed: _verifyPassword,
-                child: Text('현재 비밀번호 확인'),
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _newPasswordController,
-                decoration: InputDecoration(
-                  labelText: '새 비밀번호',
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscureNewPassword ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        _obscureNewPassword = !_obscureNewPassword;
-                      });
-                    },
-                  ),
-                ),
-                obscureText: _obscureNewPassword,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '새 비밀번호를 입력해주세요.';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  _checkPasswordsMatch();
-                },
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _confirmPasswordController,
-                decoration: InputDecoration(
-                  labelText: '새 비밀번호 확인',
-                  suffixIcon: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _passwordsMatch && _confirmPasswordController.text.isNotEmpty
-                          ? Icon(Icons.check_circle, color: Colors.green)
-                          : SizedBox.shrink(),
-                      IconButton(
-                        icon: Icon(_obscureConfirmPassword ? Icons.visibility_off : Icons.visibility),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.0),
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 400),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFormField(
+                    controller: _currentPasswordController,
+                    style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                    decoration: InputDecoration(
+                      labelText: l10n.currentPassword,
+                      labelStyle: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscureCurrentPassword ? Icons.visibility_off : Icons.visibility),
                         onPressed: () {
                           setState(() {
-                            _obscureConfirmPassword = !_obscureConfirmPassword;
+                            _obscureCurrentPassword = !_obscureCurrentPassword;
                           });
                         },
                       ),
-                    ],
+                    ),
+                    obscureText: _obscureCurrentPassword,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return l10n.enterCurrentPassword;
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                obscureText: _obscureConfirmPassword,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '새 비밀번호를 다시 입력해주세요.';
-                  }
-                  if (value != _newPasswordController.text) {
-                    return '새 비밀번호가 일치하지 않습니다.';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  _checkPasswordsMatch();
-                },
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: _verifyPassword,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    child: Text(l10n.verifyCurrentPassword),
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _newPasswordController,
+                    style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                    decoration: InputDecoration(
+                      labelText: l10n.newPassword,
+                      labelStyle: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscureNewPassword ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () {
+                          setState(() {
+                            _obscureNewPassword = !_obscureNewPassword;
+                          });
+                        },
+                      ),
+                    ),
+                    obscureText: _obscureNewPassword,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return l10n.enterNewPassword;
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      _checkPasswordsMatch();
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                    decoration: InputDecoration(
+                      labelText: l10n.confirmNewPassword,
+                      labelStyle: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                      suffixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _passwordsMatch && _confirmPasswordController.text.isNotEmpty
+                              ? Icon(Icons.check_circle, color: Colors.green)
+                              : SizedBox.shrink(),
+                          IconButton(
+                            icon: Icon(_obscureConfirmPassword ? Icons.visibility_off : Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                _obscureConfirmPassword = !_obscureConfirmPassword;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    obscureText: _obscureConfirmPassword,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return l10n.reenterNewPassword;
+                      }
+                      if (value != _newPasswordController.text) {
+                        return l10n.newpasswordMismatch;
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      _checkPasswordsMatch();
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _isPasswordVerified && _passwordsMatch ? _changePassword : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    child: Text(l10n.changePassword),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _isPasswordVerified && _passwordsMatch ? _changePassword : null,
-                child: Text('비밀번호 변경'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
