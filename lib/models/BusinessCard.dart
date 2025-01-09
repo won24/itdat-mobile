@@ -102,4 +102,8 @@ class BusinessCard {
     );
 
   }
+  @override
+  String toString() {
+    return 'BusinessCard(userEmail: $userEmail, userName: $userName, companyName: $companyName)';
+  }
 }

@@ -16,6 +16,8 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
   final MyWalletModel _walletModel = MyWalletModel();
   List<dynamic> _folders = [];
   List<BusinessCard> _cards = [];
+  List<BusinessCard> _allCards = [];
+  Map<String, List<BusinessCard>> _folderCards = {};
   bool _isLoading = true;
   bool _isEditMode = false;
 
@@ -27,6 +29,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
 
   Future<void> _initializeData() async {
     final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+
     if (userEmail == null) {
       _showErrorSnackBar("로그인이 필요합니다.");
       return;
@@ -36,11 +39,47 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
       _isLoading = true;
     });
 
-    await Future.wait([_fetchFolders(userEmail), _fetchBusinessCards(userEmail)]);
+    try {
+      // 전체 명함과 폴더 목록 동시 로드
+      final allCardsResponse = await _walletModel.getAllCards(userEmail);
+      final foldersResponse = await _walletModel.getFolders(userEmail);
 
-    setState(() {
-      _isLoading = false;
-    });
+      // debugPrint("전체 명함 응답: $allCardsResponse");
+      // debugPrint("폴더 응답: $foldersResponse");
+
+      // 전체 명함 로드
+      setState(() {
+        _allCards = (allCardsResponse as List)
+            .map((card) => BusinessCard.fromJson(card as Map<String, dynamic>))
+            .toList();
+      });
+
+      // 폴더 목록 로드
+      setState(() {
+        _folders = foldersResponse;
+      });
+
+      // 폴더별 명함 로드
+      for (var folder in _folders) {
+        final folderName = folder['folderName'];
+        final folderCardsResponse = await _walletModel.getFolderCards(folderName);
+
+        // debugPrint("폴더 '$folderName'의 명함 응답: $folderCardsResponse");
+
+        setState(() {
+          _folderCards[folderName] = (folderCardsResponse as List)
+              .map((card) => BusinessCard.fromJson(card as Map<String, dynamic>))
+              .toList();
+        });
+      }
+    } catch (e) {
+      debugPrint("데이터 로드 중 오류: $e");
+      _showErrorSnackBar("데이터를 가져오는 중 오류가 발생했습니다.");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _fetchFolders(String userEmail) async {
@@ -207,38 +246,29 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
 
   Future<void> _moveCardToFolder(String userEmail, String folderName, BusinessCard card) async {
     try {
-      // 서버에 명함 이동 요청
-      final success = await _walletModel.moveCardToFolder(userEmail, card.cardNo!, folderName);
+      final success = await _walletModel.moveCardToFolder(userEmail, card.userEmail!, folderName);
 
       if (success) {
         setState(() {
-          // 성공 시 명함을 UI에서 제거
-          _cards.removeWhere((c) => c.cardNo == card.cardNo);
-        });
+          // 전체 명함에서 제거
+          _allCards.removeWhere((c) => c.userEmail == card.userEmail);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("명함이 폴더로 이동되었습니다.")),
-        );
-      } else {
-        // 실패 시 메시지 출력
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("명함 이동에 실패했습니다.")),
-        );
+          // 폴더에 추가
+          if (!_folderCards.containsKey(folderName)) {
+            _folderCards[folderName] = [];
+          }
+          _folderCards[folderName]?.add(card);
+        });
       }
     } catch (e) {
-      // 예외 발생 시 메시지 출력
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("명함 이동 중 오류가 발생했습니다.")),
-      );
+      _showErrorSnackBar("명함 이동 중 오류가 발생했습니다.");
     }
   }
-
 
 
   @override
   Widget build(BuildContext context) {
     final userEmail = Provider.of<AuthProvider>(context).userEmail ?? "unknown";
-
     return Scaffold(
       appBar: AppBar(
         title: Text("내 명함첩"),
@@ -264,11 +294,11 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
           Expanded(
             flex: 2,
             child: GridView.builder(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
+                crossAxisSpacing: 30.0,
+                mainAxisSpacing: 12.0,
                 childAspectRatio: 1.0,
               ),
               itemCount: _folders.length,
@@ -276,49 +306,58 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                 final folder = _folders[index];
                 return Stack(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        if (_isEditMode) {
-                          _editFolderDialog(userEmail, folder['folderName']);
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  FolderDetailScreen(folderName: folder['folderName']),
-                            ),
-                          );
+                    DragTarget<BusinessCard>(
+                      onAccept: (card) {
+                        debugPrint("드롭된 명함 데이터: ${card.userName}, ${card.userEmail}");
+                        final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+                        if (userEmail != null) {
+                          _moveCardToFolder(userEmail, folder['folderName'], card);
                         }
                       },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.folder,
-                            size: 64.0,
-                            color: Colors.grey,
+                      builder: (context, candidateData, rejectedData) {
+                        return InkWell(
+                          onTap: () {
+                            if (_isEditMode) {
+                              _editFolderDialog(userEmail, folder['folderName']);
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FolderDetailScreen(
+                                    folderName: folder['folderName'],
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.folder, size: 64.0, color: Colors.grey),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                folder['folderName'],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            folder['folderName'],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                     if (_isEditMode)
                       Positioned(
-                        top: 0,
-                        right: 25,
+                        top: -10,
+                        right: 12,
                         child: IconButton(
                           icon: Icon(Icons.remove_circle, color: Colors.red),
-                          onPressed: () =>
-                              _deleteFolder(userEmail!, folder['folderName']),
+                          onPressed: () {
+                            _deleteFolder(userEmail, folder['folderName']);
+                          },
                         ),
                       ),
                   ],
@@ -336,24 +375,57 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                 mainAxisSpacing: 16.0,
                 childAspectRatio: 5 / 3,
               ),
-              itemCount: _cards.length,
+              itemCount: _allCards.length, // 전체 명함 개수
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               itemBuilder: (context, index) {
-                final card = _cards[index];
+                final card = _allCards[index];
 
-                // Draggable 적용
                 return Draggable<BusinessCard>(
-                  data: card, // 드래그 시 전송할 데이터
+                  data: card, // 드래그 시 전달할 데이터
                   feedback: Material(
                     elevation: 4,
                     borderRadius: BorderRadius.circular(8),
                     child: Container(
                       padding: const EdgeInsets.all(12.0),
-                      width: 120,
-                      color: Colors.white,
+                      width: 150,
+                      color: Colors.grey[300],
                       child: Text(
                         card.userName ?? '이름 없음',
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                  childWhenDragging: Opacity(
+                    opacity: 0.5, // 드래그 중일 때 원본 아이템의 투명도
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              card.userName ?? '이름 없음',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              "${card.companyName ?? '정보 없음'}",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              "${card.userEmail ?? '이메일 없음'}",
+                              style: TextStyle(fontSize: 14),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -374,12 +446,12 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                           ),
                           const SizedBox(height: 8.0),
                           Text(
-                            "회사: ${card.companyName ?? '정보 없음'}",
+                            "${card.companyName ?? '정보 없음'}",
                             style: TextStyle(fontSize: 14),
                           ),
                           const SizedBox(height: 4.0),
                           Text(
-                            "이메일: ${card.userEmail ?? '이메일 없음'}",
+                            "${card.userEmail ?? '이메일 없음'}",
                             style: TextStyle(fontSize: 14),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
