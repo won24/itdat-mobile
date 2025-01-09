@@ -49,11 +49,8 @@ class MyWalletModel {
   // 폴더 내부 명함 가져오기
   Future<List<dynamic>> getFolderCards(String folderName) async {
     final url = '$baseUrl/folderCards?folderName=$folderName';
-    print('폴더 내부 명함 API 요청: $url');
     try {
       final response = await http.get(Uri.parse(url));
-      print('폴더 내부 명함 API 응답 상태 코드: ${response.statusCode}');
-      print('폴더 내부 명함 API 응답 본문: ${response.body}');
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -61,7 +58,6 @@ class MyWalletModel {
         throw Exception('Failed to fetch folder cards');
       }
     } catch (e) {
-      print('폴더 내부 명함 API 호출 중 오류: $e');
       rethrow;
     }
   }
