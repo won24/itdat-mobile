@@ -89,6 +89,7 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
+                  // commit test
                   builder: (context) => PublicCardDetailScreen(cardInfo: cardInfo),
                 ),
               );
