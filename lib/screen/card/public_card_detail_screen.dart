@@ -19,7 +19,6 @@ class PublicCardDetailScreen extends StatefulWidget {
 class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
   int _selectedIndex = 0;
 
-  // 명함 템플릿 렌더링
   Widget buildBusinessCard(BusinessCard cardInfo) {
     switch (cardInfo.appTemplate) {
       case 'No1':
@@ -84,7 +83,6 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
               ),
             ],
           ),
-          // 선택된 섹션 렌더링
           Expanded(
             child: _selectedIndex == 0
                 ? CardInfoWidget(businessCards: widget.cardInfo)
