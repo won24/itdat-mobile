@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'BusinessCard.dart';
 
 class PublicCardModel {
-  // final String baseUrl = "http://10.0.2.2:8082/card/public";
-  final String baseUrl = "http://112.221.66.174:8001/card/public";
+  final String baseUrl = "http://10.0.2.2:8082/card/public";
+  // final String baseUrl = "http://112.221.66.174:8001/card/public";
 
   // 전체 공개 명함 가져오기
   Future<List<dynamic>> getAllPublicCards() async {
