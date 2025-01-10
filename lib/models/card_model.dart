@@ -40,7 +40,7 @@ class CardModel{
   }
 
 
-  // 명함 저장
+  // 로고 없는 명함 저장
   Future<BusinessCard> createBusinessCard(BusinessCard card) async {
     try {
       final response = await http.post(
@@ -64,7 +64,6 @@ class CardModel{
       final url = Uri.parse('$baseUrl/save/logo');
       var request = http.MultipartRequest('POST', url);
       request.fields['cardInfo'] = jsonEncode(cardInfo.toJson()).trim();
-      print(jsonEncode(cardInfo.toJson()));
 
       if (cardInfo.logoUrl != null && cardInfo.logoUrl!.isNotEmpty) {
         final logoFile = File(cardInfo.logoUrl!);
@@ -79,9 +78,9 @@ class CardModel{
         ));
       }
 
-      request.headers.addAll({
-        'Content-Type': 'multipart/form-data',
-      });
+      // request.headers.addAll({
+      //   'Content-Type': 'multipart/form-data',
+      // });
 
       final response = await request.send();
       if (response.statusCode >= 200 && response.statusCode < 300) {

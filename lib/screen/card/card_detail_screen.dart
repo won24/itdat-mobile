@@ -230,7 +230,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                     child: _selectedIndex == 0
                         ? CardInfoWidget(businessCards: cardInfo!)
                         : _selectedIndex == 1
-                        ? PortfolioWidget(currentUserEmail: _userEmail,)
+                        ? PortfolioWidget(currentUserEmail: _userEmail,cardUserEmail: cardInfo!.userEmail,)
                         : HistoryWidget(),
                   ),
                 ]

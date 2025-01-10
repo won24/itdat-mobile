@@ -34,14 +34,22 @@ class _FormScreenState extends State<FormScreen> {
           color: Colors.transparent,
         ),
         content: SizedBox(
-          width: 400,
-          height: 200,
+          width: double.infinity,
+          height: 150,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text("명함이 저장 되었습니다.", style: TextStyle(fontSize: 18),),
-              const Text("해당 명함의 뒷면을 추가로 만드시겠습니까?", style: TextStyle(fontSize: 15),),
+              const Text("명함이 저장 되었습니다.",
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              const Text("추가로 명함 뒷장 만들기",
+                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,14 +125,14 @@ class _FormScreenState extends State<FormScreen> {
   void _createCard() async {
     try {
       await CardModel().createBusinessCard(widget.cardInfo);
-      _showSnackBar("새로운 명함이 생성되었습니다.");
+      _showSnackBar("명함 제작 성공");
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => MainLayout()),
             (route) => false,
       );
     } catch (e) {
-      _showSnackBar("명함 생성에 실패했습니다. 다시 시도해주세요.", isError: true);
+      _showSnackBar("명함 생성 실패. 다시 시도해주세요.", isError: true);
     }
   }
 
