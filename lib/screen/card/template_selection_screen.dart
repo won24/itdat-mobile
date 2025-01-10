@@ -94,7 +94,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       userEmail: widget.userEmail,
       cardNo: cardNo,
       cardSide: "FRONT",
-      logoPath: "",
+      logoUrl: "",
       isPublic: userData?['isPublic'] ?? false,
     );
 

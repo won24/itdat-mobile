@@ -32,12 +32,12 @@ class _No1BackState extends State<No1Back> {
 
   // 네트워크에서 이미지를 다운로드하고 로컬 파일로 저장
   Future<void> _loadImage() async {
-    if (widget.cardInfo.logoPath != null) {
+    if (widget.cardInfo.logoUrl != null) {
       setState(() {
         isLoading = true;
       });
 
-      String imageUrl = serverUrl + widget.cardInfo.logoPath!;
+      String imageUrl = serverUrl + widget.cardInfo.logoUrl!;
 
       try {
         final response = await http.get(
@@ -46,7 +46,7 @@ class _No1BackState extends State<No1Back> {
 
         if (response.statusCode == 200) {
           // MIME 타입에 따라 확장자를 동적으로 설정
-          String? mimeType = lookupMimeType(widget.cardInfo.logoPath!);
+          String? mimeType = lookupMimeType(widget.cardInfo.logoUrl!);
           String fileExtension = mimeType?.split('/').last ?? 'jpg'; // 기본 확장자는 'jpg'
 
           // 다운로드한 파일을 로컬 파일로 저장

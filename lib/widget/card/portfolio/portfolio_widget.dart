@@ -31,12 +31,12 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
   }
 
   void _goToWritePost() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WritePost(onPostSaved: _fetchPosts, userEmail: widget.currentUserEmail,),
-      ),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => WritePost(onPostSaved: _fetchPosts, userEmail: widget.currentUserEmail,),
+    //   ),
+    // );
   }
 
 

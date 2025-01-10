@@ -20,7 +20,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   Uri get _smsUrl => Uri.parse('sms:${widget.businessCards.phone}');
   Uri get _emailUrl => Uri.parse('mailto:${widget.businessCards.email}');
 
-  Future<void> _openGoogleMaps() async {
+  Future<void> _openMaps() async {
     final String address = "${widget.businessCards.companyAddress}";
     final Uri appUrl = Uri.parse("geo:0,0?q=${Uri.encodeComponent(address)}");
     final Uri webUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(address)}");
@@ -30,37 +30,37 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     } else if (await canLaunchUrl(webUrl)) {
       await launchUrl(webUrl, mode: LaunchMode.externalApplication);
     } else {
-      _showSnackBarError('구글 맵을 열 수 없습니다.');
+      _showSnackBarError('맵을 열 수 없습니다.');
     }
   }
 
-  Future<void> _openNaverMap() async {
-    final Uri appUrl = Uri.parse("nmap://search?query=${widget.businessCards.companyAddress}");
-    final Uri webUrl = Uri.parse("https://map.naver.com/v5/search/${widget.businessCards.companyAddress}");
-
-    if (await canLaunchUrl(appUrl)) {
-      await launchUrl(appUrl, mode: LaunchMode.externalApplication);
-    } else if (await canLaunchUrl(webUrl)) {
-        await launchUrl(webUrl, mode: LaunchMode.externalApplication);
-    } else {
-      _showSnackBarError("네이버 지도를 열 수 없습니다.");
-    }
-  }
-
-  Future<void> _openKakaoMap() async {
-
-    final Uri appUrl = Uri.parse("kakaomap://search?q=${widget.businessCards.companyAddress}");
-    final Uri webSearchUrl = Uri.parse("https://map.kakao.com/link/search/${widget.businessCards.companyAddress}");
-
-
-    if (await canLaunchUrl(appUrl)) {
-      await launchUrl(appUrl, mode: LaunchMode.externalApplication);
-    } else if (await canLaunchUrl(webSearchUrl)) {
-        await launchUrl(webSearchUrl, mode: LaunchMode.externalApplication);
-    } else {
-      _showSnackBarError("카카오맵을 열 수 없습니다.");
-    }
-  }
+  // Future<void> _openNaverMap() async {
+  //   final Uri appUrl = Uri.parse("nmap://search?query=${widget.businessCards.companyAddress}");
+  //   final Uri webUrl = Uri.parse("https://map.naver.com/v5/search/${widget.businessCards.companyAddress}");
+  //
+  //   if (await canLaunchUrl(appUrl)) {
+  //     await launchUrl(appUrl, mode: LaunchMode.externalApplication);
+  //   } else if (await canLaunchUrl(webUrl)) {
+  //       await launchUrl(webUrl, mode: LaunchMode.externalApplication);
+  //   } else {
+  //     _showSnackBarError("네이버 지도를 열 수 없습니다.");
+  //   }
+  // }
+  //
+  // Future<void> _openKakaoMap() async {
+  //
+  //   final Uri appUrl = Uri.parse("kakaomap://search?q=${widget.businessCards.companyAddress}");
+  //   final Uri webSearchUrl = Uri.parse("https://map.kakao.com/link/search/${widget.businessCards.companyAddress}");
+  //
+  //
+  //   if (await canLaunchUrl(appUrl)) {
+  //     await launchUrl(appUrl, mode: LaunchMode.externalApplication);
+  //   } else if (await canLaunchUrl(webSearchUrl)) {
+  //       await launchUrl(webSearchUrl, mode: LaunchMode.externalApplication);
+  //   } else {
+  //     _showSnackBarError("카카오맵을 열 수 없습니다.");
+  //   }
+  // }
 
   void _showSnackBarError(String message) {
     final snackBar = SnackBar(
@@ -74,74 +74,74 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void _showMapSelectionBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-      ),
-      builder: (context) => Container(
-        height: 200,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              "어플 선택",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    _openGoogleMaps();
-                  },
-                  child: Column(
-                    children: [
-                      Image.asset('assets/icons/google_map_icon.png', width: 50, height: 50),
-                      SizedBox(height: 10),
-                      Text('Google'),
-                    ],
-                  ),
-                ),
-
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    _openNaverMap();
-                  },
-                  child: Column(
-                    children: [
-                      Image.asset('assets/icons/naver_map_icon.png', width: 50, height: 50),
-                      SizedBox(height: 10),
-                      Text('Naver'),
-                    ],
-                  ),
-                ),
-
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    _openKakaoMap();
-                  },
-                  child: Column(
-                    children: [
-                      Image.asset('assets/icons/kakao_map_icon.png', width: 50, height: 50),
-                      SizedBox(height: 10),
-                      Text('Kakao'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        )
-      ),
-    );
-  }
+  // void _showMapSelectionBottomSheet() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.zero,
+  //     ),
+  //     builder: (context) => Container(
+  //       height: 200,
+  //       padding: const EdgeInsets.all(16.0),
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         crossAxisAlignment: CrossAxisAlignment.center,
+  //         children: [
+  //           const Text(
+  //             "어플 선택",
+  //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  //           ),
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //             children: [
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   Navigator.pop(context);
+  //                   _openGoogleMaps();
+  //                 },
+  //                 child: Column(
+  //                   children: [
+  //                     Image.asset('assets/icons/google_map_icon.png', width: 50, height: 50),
+  //                     SizedBox(height: 10),
+  //                     Text('Google'),
+  //                   ],
+  //                 ),
+  //               ),
+  //
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   Navigator.pop(context);
+  //                   _openNaverMap();
+  //                 },
+  //                 child: Column(
+  //                   children: [
+  //                     Image.asset('assets/icons/naver_map_icon.png', width: 50, height: 50),
+  //                     SizedBox(height: 10),
+  //                     Text('Naver'),
+  //                   ],
+  //                 ),
+  //               ),
+  //
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   Navigator.pop(context);
+  //                   _openKakaoMap();
+  //                 },
+  //                 child: Column(
+  //                   children: [
+  //                     Image.asset('assets/icons/kakao_map_icon.png', width: 50, height: 50),
+  //                     SizedBox(height: 10),
+  //                     Text('Kakao'),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       )
+  //     ),
+  //   );
+  // }
 
 
   @override
@@ -198,7 +198,8 @@ class _InfoWidgetState extends State<CardInfoWidget> {
             subtitle: Text("주소", style: TextStyle(color: Colors.grey),),
             trailing: IconButton(
               onPressed: (){
-                _showMapSelectionBottomSheet();
+                // _showMapSelectionBottomSheet();
+                _openMaps();
               },
               icon: Image.asset('assets/icons/location.png', height: 30, width: 30),
             ),

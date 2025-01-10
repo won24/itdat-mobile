@@ -184,7 +184,7 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
                 userEmail: card['userEmail'],
                 cardNo: card['cardNo'],
                 cardSide: card['cardSide'],
-                logoPath: card['logoPath'],
+                logoUrl: card['logoUrl'],
               );
               return GestureDetector(
                 onTap: () {

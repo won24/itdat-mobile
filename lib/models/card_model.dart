@@ -8,7 +8,7 @@ import 'package:http_parser/http_parser.dart';
 
 class CardModel{
 
-  static const String baseUrl = "http://112.221.66.174:8001/board";  // 원
+  static const String baseUrl = "http://112.221.66.174:8001/card";  // 원
   // final baseUrl = "http://112.221.66.174:8000/card"; //정원
 
 
@@ -63,10 +63,11 @@ class CardModel{
     try {
       final url = Uri.parse('$baseUrl/save/logo');
       var request = http.MultipartRequest('POST', url);
-      request.fields['cardInfo'] = jsonEncode(cardInfo.toJson());
+      request.fields['cardInfo'] = jsonEncode(cardInfo.toJson()).trim();
+      print(jsonEncode(cardInfo.toJson()));
 
-      if (cardInfo.logoPath != null && cardInfo.logoPath!.isNotEmpty) {
-        final logoFile = File(cardInfo.logoPath!);
+      if (cardInfo.logoUrl != null && cardInfo.logoUrl!.isNotEmpty) {
+        final logoFile = File(cardInfo.logoUrl!);
         final mimeType = lookupMimeType(logoFile.path) ?? 'application/octet-stream';
         final fileName = path.basename(logoFile.path);
 
@@ -77,6 +78,10 @@ class CardModel{
           filename: fileName,
         ));
       }
+
+      request.headers.addAll({
+        'Content-Type': 'multipart/form-data',
+      });
 
       final response = await request.send();
       if (response.statusCode >= 200 && response.statusCode < 300) {

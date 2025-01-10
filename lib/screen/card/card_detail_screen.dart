@@ -70,47 +70,47 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
   // 명함 뒷장 템플릿
   Widget buildBusinessCardBack(BusinessCard cardInfo, List<BusinessCard> businessCards) {
     // "FRONT"일 경우 "BACK" 데이터를 찾아서 넘겨줌
-    if (cardInfo.logoPath == null) {
+    if (cardInfo.logoUrl == null) {
       var backCard = businessCards.firstWhere(
             (card) => card.cardNo == cardInfo.cardNo && card.cardSide == 'BACK',
       );
-      print("-----------로고 주소1: ${cardInfo.logoPath}");
-      cardInfo.logoPath = backCard.logoPath;
-      print("-----------로고 주소2: ${cardInfo.logoPath}");
+      print("-----------로고 주소1: ${cardInfo.logoUrl}");
+      cardInfo.logoUrl = backCard.logoUrl;
+      print("-----------로고 주소2: ${cardInfo.logoUrl}");
     }
 
     // "BACK"일 경우는 그 자체를 반환
-    cardInfo.logoPath = cardInfo.logoPath;
-    print("-----------로고 주소3: ${cardInfo.logoPath}");
+    cardInfo.logoUrl = cardInfo.logoUrl;
+    print("-----------로고 주소3: ${cardInfo.logoUrl}");
 
     return _buildBackCardWithLogo(cardInfo);
   }
 
   Widget _buildBackCardWithLogo(BusinessCard cardInfo) {
-    if (cardInfo.logoPath == null) {
+    if (cardInfo.logoUrl == null) {
       print("로고 경로가 없습니다.");
-      cardInfo.logoPath = "/assets/logoblack.png";
+      cardInfo.logoUrl = "/assets/logoblack.png";
       switch (cardInfo.appTemplate) {
         case 'No1':
-          return No1Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!));
+          return No1Back(cardInfo: cardInfo, image: File(cardInfo.logoUrl!));
         case 'No2':
-          return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!));
+          return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoUrl!));
         case 'No3':
-          return No3Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!));
+          return No3Back(cardInfo: cardInfo, image: File(cardInfo.logoUrl!));
         default:
-          return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!)); // 기본값
+          return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoUrl!)); // 기본값
       }
     }
 
     switch (cardInfo.appTemplate) {
       case 'No1':
-        return No1Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!));
+        return No1Back(cardInfo: cardInfo, image: File(cardInfo.logoUrl!));
       case 'No2':
-        return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!));
+        return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoUrl!));
       case 'No3':
-        return No3Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!));
+        return No3Back(cardInfo: cardInfo, image: File(cardInfo.logoUrl!));
       default:
-        return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoPath!)); // 기본값
+        return No2Back(cardInfo: cardInfo, image: File(cardInfo.logoUrl!)); // 기본값
     }
   }
 

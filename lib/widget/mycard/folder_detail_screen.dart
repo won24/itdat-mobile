@@ -63,7 +63,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
             userEmail: businessCard['userEmail'],
             cardNo: businessCard['cardNo'],
             cardSide: businessCard['cardSide'],
-            logoPath: businessCard['logoPath'],
+            logoUrl: businessCard['logoUrl'],
           );
         }).toList();
       });

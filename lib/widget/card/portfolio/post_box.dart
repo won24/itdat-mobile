@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:itdat/widget/card/portfolio/write_post.dart';
 
 class PostBox extends StatelessWidget {
   final Map<String, dynamic> post;
@@ -16,16 +15,16 @@ class PostBox extends StatelessWidget {
 
   // 수정
   void _editPost(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WritePost(
-          onPostSaved: onPostModified,
-          post: post,
-          userEmail: currentUserEmail
-        ),
-      ),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => WritePost(
+    //       onPostSaved: onPostModified,
+    //       post: post,
+    //       userEmail: currentUserEmail
+    //     ),
+    //   ),
+    // );
   }
 
 

@@ -33,39 +33,14 @@ class BoardModel{
   }
 
   // 저장
-  Future<void> savePost(Map<String, dynamic> postData, {required List<File> newFiles}) async {
-    try{
-      // 파일
-      final request = http.MultipartRequest(
-        'POST',
+  Future<void> savePost(Map<String, dynamic> postData) async {
+    try {
+      final response = await http.post(
         Uri.parse("$baseUrl/save"),
+        headers: {"Content-Type": "application/json; charset=UTF-8"},
+        body: json.encode(postData),
       );
-
-      // 텍스트 데이터 추가
-      postData.forEach((key, value) {
-        if (value != null) {
-          request.fields[key] = value.toString();
-        }
-      });
-
-      // 파일 데이터 추가
-      for (var file in newFiles) {
-        final fileName = file.path.split('/').last;
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'files', // 서버에서 기대하는 파일 키
-            file.path,
-            filename: fileName,
-          ),
-        );
-      }
-
-      final response = await request.send();
-      if (response.statusCode == 200) {
-        print("포트폴리오 저장 성공");
-      } else {
-        throw Exception("포트폴리오 저장 실패. Status Code: ${response.statusCode}");
-      }
+      handleResponse(response, "savePost");
     } catch (e) {
       logError("savePost", e);
       throw Exception("savePost Error: $e");
@@ -73,41 +48,16 @@ class BoardModel{
   }
 
 
+
   // 수정
-  Future<void> editPost(
-      Map<String, dynamic> postData,
-      int postId,
-      {required List<File> newFiles}) async {
-
+  Future<void> editPost(Map<String, dynamic> postData, int postId) async {
     try {
-      final request = http.MultipartRequest(
-        'PUT',
+      final response = await http.put(
         Uri.parse("$baseUrl/edit/$postId"),
+        headers: {"Content-Type": "application/json; charset=UTF-8"},
+        body: json.encode(postData),
       );
-
-      postData.forEach((key, value) {
-        if (value != null) {
-          request.fields[key] = value.toString();
-        }
-      });
-
-      for (var file in newFiles) {
-        final fileName = file.path.split('/').last;
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'files', // 서버에서 기대하는 파일 키
-            file.path,
-            filename: fileName,
-          ),
-        );
-      }
-
-      final response = await request.send();
-      if (response.statusCode == 200) {
-        print("게시글 수정 성공");
-      } else {
-        throw Exception("게시글 수정 실패. Status Code: ${response.statusCode}");
-      }
+      handleResponse(response, "editPost");
     } catch (e) {
       logError("editPost", e);
       throw Exception("editPost Error: $e");
