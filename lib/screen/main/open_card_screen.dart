@@ -67,6 +67,7 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
     }
   }
 
+  // commit test
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,21 +83,32 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
         itemCount: _publicCards.length,
         itemBuilder: (context, index) {
           final cardInfo = _publicCards[index];
-          return Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            margin: const EdgeInsets.symmetric(
-                vertical: 8.0, horizontal: 16.0),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // 명함 템플릿
-                  buildBusinessCard(cardInfo),
-                ],
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  // commit test
+                  builder: (context) => PublicCardDetailScreen(cardInfo: cardInfo),
+                ),
+              );
+            },
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: const EdgeInsets.symmetric(
+                  vertical: 8.0, horizontal: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 명함 템플릿
+                    buildBusinessCard(cardInfo),
+                  ],
+                ),
               ),
             ),
           );

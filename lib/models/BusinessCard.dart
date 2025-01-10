@@ -9,10 +9,10 @@ class BusinessCard {
   String? companyFax;
   String? department;
   String? position;
-  String? userEmail;
+  String userEmail;
   int? cardNo;
   String? cardSide;
-  String? logoPath;
+  String? logoUrl;
   bool? isPublic;
 
   BusinessCard({
@@ -29,7 +29,7 @@ class BusinessCard {
     required this.userEmail,
     required this.cardNo,
     required this.cardSide,
-    required this.logoPath,
+    required this.logoUrl,
     this.isPublic,
   });
   @override
@@ -57,7 +57,7 @@ class BusinessCard {
       userEmail: json['userEmail'],
       cardNo: json['cardNo'],
       cardSide: json['cardSide'],
-      logoPath: json['logoPath'],
+      logoUrl: json['logoUrl'],
       isPublic: json['isPublic']== true,
     );
   }
@@ -77,7 +77,7 @@ class BusinessCard {
       'userEmail': userEmail,
       'cardNo': cardNo,
       'cardSide': cardSide,
-      'logoPath': logoPath,
+      'logoUrl': logoUrl,
       'isPublic': isPublic,
     };
   }
@@ -96,7 +96,7 @@ class BusinessCard {
     String? userEmail,
     int? cardNo,
     String? cardSide,
-    String? logoPath,
+    String? logoUrl,
     bool? isPublic,
   }) {
     return BusinessCard(
@@ -113,7 +113,7 @@ class BusinessCard {
       userEmail: userEmail ?? this.userEmail,
       cardNo: cardNo ?? this.cardNo,
       cardSide: cardSide ?? this.cardSide,
-      logoPath: logoPath ?? this.logoPath,
+      logoUrl: logoUrl ?? this.logoUrl,
       isPublic: isPublic ?? this.isPublic,
     );
   }

@@ -7,10 +7,10 @@ class No3Back extends StatelessWidget {
   final BusinessCard cardInfo;
   final File? image;
 
-  const No3Back({
+  No3Back({
     super.key,
     required this.cardInfo,
-    required this.image,
+    this.image,
   });
 
   @override
