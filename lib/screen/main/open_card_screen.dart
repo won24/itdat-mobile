@@ -5,6 +5,7 @@ import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 
 import '../../models/BusinessCard.dart';
+import '../card/public_card_detail_screen.dart';
 
 class OpenCardScreen extends StatefulWidget {
   const OpenCardScreen({super.key});
@@ -82,21 +83,31 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
         itemCount: _publicCards.length,
         itemBuilder: (context, index) {
           final cardInfo = _publicCards[index];
-          return Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            margin: const EdgeInsets.symmetric(
-                vertical: 8.0, horizontal: 16.0),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // 명함 템플릿
-                  buildBusinessCard(cardInfo),
-                ],
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PublicCardDetailScreen(cardInfo: cardInfo),
+                ),
+              );
+            },
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: const EdgeInsets.symmetric(
+                  vertical: 8.0, horizontal: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 명함 템플릿
+                    buildBusinessCard(cardInfo),
+                  ],
+                ),
               ),
             ),
           );
