@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class EmailVerificationService {
-  final String sendEmailUrl = "http://10.0.2.2:8082/api/email/send";
-  final String verifyEmailUrl = "http://10.0.2.2:8082/api/email/verify";
+  final String sendEmailUrl = "http://10.0.2.2:8080/api/email/send";
+  final String verifyEmailUrl = "http://10.0.2.2:8080/api/email/verify";
 
   // 이메일 인증 코드 발송
   Future<bool> sendVerificationCode(String email) async {
