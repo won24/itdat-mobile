@@ -29,16 +29,20 @@ class _ReportuserwidgetState extends State<Reportuserwidget> {
     loginedUserEmail = context.read<AuthProvider>().userEmail;
   }
 
-   void sendReport (String loginedUserEmail) async {
+   void sendReport () async {
        final String reason = reasonForReporting.text.trim();
        final String repotedUserEmail = widget.userEmail;
+       // print("1111111111111111111111");
+       // print(reason);
+       // print(repotedUserEmail);
+       // print(loginedUserEmail);
 
        if (reason.isEmpty) {
          ScaffoldMessenger.of(context).showSnackBar(
            const SnackBar(content: Text("신고 이유를 입력해 주세요.")),
          );
        }else{
-         bool result = await ReportModel().sendNewReport(reason, loginedUserEmail, repotedUserEmail);
+         bool result = await ReportModel().sendNewReport(reason, loginedUserEmail!, repotedUserEmail);
 
          if(result == true){
            ScaffoldMessenger.of(context).showSnackBar(
@@ -72,13 +76,7 @@ class _ReportuserwidgetState extends State<Reportuserwidget> {
       ),
       actions: [
         TextButton(
-            onPressed: ()=>sendReport(loginedUserEmail!),
-            /*
-              신고 로직
-              호출한 곳으로부터 받은 신고할 유저의 아이디와
-              방금 신고자로부터 입력받은 신고 이유까지 함께 백으로 요청을 보낸다.
-            */
-
+            onPressed: sendReport,
             child: const Text("신고"),
         )
       ],
