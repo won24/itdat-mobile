@@ -32,7 +32,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
         return No2(cardInfo: cardInfo);
     }
   }
-
+  // commit 확인용.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
