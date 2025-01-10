@@ -9,8 +9,6 @@ class MyWalletModel {
   final String baseUrl = "http://112.221.66.174:8001/api/mywallet";
   final String baseUrl2 = "http://112.221.66.174:8001/api/auth";
 
-
-
   // 명함 가져오기
   Future<List<dynamic>> getCards(String myEmail) async {
     final url = '$baseUrl/cards?myEmail=$myEmail';
@@ -118,7 +116,6 @@ class MyWalletModel {
           "folderName": folderName.isEmpty ? null : folderName, // 폴더 이름 처리
         }),
       );
-
       // debugPrint("응답 상태 코드: ${response.statusCode}");
       // debugPrint("응답 본문: ${response.body}");
 
@@ -126,6 +123,7 @@ class MyWalletModel {
         return true;
       } else {
         debugPrint("API 호출 실패: ${response.body}");
+        debugPrint("API 엔드포인트: $baseUrl/moveCard");
         return false;
       }
     } catch (e) {
