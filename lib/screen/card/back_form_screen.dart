@@ -59,7 +59,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
   // 명함 저장
   void _saveCard() async {
     widget.cardInfo.cardSide = 'BACK';
-    widget.cardInfo.logoPath = _image?.path;
+    widget.cardInfo.logoUrl = _image?.path;
 
     if (_image == null) {
       _showSnackBar("로고 이미지를 선택해주세요.", isError: true);

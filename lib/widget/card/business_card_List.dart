@@ -74,7 +74,7 @@ class _BusinessCardWidgetState extends State<BusinessCardList> {
                   userEmail: card['userEmail'],
                   cardNo: card['cardNo'],
                   cardSide: card['cardSide'],
-                  logoPath: card['logoPath'],
+                  logoUrl: card['logoUrl'],
                   isPublic: card['isPublic'],
               );
               return GestureDetector(

@@ -27,18 +27,21 @@ class _FormScreenState extends State<FormScreen> {
 
   // 명함 저장
   void _saveCard() {
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 150,
-          padding: EdgeInsets.all(16.0),
+      builder: (context) => AlertDialog(
+        shape: Border.all(
+          color: Colors.transparent,
+        ),
+        content: SizedBox(
+          width: 400,
+          height: 200,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
               const Text("명함이 저장 되었습니다.", style: TextStyle(fontSize: 18),),
               const Text("해당 명함의 뒷면을 추가로 만드시겠습니까?", style: TextStyle(fontSize: 15),),
-              const SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,55 +52,6 @@ class _FormScreenState extends State<FormScreen> {
                   TextButton(
                     onPressed: () {
                       _createCard();
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (context) => AlertDialog(
-                      //     shape: Border.all(
-                      //       color: Colors.transparent,
-                      //     ),
-                      //     content: SizedBox(
-                      //       width: 250,
-                      //       height: 120,
-                      //       child: Column(
-                      //         mainAxisAlignment: MainAxisAlignment.center,
-                      //         crossAxisAlignment: CrossAxisAlignment.center,
-                      //         children: [
-                      //           const Padding(
-                      //             padding: const EdgeInsets.only(bottom: 20.0),
-                      //             child: Text(
-                      //               "명함을 저장 하시겠습니까?",
-                      //               style: TextStyle(fontSize: 17),
-                      //               textAlign: TextAlign.center,
-                      //             ),
-                      //           ),
-                      //           Row(
-                      //             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      //             children: [
-                      //               TextButton(
-                      //                 onPressed: () {
-                      //                   _createCard();
-                      //                 },
-                      //                 child: Text("저장"),
-                      //               ),
-                      //               TextButton(
-                      //                 onPressed: () {
-                      //                   Navigator.pushAndRemoveUntil(
-                      //                     context,
-                      //                     MaterialPageRoute(
-                      //                       builder: (BuildContext context) => MainLayout(),
-                      //                     ),
-                      //                         (route) => false,
-                      //                   );
-                      //                 },
-                      //                 child: Text("취소"),
-                      //               ),
-                      //             ],
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-                      // );
                     },
                     child: Text("아니오"),
                   )
@@ -105,22 +59,57 @@ class _FormScreenState extends State<FormScreen> {
               )
             ],
           ),
-        );
-      },
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
+        ),
       ),
     );
   }
 
+  // void _saveCard() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.zero,
+  //     ),
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         height: 150,
+  //         padding: EdgeInsets.all(16.0),
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: <Widget>[
+  //             const Text("명함이 저장 되었습니다.", style: TextStyle(fontSize: 18),),
+  //             const Text("해당 명함의 뒷면을 추가로 만드시겠습니까?", style: TextStyle(fontSize: 15),),
+  //             const SizedBox(height: 20,),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               children: [
+  //                 TextButton(onPressed: (){
+  //                   moveToBackFormScreen();
+  //                 }, child: const Text("네")),
+  //                 TextButton(
+  //                   onPressed: () {
+  //                     _createCard();
+  //                   },
+  //                   child: Text("아니오"),
+  //                 )
+  //               ],
+  //             )
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   void moveToBackFormScreen() async {
     await CardModel().createBusinessCard(widget.cardInfo);
-
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-          builder: (BuildContext context) =>
-              BackFormScreen(cardInfo: widget.cardInfo)), (route) => false
+        builder: (context) => BackFormScreen(cardInfo: widget.cardInfo),
+      ),
+          (route) => false,
     );
   }
 
@@ -131,13 +120,11 @@ class _FormScreenState extends State<FormScreen> {
       _showSnackBar("새로운 명함이 생성되었습니다.");
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(
-            builder: (BuildContext context) =>
-                MainLayout()), (route) => false
+        MaterialPageRoute(builder: (context) => MainLayout()),
+            (route) => false,
       );
     } catch (e) {
-      _showSnackBar(
-          "명함 생성에 실패했습니다. 다시 시도해주세요.", isError: true);
+      _showSnackBar("명함 생성에 실패했습니다. 다시 시도해주세요.", isError: true);
     }
   }
 
@@ -152,35 +139,6 @@ class _FormScreenState extends State<FormScreen> {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-
-  void _showBottomSheet({
-    required String title,
-    required String content,
-    required List<Widget> actions,
-  }) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          height: 150,
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(title, style: const TextStyle(fontSize: 18)),
-              Text(content, style: const TextStyle(fontSize: 15)),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: actions,
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
 
   // 명함 템플릿
   Widget buildBusinessCard(BusinessCard cardInfo) {

@@ -181,7 +181,7 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
                   userEmail: card['userEmail'],
                   cardNo: card['cardNo'],
                   cardSide: card['cardSide'],
-                  logoPath: card['logoPath'],
+                  logoUrl: card['logoUrl'],
                   isPublic: card['public'],
                 );
                 print("Card ${cardInfo.cardNo} isPublic: ${cardInfo.isPublic}");
