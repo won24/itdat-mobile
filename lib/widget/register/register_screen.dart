@@ -138,6 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
+  // test
   // 인증 코드 발송
   void _sendVerificationCode() async {
     String email = _emailController.text.trim();
@@ -176,6 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
+  // test
   Future<void> _verifyCode() async {
     String email = _emailController.text.trim();
     String code = _verificationCodeController.text.trim();
@@ -204,6 +206,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  // test
   void _startResendCooldown() {
     setState(() {
       _resendCooldown = 60; // 60초 쿨다운
