@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,7 @@ import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 
 class CardModel{
-
+   final storage = FlutterSecureStorage();
   //final baseUrl = "http://112.221.66.174:8001/card";  // 원
    final baseUrl = "http://112.221.66.174:8000/card"; //정원
 
@@ -184,11 +185,56 @@ class CardModel{
        print('Error in updateCardsPublicStatus: $e');
      }
    }
-   // final response = await http.post(
-   // Uri.parse('$baseUrl/public'),
-   // headers: {"Content-Type": "application/json"},
-   // body: json.encode(cardData),
-   // );
+   Future<bool> updateBusinessCard(BusinessCard card) async {
+     try {
+       print("updateBusinessCard: $card");
+       final response = await http.put(
+         Uri.parse('$baseUrl/front/update'),
+         headers: {"Content-Type": "application/json; charset=UTF-8"},
+         body: json.encode(card.toJson()),
+       );
 
+       if (response.statusCode == 200) {
+         print("명함 업데이트 성공");
+         return true;
+       } else {
+         throw Exception('명함 업데이트 실패: ${response.statusCode}');
+       }
+     } catch (e) {
+       print("명함 업데이트 실패 $e");
+       throw Exception("updateBusinessCard Error: $e");
+     }
+   }
 
+   Future<bool> deleteCard(int cardNo) async {
+     try {
+       // 저장된 이메일 가져오기
+       String? userEmail = await storage.read(key: 'email');
+       if (userEmail == null) {
+         throw Exception('사용자 이메일을 찾을 수 없습니다.');
+       }
+
+       // 요청 바디 생성
+       Map<String, dynamic> requestBody = {
+         'cardNo': cardNo,
+         'userEmail': userEmail,
+       };
+
+       final response = await http.post(
+         Uri.parse('$baseUrl/delete'),
+         headers: {"Content-Type": "application/json"},
+         body: json.encode(requestBody),
+       );
+
+       if (response.statusCode == 200) {
+         print("명함 삭제 성공");
+         return true;
+       } else {
+         throw Exception('명함 삭제 실패: ${response.statusCode}');
+       }
+     } catch (e) {
+       print("명함 삭제 실패: $e");
+       throw Exception("deleteCard Error: $e");
+     }
+   }
 }

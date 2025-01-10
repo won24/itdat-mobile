@@ -111,30 +111,35 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
           gapless: true,
         );
 
-        const imageSize = Size(300, 300);
+        const qrSize = 300.0;
+        const padding = 40.0;
+        const totalSize = qrSize + (padding * 2);
+
         final recorder = ui.PictureRecorder();
         final canvas = Canvas(recorder);
-        painter.paint(canvas, imageSize);
-        final picture = recorder.endRecording();
 
-        final image = await picture.toImage(
-          imageSize.width.toInt(),
-          imageSize.height.toInt(),
-        );
+        // 배경 그리기
+        final backgroundPaint = Paint()..color = Colors.white;
+        canvas.drawRect(Rect.fromLTWH(0, 0, totalSize, totalSize), backgroundPaint);
+
+        // QR 코드 그리기
+        canvas.translate(padding, padding);
+        painter.paint(canvas, Size(qrSize, qrSize));
+
+        final picture = recorder.endRecording();
+        final image = await picture.toImage(totalSize.toInt(), totalSize.toInt());
         final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
         final buffer = byteData!.buffer.asUint8List();
 
         // 갤러리에 이미지 저장
-        final result = await ImageGallerySaverPlus.saveImage(Uint8List.fromList(buffer)); // 변경된 부분
+        final result = await ImageGallerySaverPlus.saveImage(Uint8List.fromList(buffer));
 
-        if (result != null) {
+        if (result['isSuccess']) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('QR 코드가 성공적으로 저장되었습니다.')),
           );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('QR 코드 저장에 실패했습니다.')),
-          );
+          throw Exception('이미지 저장 실패');
         }
       } else {
         throw Exception('QR 코드 생성 실패');

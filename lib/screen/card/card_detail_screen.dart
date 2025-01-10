@@ -14,6 +14,8 @@ import 'package:itdat/widget/card/history_widget.dart';
 import 'package:itdat/widget/card/info_widget.dart';
 import 'package:itdat/widget/card/portfolio_widget.dart';
 
+import 'card_front_fix.dart';
+
 class CardDetailScreen extends StatefulWidget {
   const CardDetailScreen({super.key});
 
