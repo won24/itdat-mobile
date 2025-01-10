@@ -35,7 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _deptController = TextEditingController();
   final TextEditingController _faxController = TextEditingController();
   final TextEditingController _companyPhoneController = TextEditingController();
-
+  // test commit
   final EmailVerificationService emailService = EmailVerificationService();
   final TextEditingController _verificationCodeController = TextEditingController();
   bool _isCodeSent = false; // 인증 코드 발송 여부
