@@ -35,7 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _deptController = TextEditingController();
   final TextEditingController _faxController = TextEditingController();
   final TextEditingController _companyPhoneController = TextEditingController();
-  // test commit
+
   final EmailVerificationService emailService = EmailVerificationService();
   final TextEditingController _verificationCodeController = TextEditingController();
   bool _isCodeSent = false; // 인증 코드 발송 여부
@@ -46,6 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   int _verificationTimeLeft = 0;
   Timer? _resendTimer;
   Timer? _verificationTimer;
+  
   String _userType = "PERSONAL";
   bool _acceptedTerms = false;
   bool _acceptedPrivacyPolicy = false;
@@ -138,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
-  // test
+
   // 인증 코드 발송
   void _sendVerificationCode() async {
     String email = _emailController.text.trim();
@@ -335,6 +336,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+
   Widget _buildStyledField({
     TextEditingController? controller,
     required String label,
@@ -488,7 +490,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: 8),
               Text(
                 '회원정보를 입력해주세요',
-                style: TextStyle(fontSize: 16, color: Color(0xFF00CA91)),
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
               ),
               SizedBox(height: 16),
 
@@ -526,10 +528,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 hintText: "실명을 적어주세요.",
                 isRequired: true,
               ),
-
+              
               // 이메일 인증
               _buildEmailVerification(),
-
+              
               _buildStyledField(
                 controller: _phoneController,
                 label: "전화번호",

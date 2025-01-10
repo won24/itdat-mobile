@@ -5,7 +5,6 @@ import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 
 import '../../models/BusinessCard.dart';
-import '../card/public_card_detail_screen.dart';
 
 class OpenCardScreen extends StatefulWidget {
   const OpenCardScreen({super.key});

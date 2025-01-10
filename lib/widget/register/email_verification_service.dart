@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class EmailVerificationService {
-  // test commit
   final String sendEmailUrl = "http://10.0.2.2:8082/api/email/send";
   final String verifyEmailUrl = "http://10.0.2.2:8082/api/email/verify";
 
