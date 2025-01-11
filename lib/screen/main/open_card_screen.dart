@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/models/publicCard_model.dart';
+import 'package:itdat/screen/card/public_card_detail_screen.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
