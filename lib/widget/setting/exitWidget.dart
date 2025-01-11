@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/models/user_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:itdat/widget/login_screen/login_screen.dart';
+
+import '../login/login_screen.dart';
 
 class AccountDeletionScreen extends StatefulWidget {
   final String userEmail;

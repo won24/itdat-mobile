@@ -504,7 +504,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final success = await Provider.of<LoginModel>(context, listen: false).register(formData);
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('회원가입 성공!')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('축하합니다, 회원가입 되었습니다.')));
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('회원가입 실패. 다시 시도하세요.')));
@@ -596,6 +596,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Text(
               '선택 입력 사항 및 동의 체크',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '명함에 들어갈 정보를 작성해주세요',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
             _buildStyledField(
