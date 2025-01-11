@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:itdat/models/board_model.dart';
 import 'package:itdat/widget/card/portfolio/write_post.dart';
 import 'package:video_player/video_player.dart';
+import 'package:http/http.dart' as http;
 
 class PostBox extends StatefulWidget {
   final Map<String, dynamic> post;
@@ -27,10 +28,23 @@ class _PostBoxState extends State<PostBox> {
   @override
   void initState() {
     super.initState();
-    if (widget.post['fileUrl'] != null && widget.post['fileUrl'].endsWith('.mp4')) {
+    print('fileUrl: ${widget.post['fileUrl']}');
+    if (widget.post['fileUrl'] != null &&
+        widget.post['fileUrl'].endsWith('.mp4')) {
       _initializeVideoPlayer(widget.post['fileUrl']);
     }
   }
+
+  // 파일이 있는 지 확인
+  Future<bool> checkFileExists(String url) async {
+    try {
+      final response = await http.head(Uri.parse(url));
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
 
   // 이미지 가져오기
   String getFullImageUrl(String fileUrl) {
@@ -86,7 +100,8 @@ class _PostBoxState extends State<PostBox> {
     super.dispose();
   }
 
-  void _showSnackBar(BuildContext context, String message, {bool isError = false}) {
+  void _showSnackBar(BuildContext context, String message,
+      {bool isError = false}) {
     final snackBar = SnackBar(
       content: Text(message),
       backgroundColor: isError ? Colors.red : Colors.green,
@@ -103,11 +118,12 @@ class _PostBoxState extends State<PostBox> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => WritePost(
-          onPostSaved: widget.onPostModified,
-          post: widget.post,
-          userEmail: widget.currentUserEmail,
-        ),
+        builder: (context) =>
+            WritePost(
+              onPostSaved: widget.onPostModified,
+              post: widget.post,
+              userEmail: widget.currentUserEmail,
+            ),
       ),
     );
   }
@@ -139,7 +155,8 @@ class _PostBoxState extends State<PostBox> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.post['title'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text(widget.post['title'], style: TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.bold)),
                 if (widget.post['userEmail'] == widget.currentUserEmail)
                   Align(
                     alignment: Alignment.topRight,
@@ -148,7 +165,8 @@ class _PostBoxState extends State<PostBox> {
                         if (value == 'edit') _editPost(context);
                         if (value == 'delete') _deletePost(context);
                       },
-                      itemBuilder: (context) => [
+                      itemBuilder: (context) =>
+                      [
                         PopupMenuItem(value: 'edit', child: Text('수정')),
                         PopupMenuItem(value: 'delete', child: Text('삭제')),
                       ],
@@ -157,42 +175,55 @@ class _PostBoxState extends State<PostBox> {
               ],
             ),
             if (widget.post['fileUrl'] != null && widget.post['fileUrl'].isNotEmpty)
-              if (widget.post['fileUrl'].endsWith('.mp4') && _videoController != null && _videoController!.value.isInitialized)
-                _isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 250,
-                      child: AspectRatio(
-                        aspectRatio: _videoController!.value.aspectRatio,
-                        child: VideoPlayer(_videoController!),
-                      ),
-                    ),
-                    VideoProgressIndicator(_videoController!, allowScrubbing: true),
-                    IconButton(
-                      icon: Icon(
-                        _isPlaying ? Icons.pause : Icons.play_arrow,
-                        size: 40.0,
-                      ),
-                      onPressed: _togglePlayPause,
-                    ),
-                  ],
-                )
-              else
-                Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 250,
-                      child: Image.network(
-                        getFullImageUrl(widget.post['fileUrl']),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ],
-                ),
+              FutureBuilder<bool>(
+                future: checkFileExists(getFullImageUrl(widget.post['fileUrl'])),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasData && snapshot.data == true) {
+                    if (widget.post['fileUrl'].endsWith('.mp4') &&
+                        _videoController != null &&
+                        _videoController!.value.isInitialized) {
+                      return Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: 250,
+                            child: AspectRatio(
+                              aspectRatio: _videoController!.value.aspectRatio,
+                              child: VideoPlayer(_videoController!),
+                            ),
+                          ),
+                          VideoProgressIndicator(
+                              _videoController!, allowScrubbing: true),
+                          IconButton(
+                            icon: Icon(
+                              _isPlaying ? Icons.pause : Icons.play_arrow,
+                              size: 40.0,
+                            ),
+                            onPressed: _togglePlayPause,
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: 250,
+                            child: Image.network(
+                              getFullImageUrl(widget.post['fileUrl']),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
             Text(widget.post['content'] ?? ''),
             SizedBox(height: 10),
           ],

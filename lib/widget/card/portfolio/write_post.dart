@@ -37,7 +37,7 @@ class _WritePostState extends State<WritePost> {
     if (widget.post != null) {
       titleController.text = widget.post!['title'] ?? '';
       contentController.text = widget.post!['content'] ?? '';
-      fileUrlController.text = widget.post!['fileUrl'] ?? '';
+      fileUrlController.text = '';
     }
   }
 
@@ -154,7 +154,7 @@ class _WritePostState extends State<WritePost> {
               TextField(
                 controller: contentController,
                 decoration: const InputDecoration(labelText: '내용'),
-                maxLines: 5,
+                maxLines: 10,
               ),
               TextField(
                 controller: fileUrlController,
@@ -212,5 +212,4 @@ class _WritePostState extends State<WritePost> {
       ),
     );
   }
-
 }
