@@ -154,7 +154,7 @@ class _WritePostState extends State<WritePost> {
               TextField(
                 controller: contentController,
                 decoration: const InputDecoration(labelText: '내용'),
-                maxLines: 5,
+                maxLines: 10,
               ),
               TextField(
                 controller: fileUrlController,

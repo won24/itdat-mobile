@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/models/board_model.dart';
+import 'package:itdat/widget/card/history/write_post_dialog.dart';
 
 class HistoryWidget extends StatefulWidget {
   final String currentUserEmail;
@@ -18,11 +19,13 @@ class HistoryWidget extends StatefulWidget {
 class _HistoryWidgetState extends State<HistoryWidget> {
   List<Map<String, dynamic>> posts = [];
 
+
   @override
   void initState() {
     super.initState();
     _fetchPosts();
   }
+
 
   Future<void> _fetchPosts() async {
     final fetchedPosts = await BoardModel().getPosts(widget.cardUserEmail);
@@ -30,6 +33,10 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     setState(() {
       posts = fetchedPosts;
     });
+  }
+
+  void _onPostSave(String post) {
+    print('새로운 글이 저장되었습니다: $post');
   }
 
   @override
@@ -55,7 +62,14 @@ class _HistoryWidgetState extends State<HistoryWidget> {
       ),
       floatingActionButton: widget.cardUserEmail == widget.currentUserEmail
           ? FloatingActionButton(
-        onPressed: showDialog,
+        onPressed: (){
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return WritePostDialog(onPostSave: _onPostSave, userEmail: widget.currentUserEmail);
+            },
+          );
+        },
         backgroundColor: Colors.transparent,
         elevation: 0,
         child: Icon(Icons.playlist_add_sharp),
@@ -64,3 +78,4 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     );
   }
 }
+
