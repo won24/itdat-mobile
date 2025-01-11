@@ -7,8 +7,10 @@ import 'package:http_parser/http_parser.dart';
 
 class BoardModel{
 
-  // static const String baseUrl = "http://112.221.66.174:8001/board"; // 원
-  final String baseUrl = 'http://112.221.66.174:8002/board'; // seo
+  static const String baseUrl = "http://112.221.66.174:8001/board/portfolio"; // 원
+  static const String historyBaseUrl = "http://112.221.66.174:8001/board/history"; // 원
+  // final String baseUrl = 'http://112.221.66.174:8002/board'; // seo
+
 
   void logError(String functionName, dynamic error) {
     print("[$functionName] Error: $error");
@@ -23,7 +25,7 @@ class BoardModel{
     }
   }
 
-  // 가져오기
+  // 포트폴리오 가져오기
   Future<List<Map<String,dynamic>>> getPosts(String userEmail) async {
     try {
       final response = await http.get(Uri.parse("$baseUrl/$userEmail"));
@@ -35,7 +37,7 @@ class BoardModel{
     }
   }
 
-  // 저장
+  // 포트폴리오 저장
   Future<void> savePost(Map<String, dynamic> postData) async {
     try {
       final url = Uri.parse("$baseUrl/save");
@@ -74,7 +76,7 @@ class BoardModel{
 
 
 
-  // 수정
+  // 포트폴리오 수정
   Future<void> editPost(Map<String, dynamic> postData, int postId) async {
     try {
       final url = Uri.parse("$baseUrl/edit/$postId");
@@ -112,8 +114,7 @@ class BoardModel{
   }
 
 
-
-  // 삭제
+  // 포트폴리오 삭제
   Future<void> deletePost(int postId) async {
     try{
       final response = await http.delete(Uri.parse("$baseUrl/delete/$postId"));
@@ -121,6 +122,62 @@ class BoardModel{
     } catch (e) {
       logError("deletePost", e);
       throw Exception("deletePost Error: $e");
+    }
+  }
+
+
+
+  // 히스토리 가져오기
+  Future<List<Map<String,dynamic>>> getHistories(String userEmail) async {
+    try {
+      final response = await http.get(Uri.parse("$historyBaseUrl/$userEmail"));
+      handleResponse(response, "getHistories");
+      return List<Map<String, dynamic>>.from(jsonDecode(utf8.decode(response.bodyBytes)));
+    } catch (e) {
+      logError("getHistories", e);
+      throw Exception("getHistories Error: $e");
+    }
+  }
+
+
+  // 히스토리 저장
+  Future<void> saveHistory(Map<String, dynamic> postData) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$historyBaseUrl/save'),
+        headers: {"Content-Type": "application/json; charset=UTF-8"},
+        body: json.encode(postData).trim()
+      );
+      handleResponse(response, "saveHistoryPost");
+    } catch (e) {
+      logError("saveHistoryPost", e);
+      throw Exception("saveHistoryPost Error: $e");
+    }
+  }
+
+  // 히스토리 수정
+  Future<void> editHistory(Map<String, dynamic> postData, int postId) async {
+    try {
+      final response = await http.put(
+          Uri.parse("$historyBaseUrl/edit/$postId"),
+          headers: {"Content-Type": "application/json; charset=UTF-8"},
+          body: json.encode(postData).trim()
+      );
+      handleResponse(response, "editHistoryPost");
+    } catch (e) {
+      logError("editHistoryPost", e);
+      throw Exception("editHistoryPost Error: $e");
+    }
+  }
+
+  // 삭제
+  Future<void> deleteHistory(int postId) async {
+    try{
+      final response = await http.delete(Uri.parse("$historyBaseUrl/delete/$postId"));
+      handleResponse(response, "deleteHistory");
+    } catch (e) {
+      logError("deleteHistory", e);
+      throw Exception("deleteHistory Error: $e");
     }
   }
 }
