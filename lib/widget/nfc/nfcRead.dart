@@ -15,6 +15,7 @@ class NfcReadPage extends StatefulWidget {
 class _NfcReadPageState extends State<NfcReadPage> {
   bool _isReading = false;
   bool _isRetryVisible = false;
+  bool _isNfcAvailable = false;
   Timer? _vibrationTimer;
   late String _baseText;
   String _dots = '';
@@ -24,7 +25,7 @@ class _NfcReadPageState extends State<NfcReadPage> {
   @override
   void initState() {
     super.initState();
-    _startNfcRead();
+    _checkNfcAvailability();
     _startTextAnimation();
   }
 
@@ -39,6 +40,39 @@ class _NfcReadPageState extends State<NfcReadPage> {
     _stopVibration();
     _textAnimationTimer?.cancel();
     super.dispose();
+  }
+
+  Future<void> _checkNfcAvailability() async {
+    bool isAvailable = await NfcManager.instance.isAvailable();
+    setState(() {
+      _isNfcAvailable = isAvailable;
+    });
+    if (isAvailable) {
+      _startNfcRead();
+    } else {
+      _showNfcNotAvailableAlert();
+    }
+  }
+
+  void _showNfcNotAvailableAlert() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.nfcNotAvailable),
+          content: Text(AppLocalizations.of(context)!.nfcNotAvailableMessage),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.confirm),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // NFC 읽기 페이지를 닫습니다.
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _startTextAnimation() {
@@ -65,7 +99,7 @@ class _NfcReadPageState extends State<NfcReadPage> {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: _isReading
+                    child: _isReading && _isNfcAvailable
                         ? Lottie.asset('assets/nfcAnime.json')
                         : SizedBox.shrink(),
                   ),
@@ -93,7 +127,7 @@ class _NfcReadPageState extends State<NfcReadPage> {
                 ],
               ),
             ),
-            if (_isRetryVisible)
+            if (_isRetryVisible && _isNfcAvailable)
               IconButton(
                 icon: Icon(Icons.refresh),
                 iconSize: 48,
@@ -112,6 +146,11 @@ class _NfcReadPageState extends State<NfcReadPage> {
   }
 
   void _startNfcRead() {
+    if (!_isNfcAvailable) {
+      _showNfcNotAvailableAlert();
+      return;
+    }
+
     setState(() {
       _isReading = true;
     });
@@ -155,7 +194,6 @@ class _NfcReadPageState extends State<NfcReadPage> {
 
   Future<void> _processCardInfo(Map<String, dynamic> cardInfo) async {
     try {
-      // NfcModel을 사용하여 카드 정보 처리
       print('Processing card info: $cardInfo');
       await _nfcModel.processCardInfo(cardInfo);
       _showSuccessAlert(AppLocalizations.of(context)!.cardProcessSuccess);

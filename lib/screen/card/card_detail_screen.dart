@@ -14,6 +14,8 @@ import 'package:itdat/widget/card/history/history_widget.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
 
 
+import 'card_front_fix.dart';
+
 class CardDetailScreen extends StatefulWidget {
   const CardDetailScreen({super.key});
 
@@ -230,7 +232,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                     child: _selectedIndex == 0
                         ? CardInfoWidget(businessCards: cardInfo!)
                         : _selectedIndex == 1
-                        ? PortfolioWidget(currentUserEmail: _userEmail,)
+                        ? PortfolioWidget(currentUserEmail: _userEmail,cardUserEmail: cardInfo!.userEmail,)
                         : HistoryWidget(),
                   ),
                 ]

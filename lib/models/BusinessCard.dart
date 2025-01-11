@@ -9,7 +9,7 @@ class BusinessCard {
   String? companyFax;
   String? department;
   String? position;
-  String? userEmail;
+  String userEmail;
   int? cardNo;
   String? cardSide;
   String? logoUrl;

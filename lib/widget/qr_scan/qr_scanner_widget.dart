@@ -59,10 +59,8 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     setState(() {
       _isProcessing = true; // 처리 시작
     });
-
     try {
       print('Raw QR 코드 데이터: $result');
-
       // 쉼표로 분리된 데이터 처리
       List<String> parts = result.split(',');
       if (parts.length != 2) {
@@ -110,11 +108,8 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('QR 코드 데이터가 성공적으로 처리되었습니다.')),
       );
-
       // CardWalletScreen으로 이동
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      Navigator.of(context).pushReplacementNamed('/main', arguments: {'initialIndex': 1});
-
+      Navigator.of(context).pop();
     } catch (e) {
       print('QR 코드 데이터 처리 중 오류 발생: $e');
       ScaffoldMessenger.of(context).showSnackBar(
