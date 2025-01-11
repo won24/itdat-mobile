@@ -22,7 +22,7 @@ class UserModel {
         },
         body: jsonEncode({'email': email})
     );
-
+    print("여기 나오냐");
     if (response.statusCode == 200) {
       return json.decode(utf8.decode(response.bodyBytes));
     } else {

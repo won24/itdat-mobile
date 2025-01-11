@@ -5,12 +5,16 @@ final String baseUrl = "http://112.221.66.174:8002"; // seo
 class ReportModel {
 
 
-  Future<bool> sendNewReport(String reason, String loginedUserEmail, String repotedUserEmail) async {
+  Future<bool> sendNewReport(String reason, String loginedUserEmail, String reportedUserEmail) async {
     final dio = Dio();
 
     try{
       final response = await dio.post('$baseUrl/admin/report-user',
-          data: {reason, loginedUserEmail, repotedUserEmail}
+          data: {
+            "reason":reason,
+            "loginedUserEmail": loginedUserEmail,
+            "reportedUserEmail": reportedUserEmail
+          }
       );
       // true   "신고되었습니다."
       // false  "신고에 실패하였습니다."
