@@ -3,12 +3,12 @@ import 'package:itdat/models/board_model.dart';
 import 'package:itdat/widget/card/history/write_post_dialog.dart';
 
 class HistoryWidget extends StatefulWidget {
-  final String currentUserEmail;
+  final String loginUserEmail;
   final String cardUserEmail;
 
   const HistoryWidget({
     super.key,
-    required this.currentUserEmail,
+    required this.loginUserEmail,
     required this.cardUserEmail
   });
 
@@ -57,7 +57,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
         builder: (context) =>
             WritePostDialog(
               post: post,
-              userEmail: widget.currentUserEmail,
+              userEmail: widget.loginUserEmail,
               onPostModified: _fetchPosts,
             ),
       ),
@@ -80,7 +80,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: posts.isEmpty
-          ? widget.cardUserEmail == widget.currentUserEmail
+          ? widget.cardUserEmail == widget.loginUserEmail
             ? Center(child: Text('간단한 이력사항, 기술 등을 작성할 수 있습니다.'))
             : Center(child: Text('히스토리가 없습니다.'))
           : ListView.builder(
@@ -98,7 +98,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                   children: [
                     Text(post['title'], style: TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold, color:Color.fromRGBO(0, 202, 145, 1)),),
-                    if (post['userEmail'] == widget.currentUserEmail)
+                    if (post['userEmail'] == widget.loginUserEmail)
                       Align(
                         alignment: Alignment.topRight,
                         child: PopupMenuButton<String>(
@@ -121,19 +121,19 @@ class _HistoryWidgetState extends State<HistoryWidget> {
             );
         },
       ),
-      floatingActionButton: widget.cardUserEmail == widget.currentUserEmail
+      floatingActionButton: widget.cardUserEmail == widget.loginUserEmail
           ? FloatingActionButton(
         onPressed: (){
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return WritePostDialog(userEmail: widget.currentUserEmail, onPostModified: _fetchPosts);
+              return WritePostDialog(userEmail: widget.loginUserEmail, onPostModified: _fetchPosts);
             },
           );
         },
         backgroundColor: Colors.transparent,
         elevation: 0,
-        child: Icon(Icons.playlist_add_sharp),
+        child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30),
       )
           : null,
     );
