@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 
+final String baseUrl = "http://112.221.66.174:8002"; // seo
+
 class ReportModel {
-  final String baseUrl = "http://112.221.66.174:8002";
+
 
   Future<bool> sendNewReport(String reason, String loginedUserEmail, String repotedUserEmail) async {
     final dio = Dio();
