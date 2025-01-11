@@ -326,7 +326,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         // 인증 완료 메시지
         if (_isVerified)
           Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: const EdgeInsets.only(top: 1.0),
             child: Text(
               "이메일 인증 완료",
               style: TextStyle(color: Colors.green, fontSize: 16, fontWeight: FontWeight.bold),

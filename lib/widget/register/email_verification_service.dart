@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class EmailVerificationService {
@@ -14,10 +15,10 @@ class EmailVerificationService {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
-
       if (response.statusCode == 200) {
         return true;
       } else {
+        print(sendEmailUrl);
         print("서버 응답 상태 코드: ${response.statusCode}");
         print("서버 응답 메시지: ${response.body}");
         return false;
