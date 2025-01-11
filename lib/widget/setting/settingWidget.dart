@@ -2,11 +2,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:itdat/widget/card/cart_select_widget.dart';
 import 'package:itdat/widget/card/openCardList.dart';
-import 'package:itdat/widget/login_screen/logoutWidget.dart';
 import 'package:itdat/widget/setting/languageTranWidget.dart';
 import 'package:itdat/widget/setting/permissionWidget.dart';
 import 'package:itdat/widget/setting/themeTranWidget.dart';
 
+import '../login/logoutWidget.dart';
 import 'fontSelectWidget.dart';
 
 class Settings extends StatefulWidget {
