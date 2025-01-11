@@ -68,13 +68,13 @@ class _BackFormScreenState extends State<BackFormScreen> {
 
     try {
       await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
-      _showSnackBar("명함이 제작되었습니다.");
+      _showSnackBar("명함 제작 성공");
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (BuildContext context) =>
               MainLayout()), (route) => false);
     } catch (e) {
-      _showSnackBar("명함 저장에 실패했습니다. 다시 시도해주세요.", isError: true);
+      _showSnackBar("명함 저장 실패. 다시 시도해주세요.", isError: true);
     }
   }
 

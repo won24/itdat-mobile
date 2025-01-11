@@ -230,15 +230,19 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                   }
                                   showDialog(
                                     context: context,
-                                    barrierDismissible: true, // 외부 영역을 탭하면 닫힘
+                                    barrierDismissible: true,
                                     builder: (context) {
                                       return Dialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(16),
+                                          borderRadius: BorderRadius.circular(1),
                                         ),
-                                        child: ExpandedCardScreen(
-                                          cardInfo: cardInfo,
-                                          backCard: backCard,
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          child: ExpandedCardScreen(
+                                            cardInfo: cardInfo,
+                                            backCard: backCard,
+                                          ),
                                         ),
                                       );
                                     },
@@ -299,7 +303,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                   child: _selectedIndex == 0 && selectedCardInfo != null
                       ? CardInfoWidget(businessCards: selectedCardInfo!)
                       : _selectedIndex == 1
-                      ? PortfolioWidget(currentUserEmail: _userEmail)
+                      ? PortfolioWidget(currentUserEmail: _userEmail, cardUserEmail: _userEmail)
                       : HistoryWidget(),
                 ),
               ]

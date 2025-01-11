@@ -93,6 +93,8 @@
   "nfcWriteSuccessMessage": "Business card data has been successfully written to the NFC tag.",
   "retry": "Retry",
   "nfcNotWritable": "This NFC tag is not writable.",
-  "noStoredEmail": "No stored email. Please log in again."
+  "noStoredEmail": "No stored email. Please log in again.",
+  "nfcNotAvailable": "NFC Function Disabled",
+  "nfcNotAvailableMessage": "Please enable NFC function in default mode in your phone settings."
 
 }

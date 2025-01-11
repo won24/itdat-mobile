@@ -93,5 +93,7 @@
   "nfcWriteSuccessMessage": "名刺データがNFCタグに正常に書き込まれました。",
   "retry": "再試行",
   "nfcNotWritable": "このNFCタグは書き込み不可能です。",
-  "noStoredEmail": "保存されたメールアドレスがありません。再度ログインしてください。"
+  "noStoredEmail": "保存されたメールアドレスがありません。再度ログインしてください。",
+  "nfcNotAvailable": "NFC機能が無効",
+  "nfcNotAvailableMessage": "携帯電話の設定でNFC機能をデフォルトモードで有効にしてください。"
 }

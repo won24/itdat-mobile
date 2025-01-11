@@ -59,11 +59,6 @@ class ExpandedCardScreen extends StatelessWidget {
               const SizedBox(height: 10),
               buildBackCardWithLogo(backCard!),
             ],
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context), // 모달 닫기
-              child: const Text("닫기"),
-            ),
           ],
         ),
       ),
