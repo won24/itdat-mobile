@@ -6,6 +6,7 @@ class EmailVerificationService {
   final String verifyEmailUrl = "http://10.0.2.2:8082/api/email/verify";
 
   // 이메일 인증 코드 발송
+  //test
   Future<bool> sendVerificationCode(String email) async {
     try {
       final response = await http.post(
@@ -28,6 +29,7 @@ class EmailVerificationService {
   }
 
   // 이메일 인증 코드 검증
+  //test
   Future<bool> verifyCode(String email, String code) async {
     try {
       final response = await http.post(
