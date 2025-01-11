@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class SocialsModel {
-//  final String baseUrl = 'http://10.0.2.2:8082'; // 김
-  final String baseUrl = "http://112.221.66.174:8000";
+ final String baseUrl = 'http://10.0.2.2:8082'; // 김
+//   final String baseUrl = "http://112.221.66.174:8000";
 
 
   // Google 로그인
