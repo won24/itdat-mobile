@@ -48,7 +48,7 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: posts.isEmpty
-          ? widget.cardUserEmail == widget.currentUserEmail? Center(child: Text('새 글을 작성해 주세요.')) : Center(child: Text('포트폴리오가 없습니다.'))
+          ? widget.cardUserEmail == widget.currentUserEmail? Center(child: Text('포트폴리오를 작성해주세요.')) : Center(child: Text('포트폴리오가 없습니다.'))
           : ListView.builder(
         padding: EdgeInsets.all(8.0),
         itemCount: posts.length,

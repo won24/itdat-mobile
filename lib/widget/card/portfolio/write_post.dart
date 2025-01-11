@@ -37,7 +37,7 @@ class _WritePostState extends State<WritePost> {
     if (widget.post != null) {
       titleController.text = widget.post!['title'] ?? '';
       contentController.text = widget.post!['content'] ?? '';
-      fileUrlController.text = widget.post!['fileUrl'] ?? '';
+      fileUrlController.text = '';
     }
   }
 
@@ -212,5 +212,4 @@ class _WritePostState extends State<WritePost> {
       ),
     );
   }
-
 }
