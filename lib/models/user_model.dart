@@ -6,6 +6,7 @@ class UserModel {
   final storage = FlutterSecureStorage();
   // final String baseUrl = "http://112.221.66.174:8000";
   final String baseUrl = "http://112.221.66.174:8001";
+  // final String baseUrl = "http://112.221.66.174:8002"; // seo
 
   Future<Map<String, dynamic>> getUserInfo() async {
     String? email = await storage.read(key: 'email');

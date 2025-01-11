@@ -11,8 +11,10 @@ import 'package:http_parser/http_parser.dart';
 
 class CardModel{
    final storage = FlutterSecureStorage();
-   final baseUrl = "http://112.221.66.174:8001/card";  // 원
-   // final baseUrl = "http://112.221.66.174:8000/card"; //정원
+  //final baseUrl = "http://112.221.66.174:8001/card";  // 원
+   final baseUrl = "http://112.221.66.174:8000/card"; //정원
+  //final String baseUrl = 'http://112.221.66.174:8002/card'; // seo
+
 
   void logError(String functionName, dynamic error) {
     print("[$functionName] Error: $error");
