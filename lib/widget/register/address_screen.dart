@@ -27,7 +27,6 @@ class _AddressSearchState extends State<AddressSearch> {
         _buildStyledTextField(
           controller: widget.addressController,
           label: "주소",
-          isRequired: true,
           hintText: "주소를 검색해주세요.",
           isReadOnly: true,
         ),
@@ -63,7 +62,6 @@ class _AddressSearchState extends State<AddressSearch> {
           _buildStyledTextField(
             controller: widget.detailedAddressController,
             label: "상세 주소",
-            isRequired: false,
             hintText: "상세 주소를 입력해주세요.",
           ),
       ],
@@ -73,7 +71,6 @@ class _AddressSearchState extends State<AddressSearch> {
   Widget _buildStyledTextField({
     required TextEditingController controller,
     required String label,
-    required bool isRequired,
     required String hintText,
     bool isReadOnly = false,
   }) {
@@ -86,11 +83,6 @@ class _AddressSearchState extends State<AddressSearch> {
               label,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            if (isRequired)
-              const Text(
-                " *",
-                style: TextStyle(color: Colors.red, fontSize: 16),
-              ),
           ],
         ),
         const SizedBox(height: 4),
