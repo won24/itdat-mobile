@@ -31,18 +31,18 @@ class _ReportuserwidgetState extends State<Reportuserwidget> {
 
    void sendReport () async {
        final String reason = reasonForReporting.text.trim();
-       final String repotedUserEmail = widget.userEmail;
-       // print("1111111111111111111111");
-       // print(reason);
-       // print(repotedUserEmail);
-       // print(loginedUserEmail);
+       final String reportedUserEmail = widget.userEmail;
+       print("1111111111111111111111");
+       print(reason);
+       print(reportedUserEmail);
+       print(loginedUserEmail);
 
        if (reason.isEmpty) {
          ScaffoldMessenger.of(context).showSnackBar(
            const SnackBar(content: Text("신고 이유를 입력해 주세요.")),
          );
        }else{
-         bool result = await ReportModel().sendNewReport(reason, loginedUserEmail!, repotedUserEmail);
+         bool result = await ReportModel().sendNewReport(reason, loginedUserEmail!, reportedUserEmail);
 
          if(result == true){
            ScaffoldMessenger.of(context).showSnackBar(
@@ -65,8 +65,6 @@ class _ReportuserwidgetState extends State<Reportuserwidget> {
 
   @override
   Widget build(BuildContext context) {
-
-    final loginedUserEmail = context.watch<AuthProvider>().userEmail;
 
     return AlertDialog(
       title: Text("유저 신고"),
