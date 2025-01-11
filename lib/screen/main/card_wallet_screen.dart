@@ -395,6 +395,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
             ),
           ),
           Divider(),
+          // 명함 선택 시 상세정보 보기 추가 해야됨. / 디자인 수정 필요.
           Expanded(
             flex: 6,
             child: GridView.builder(

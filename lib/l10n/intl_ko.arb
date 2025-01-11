@@ -93,5 +93,7 @@
   "nfcWriteSuccessMessage": "명함 데이터가 NFC 태그에 성공적으로 기록되었습니다.",
   "retry": "다시 시도",
   "nfcNotWritable": "이 NFC 태그는 쓰기가 불가능합니다.",
-  "noStoredEmail": "저장된 이메일이 없습니다. 다시 로그인해 주세요."
+  "noStoredEmail": "저장된 이메일이 없습니다. 다시 로그인해 주세요.",
+  "nfcNotAvailable" : "NFC 기능 비활성화",
+  "nfcNotAvailableMessage" : "휴대전화 설정에서 NFC기능을 기본모드로 활성화해 주세요."
 }
