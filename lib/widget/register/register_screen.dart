@@ -18,7 +18,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final PageController _pageController = PageController();
+  final _formKeyStep1 = GlobalKey<FormState>();
+  final _formKeyStep2 = GlobalKey<FormState>();
+
   String _providerType = "MANUAL";
   // Form Controllers
   final TextEditingController _userIdController = TextEditingController();
@@ -46,12 +49,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
   int _verificationTimeLeft = 0;
   Timer? _resendTimer;
   Timer? _verificationTimer;
-  
+
   String _userType = "PERSONAL";
   bool _acceptedTerms = false;
   bool _acceptedPrivacyPolicy = false;
   final Map<String, String?> _errors = {};
   Timer? _debounce;
+
+  int _currentStep = 0;
+
+  void _nextStep() {
+    if (_currentStep == 0) {
+      if (_formKeyStep1.currentState!.validate()) {
+        _pageController.nextPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        setState(() {
+          _currentStep = 1;
+        });
+      }
+    } else if (_currentStep == 1) {
+      if (_acceptedTerms && _acceptedPrivacyPolicy) {
+        _submitForm();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('필수 약관에 동의해야 합니다.')),
+        );
+      }
+    }
+  }
+
+  void _previousStep() {
+    if (_currentStep == 1) {
+      _pageController.previousPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+      setState(() {
+        _currentStep = 0;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -472,198 +511,224 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('회원가입')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'itdat 회원가입',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                '회원정보를 입력해주세요',
-                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-              ),
-              SizedBox(height: 16),
-
-              // 필수 필드들
-              _buildStyledField(
-                controller: _userIdController,
-                label: "아이디",
-                fieldName: "userId",
-                hintText: "아이디를 입력해주세요.",
-                isRequired: true,
-                onChanged: (value) {
-                  _validateField("userId", value!, isRequired: true, label: "아이디");
-                },
-              ),
-              _buildStyledField(
-                controller: _passwordController,
-                label: "비밀번호",
-                fieldName: "password",
-                hintText: "비밀번호를 입력해주세요.",
-                obscureText: true,
-                isRequired: true,
-              ),
-              _buildStyledField(
-                controller: _confirmPasswordController,
-                label: "비밀번호 확인",
-                fieldName: "confirmPassword",
-                hintText: "비밀번호를 다시 입력해주세요.",
-                obscureText: true,
-                isRequired: true,
-              ),
-              _buildStyledField(
-                controller: _userNameController,
-                label: "이름",
-                fieldName: "userName",
-                hintText: "실명을 적어주세요.",
-                isRequired: true,
-              ),
-              
-              // 이메일 인증
-              _buildEmailVerification(),
-              
-              _buildStyledField(
-                controller: _phoneController,
-                label: "전화번호",
-                fieldName: "userPhone",
-                hintText: "전화번호를 적어주세요.",
-                isRequired: true,
-              ),
-              _buildStyledField(
+  Widget _buildStep1() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: _formKeyStep1,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '필수 입력 사항',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            _buildStyledField(
+              controller: _userIdController,
+              label: "아이디",
+              fieldName: "userId",
+              hintText: "아이디를 입력해주세요.",
+              isRequired: true,
+            ),
+            _buildStyledField(
+              controller: _passwordController,
+              label: "비밀번호",
+              fieldName: "password",
+              hintText: "비밀번호를 입력해주세요.",
+              obscureText: true,
+              isRequired: true,
+            ),
+            _buildStyledField(
+              controller: _confirmPasswordController,
+              label: "비밀번호 확인",
+              fieldName: "confirmPassword",
+              hintText: "비밀번호를 다시 입력해주세요.",
+              obscureText: true,
+              isRequired: true,
+            ),
+            _buildStyledField(
+              controller: _userNameController,
+              label: "이름",
+              fieldName: "userName",
+              hintText: "실명을 적어주세요.",
+              isRequired: true,
+            ),
+            _buildEmailVerification(),
+            _buildStyledField(
+              controller: _phoneController,
+              label: "전화번호",
+              fieldName: "userPhone",
+              hintText: "전화번호를 적어주세요.",
+              isRequired: true,
+            ),
+            _buildStyledField(
+              controller: _birthController,
+              label: "생년월일",
+              fieldName: "userBirth",
+              hintText: "생년월일을 입력해주세요.",
+              isRequired: true,
+              datePicker: DatePickerField(
+                context: context,
                 controller: _birthController,
                 label: "생년월일",
                 fieldName: "userBirth",
-                hintText: "",
-                isRequired: true,
-                datePicker: DatePickerField(
-                  context: context,
-                  controller: _birthController,
-                  label: "생년월일",
-                  fieldName: "userBirth",
-                  validateField: (String fieldName, String value) {
-                    _validateField(fieldName, value, isRequired: true, label: "생년월일");
-                  },
-                  errors: _errors,
-                ),
-              ),
-              _buildStyledField(
-                label: "유저 타입",
-                fieldName: "userType",
-                value: _userType,
-                items: ["PERSONAL", "BUSINESS"],
-                onChanged: (value) {
-                  setState(() {
-                    _userType = value!;
-                  });
+                validateField: (String fieldName, String value) {
+                  _validateField(fieldName, value, isRequired: true, label: "생년월일");
                 },
-                hintText: "유저 타입을 선택해주세요.",
+                errors: _errors,
               ),
-              _buildStyledField(
-                controller: _companyController,
-                label: "회사명",
-                fieldName: "company",
-                hintText: "회사명을 입력해주세요.",
-              ),
-              _buildStyledField(
-                controller: _rankController,
-                label: "직급",
-                fieldName: "companyRank",
-                hintText: "직급을 입력해주세요.",
-              ),
-              _buildStyledField(
-                controller: _deptController,
-                label: "부서명",
-                fieldName: "companyDept",
-                hintText: "부서를 입력해주세요.",
-              ),
-              _buildStyledField(
-                controller: _faxController,
-                label: "팩스 번호",
-                fieldName: "companyFax",
-                hintText: "팩스 번호를 입력해주세요.",
-              ),
-              _buildStyledField(
-                controller: _companyPhoneController,
-                label: "회사 전화번호",
-                fieldName: "companyPhone",
-                hintText: "회사 전화번호를 입력해주세요.",
-              ),
-              AddressSearch(
-                addressController: _companyAddrController,
-                detailedAddressController: _companyAddrDetailController,
-              ),
-
-              SizedBox(height: 16),
-
-              // 약관 동의 체크박스
-              CheckboxListTile(
-                title: Text("서비스 이용약관 동의 (필수)"),
-                value: _acceptedTerms,
-                onChanged: (value) {
-                  setState(() {
-                    _acceptedTerms = value ?? false;
-                  });
-                },
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TermsOfService(),
-                    ),
-                  );
-                },
-                child: Text("서비스 이용약관 보기"),
-              ),
-              CheckboxListTile(
-                title: Text("개인정보 처리방침 동의 (필수)"),
-                value: _acceptedPrivacyPolicy,
-                onChanged: (value) {
-                  setState(() {
-                    _acceptedPrivacyPolicy = value ?? false;
-                  });
-                },
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PrivacyPolicy(),
-                    ),
-                  );
-                },
-                child: Text("개인정보 처리방침 보기"),
-              ),
-
-              SizedBox(height: 20),
-
-              // 회원가입 버튼
-              Center(
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  child: Text('회원가입'),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                    textStyle: TextStyle(fontSize: 18),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  Widget _buildStep2() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: _formKeyStep2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '선택 입력 사항 및 동의 체크',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            _buildStyledField(
+              controller: _companyController,
+              label: "회사명",
+              fieldName: "company",
+              hintText: "회사명을 입력해주세요.",
+            ),
+            _buildStyledField(
+              controller: _rankController,
+              label: "직급",
+              fieldName: "companyRank",
+              hintText: "직급을 입력해주세요.",
+            ),
+            _buildStyledField(
+              controller: _deptController,
+              label: "부서명",
+              fieldName: "companyDept",
+              hintText: "부서를 입력해주세요.",
+            ),
+            _buildStyledField(
+              controller: _faxController,
+              label: "팩스 번호",
+              fieldName: "companyFax",
+              hintText: "팩스 번호를 입력해주세요.",
+            ),
+            _buildStyledField(
+              controller: _companyPhoneController,
+              label: "회사 전화번호",
+              fieldName: "companyPhone",
+              hintText: "회사 전화번호를 입력해주세요.",
+            ),
+            AddressSearch(
+              addressController: _companyAddrController,
+              detailedAddressController: _companyAddrDetailController,
+            ),
+            SizedBox(height: 16),
+            CheckboxListTile(
+              title: Text("서비스 이용약관 동의 (필수)"),
+              value: _acceptedTerms,
+              onChanged: (value) {
+                setState(() {
+                  _acceptedTerms = value ?? false;
+                });
+              },
+            ),
+            CheckboxListTile(
+              title: Text("개인정보 처리방침 동의 (필수)"),
+              value: _acceptedPrivacyPolicy,
+              onChanged: (value) {
+                setState(() {
+                  _acceptedPrivacyPolicy = value ?? false;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('회원가입'),
+        actions: [
+          if (_currentStep == 1) // 두 번째 단계에서는 "이전" 버튼 표시
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: _previousStep,
+            ),
+        ],
+      ),
+      body: PageView(
+        controller: _pageController,
+        physics: NeverScrollableScrollPhysics(), // 사용자가 직접 스크롤하지 못하도록 설정
+        children: [
+          _buildStep1(), // 첫 번째 단계 UI
+          _buildStep2(), // 두 번째 단계 UI
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // 버튼 간격 배치
+          children: [
+            // 이전 버튼
+            if (_currentStep == 1) // 2번째 페이지에서만 표시
+              ElevatedButton(
+                onPressed: _previousStep, // 이전 페이지로 이동
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                child: Text(
+                  '이전',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              )
+            else
+              SizedBox.shrink(), // 1번째 페이지에서는 아무것도 표시하지 않음
+
+            // 다음 버튼 또는 회원가입 버튼
+            ElevatedButton(
+              onPressed: _currentStep == 0 ? _nextStep : _submitForm,
+              style: ElevatedButton.styleFrom(
+                padding: _currentStep == 0
+                    ? EdgeInsets.all(16) // 동그란 화살표 버튼
+                    : EdgeInsets.symmetric(horizontal: 24, vertical: 12), // 회원가입 버튼
+                shape: _currentStep == 0
+                    ? CircleBorder() // 1번째 페이지: 동그란 화살표 버튼
+                    : RoundedRectangleBorder( // 2번째 페이지: 직사각형 버튼
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: _currentStep == 0
+                  ? Icon(
+                Icons.arrow_forward, // 1번째 페이지: 화살표 아이콘
+                size: 24,
+              )
+                  : Text(
+                '회원가입', // 2번째 페이지: 회원가입 텍스트
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }
