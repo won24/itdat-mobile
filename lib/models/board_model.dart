@@ -7,7 +7,8 @@ import 'package:http_parser/http_parser.dart';
 
 class BoardModel{
 
-  static const String baseUrl = "http://112.221.66.174:8001/board"; // 원
+  // static const String baseUrl = "http://112.221.66.174:8001/board"; // 원
+  final String baseUrl = 'http://112.221.66.174:8002/board'; // seo
 
   void logError(String functionName, dynamic error) {
     print("[$functionName] Error: $error");

@@ -6,6 +6,7 @@ import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/widget/card/card_info_widget.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
 import 'package:itdat/widget/card/history/history_widget.dart';
+import 'package:itdat/widget/reportUser/reportUserWidget.dart';
 
 class PublicCardDetailScreen extends StatefulWidget {
   final BusinessCard cardInfo;
@@ -39,6 +40,29 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
       appBar: AppBar(
         title: const Text("명함 세부 정보"),
         centerTitle: true,
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert), // "..." 버튼 아이콘
+            onSelected: (value) {
+              if (value == 'report') {
+                // _showReportDialog(); // 신고 다이얼로그 표시
+
+                showDialog(
+                    context: context,
+                    builder: (context) => Reportuserwidget(
+                        userEmail: widget.cardInfo.userEmail ?? "알 수 없는 이메일" // 신고 대상의 이메일
+                    ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'report',
+                child: Text("신고"),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Column(
         children: [
