@@ -113,7 +113,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
             child: _selectedIndex == 0
                 ? CardInfoWidget(businessCards: widget.cardInfo)
                 : _selectedIndex == 1
-                ? PortfolioWidget(currentUserEmail: widget.cardInfo.userEmail ?? "이메일 없음")
+                ? PortfolioWidget(currentUserEmail: widget.cardInfo.userEmail ?? "이메일 없음", cardUserEmail: widget.cardInfo.userEmail,)
                 : HistoryWidget(),
           ),
         ],
