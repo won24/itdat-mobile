@@ -16,23 +16,27 @@ class AuthProvider with ChangeNotifier {
   String? get userEmail => _userEmail;
 
   Future<bool> checkLoginStatus() async {
+    _isLoggedIn = false;
+    _userEmail = null;
+
     String? token = await _storage.read(key: 'auth_token');
     String? storedIdentifier = await _storage.read(key: 'user_identifier');
+
     print("토큰 확인: $token");
     print("저장된 아이디 또는 이메일: $storedIdentifier");
 
     if (token != null && token.isNotEmpty) {
       _isLoggedIn = true;
       _userEmail = storedIdentifier;
-    } else {
-      _isLoggedIn = false;
-      _userEmail = null;
     }
+
     notifyListeners();
     return _isLoggedIn;
   }
 
+
   Future<bool> login(String identifier, String password) async {
+    await logout();
     print("프로바이더 로그인 정보 확인: identifier = $identifier, password = $password");
 
     bool success = await _authService.login(identifier, password);
@@ -49,11 +53,16 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await _authService.logout();
-    await _storage.delete(key: 'auth_token');
-    await _storage.delete(key: 'user_identifier');
-    _isLoggedIn = false;
-    _userEmail = null;
-    notifyListeners();
+    try {
+      await _authService.logout();
+      await _storage.delete(key: 'auth_token');
+      await _storage.delete(key: 'user_identifier');
+      print("로그아웃: auth_token과 user_identifier 삭제 완료");
+      _isLoggedIn = false;
+      _userEmail = null;
+      notifyListeners();
+    } catch (e) {
+      print("로그아웃 중 에러 발생: $e");
+    }
   }
 }
