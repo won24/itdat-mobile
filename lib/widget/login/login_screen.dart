@@ -10,6 +10,7 @@ import 'naverLogin_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _identifierController = TextEditingController(); // identifier (아이디 또는 이메일)
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -47,9 +48,9 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 TextField(
-                  controller: _emailController,
+                  controller: _identifierController,
                   decoration: InputDecoration(
-                    labelText: 'Email',
+                    labelText: '아이디 또는 이메일',
                     prefixIcon: Icon(Icons.email),
                   ),
                 ),
@@ -68,9 +69,9 @@ class LoginScreen extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      final email = _emailController.text;
+                      final identifier = _identifierController.text.trim();
                       final password = _passwordController.text;
-                      bool success = await Provider.of<AuthProvider>(context, listen: false).login(email, password);
+                      bool success = await Provider.of<AuthProvider>(context, listen: false).login(identifier, password);
 
                       if (success) {
                         Navigator.pushReplacement(

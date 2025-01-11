@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:itdat/widget/login_screen/login_screen.dart';
-import 'package:itdat/widget/login_screen/login_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'login_screen.dart';
+import 'login_service.dart';
 
 class LogoutWidget {
   static Future<void> show(BuildContext context) async {
