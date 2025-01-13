@@ -80,7 +80,7 @@ class LoginScreen extends StatelessWidget {
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Login failed. Please try again.')),
+                          SnackBar(content: Text('존재하지 않는 사용자입니다.')),
                         );
                       }
                     },
