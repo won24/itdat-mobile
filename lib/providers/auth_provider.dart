@@ -42,7 +42,7 @@ class AuthProvider with ChangeNotifier {
   Future<bool> login(String identifier, String password) async {
     bool success = await AuthService().login(identifier, password);
     if (success) {
-      await checkLoginStatus(); // 로그인 후 상태 확인
+      await checkLoginStatus();
     }
     return success;
   }

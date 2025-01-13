@@ -23,7 +23,7 @@ class MyCardScreen extends StatefulWidget {
 
 class _MyCardWidgetState extends State<MyCardScreen> {
 
-  String? _userEmail;
+  late String _userEmail;
   late Future<List<dynamic>>? _businessCards;
   BusinessCard? selectedCardInfo;
   final PageController _pageController = PageController();
@@ -60,7 +60,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
     if (userEmail != null) {
       setState(() {
         _userEmail = userEmail;
-        _businessCards = CardModel().getBusinessCard(_userEmail!);
+        _businessCards = CardModel().getBusinessCard(_userEmail);
       });
     } else {
       Navigator.pushReplacementNamed(context, '/');
@@ -118,7 +118,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TemplateSelectionScreen(userEmail: _userEmail!),
+                  builder: (context) => TemplateSelectionScreen(userEmail: _userEmail),
                 ),
               );
             },
@@ -172,7 +172,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TemplateSelectionScreen(userEmail: _userEmail!),
+                            builder: (context) => TemplateSelectionScreen(userEmail: _userEmail),
                           ),
                         );
                       },
@@ -217,7 +217,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            TemplateSelectionScreen(userEmail: _userEmail!),
+                                            TemplateSelectionScreen(userEmail: _userEmail),
                                       ),
                                     );
                                   },
@@ -302,8 +302,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                   child: _selectedIndex == 0 && selectedCardInfo != null
                       ? CardInfoWidget(businessCards: selectedCardInfo!)
                       : _selectedIndex == 1
-                      ? PortfolioWidget(loginUserEmail: _userEmail!, cardUserEmail: _userEmail!)
-                      : HistoryWidget(loginUserEmail: _userEmail!, cardUserEmail: _userEmail!),
+                      ? PortfolioWidget(loginUserEmail: _userEmail, cardUserEmail: _userEmail)
+                      : HistoryWidget(loginUserEmail: _userEmail, cardUserEmail: _userEmail),
                 ),
               ]
             ),
