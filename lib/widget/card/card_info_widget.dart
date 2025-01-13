@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CardInfoWidget extends StatefulWidget {
@@ -29,7 +29,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   @override
   void initState() {
     super.initState();
-
+    _loadLoginEmail();
     if (widget.businessCards != null) {
       _memoController.text = widget.businessCards.description?? '';
     }
@@ -188,14 +188,16 @@ class _InfoWidgetState extends State<CardInfoWidget> {
 
 
   // 로그인 유저 이메일
-  // Future<void> _loginEmail() async {
-  //   final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
-  //   if (userEmail != null) {
-  //     setState(() {
-  //       _loginEmail = userEmail;
-  //     });
-  //   }
-  // }
+  Future<void> _loadLoginEmail() async {
+    final storage = FlutterSecureStorage();
+    final userEmail = await storage.read(key: 'user_email');
+
+    if (userEmail != null) {
+      setState(() {
+        _loginEmail = userEmail;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -258,59 +260,59 @@ class _InfoWidgetState extends State<CardInfoWidget> {
             ),
           ),
           widget.businessCards.userEmail != _loginEmail
-            ? ListTile(
-                title: Text('${widget.businessCards.description}', style: TextStyle(fontWeight: FontWeight.w600),),
-                subtitle: Text("메모", style: TextStyle(color: Colors.grey),),
-                trailing: IconButton(
-                  onPressed: (){
-                    GestureDetector(
-                      onTap: () {
-                        FocusScope.of(context).unfocus();
-                      },
-                      child: Dialog(
-                        child: SingleChildScrollView(
-                          child: Container(
-                            width: 350,
-                            padding: EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
+              ? ListTile(
+            title: Text('${widget.businessCards.description}', style: TextStyle(fontWeight: FontWeight.w600),),
+            subtitle: Text("메모", style: TextStyle(color: Colors.grey),),
+            trailing: IconButton(
+              onPressed: (){
+                GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: Dialog(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        width: 350,
+                        padding: EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text('메모',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                            SizedBox(height: 10),
+                            TextField(
+                              controller: _memoController,
+                              decoration: const InputDecoration(labelText: '메모'),
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                Text('메모',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                                SizedBox(height: 10),
-                                TextField(
-                                  controller: _memoController,
-                                  decoration: const InputDecoration(labelText: '메모'),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('취소'),
                                 ),
-                                SizedBox(height: 20),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: Text('취소'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        _saveMemo(_memoController.text);
-                                      },
-                                      child: widget.businessCards.description == null ? const Text('저장') : const Text('수정'),
-                                    ),
-                                  ],
+                                TextButton(
+                                  onPressed: () {
+                                    _saveMemo(_memoController.text);
+                                  },
+                                  child: widget.businessCards.description == null ? const Text('저장') : const Text('수정'),
                                 ),
                               ],
                             ),
-                          ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                  icon: Image.asset('assets/icons/memo.png', height: 30, width: 30),
-                ),
-              )
-            : SizedBox.shrink()
+                    ),
+                  ),
+                );
+              },
+              icon: Image.asset('assets/icons/memo.png', height: 30, width: 30),
+            ),
+          )
+              : SizedBox.shrink()
         ],
-        ),
+      ),
 
-      );
+    );
   }
 }
