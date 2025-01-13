@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 class Reportuserwidget extends StatefulWidget {
   final String userEmail;
+
   const Reportuserwidget({
     super.key,
     required this.userEmail,
@@ -15,12 +16,11 @@ class Reportuserwidget extends StatefulWidget {
 }
 
 class _ReportuserwidgetState extends State<Reportuserwidget> {
-
-  final String sendSmsUrl = "http://10.0.2.2:8082/api/sms/send";
-  final String verifySmsUrl = "http://10.0.2.2:8082/api/sms/verify";
-
   final TextEditingController reasonForReporting = TextEditingController();
   String? loginedUserEmail;
+
+  // 카테고리 값 초기화
+  String selectedCategory = 'ETC'; // 기본 선택값
 
   @override
   void initState() {
@@ -29,53 +29,88 @@ class _ReportuserwidgetState extends State<Reportuserwidget> {
     loginedUserEmail = context.read<AuthProvider>().userEmail;
   }
 
-   void sendReport () async {
-       final String reason = reasonForReporting.text.trim();
-       final String reportedUserEmail = widget.userEmail;
-       print("1111111111111111111111");
-       print(reason);
-       print(reportedUserEmail);
-       print(loginedUserEmail);
+  void sendReport() async {
+    final String reason = reasonForReporting.text.trim();
+    final String reportedUserEmail = widget.userEmail;
+    print("1111111111111111111111");
+    print(reason);
+    print(reportedUserEmail);
+    print(loginedUserEmail);
 
-       if (reason.isEmpty) {
-         ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(content: Text("신고 이유를 입력해 주세요.")),
-         );
-       }else{
-         bool result = await ReportModel().sendNewReport(reason, loginedUserEmail!, reportedUserEmail);
+    if (reason.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("신고 이유를 입력해 주세요.")),
+      );
+    } else {
+      bool result = await ReportModel().sendNewReport(
+          reason, loginedUserEmail!, reportedUserEmail, selectedCategory);
 
-         if(result == true){
-           ScaffoldMessenger.of(context).showSnackBar(
-             const SnackBar(content: Text("신고가 접수되었습니다.")),
-           );
-           Navigator.of(context).pop(); // 다이얼로그 닫기
-         } else {
-           ScaffoldMessenger.of(context).showSnackBar(
-             const SnackBar(content: Text("신고가 반려되었습니다..")),
-           );
-           Navigator.of(context).pop();
-         }
-
-
-
-       }
-
-
-   }
+      if (result == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("신고가 접수되었습니다.")),
+        );
+        Navigator.of(context).pop(); // 다이얼로그 닫기
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("신고가 반려되었습니다..")),
+        );
+        Navigator.of(context).pop();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
       title: Text("유저 신고"),
-      content: TextField(
-        controller: reasonForReporting,
-        decoration: InputDecoration(hintText: "신고 이유를 적어주세요."),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: reasonForReporting,
+            decoration: InputDecoration(hintText: "신고 이유를 적어주세요."),
+          ),
+          const SizedBox(height: 16),
+          DropdownButtonFormField<String>(
+            value: selectedCategory,
+            decoration: const InputDecoration(
+              labelText: "카테고리 선택",
+              border: OutlineInputBorder(),
+            ),
+            items: const [
+              DropdownMenuItem(
+                value: 'POSTING_PORNOGRAPHY',
+                child: Text('음란물 게시'),
+              ),
+              DropdownMenuItem(
+                value: 'FAKE_ACCOUNT',
+                child: Text('허위 계정'),
+              ),
+              DropdownMenuItem(
+                value: 'FALSE_ADVERTISING',
+                child: Text('허위 광고'),
+              ),
+              DropdownMenuItem(
+                value: 'HYPE',
+                child: Text('과대 광고'),
+              ),
+              DropdownMenuItem(
+                value: 'ETC',
+                child: Text('기타'),
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                selectedCategory = value!;
+              });
+            },
+          ),
+        ],
       ),
       actions: [
         TextButton(
-            onPressed: sendReport,
-            child: const Text("신고"),
+          onPressed: sendReport,
+          child: const Text("신고"),
         )
       ],
     );
