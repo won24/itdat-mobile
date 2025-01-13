@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
@@ -20,20 +19,6 @@ class PublicCardDetailScreen extends StatefulWidget {
 
 class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
   int _selectedIndex = 0;
-  String? _loginEmail;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchLoginEmail();
-  }
-
-  Future<void> _fetchLoginEmail() async {
-    final user = FirebaseAuth.instance.currentUser;
-    setState(() {
-      _loginEmail = user?.email ?? "알 수 없는 이메일";
-    });
-  }
 
   // 명함 템플릿 렌더링
   Widget buildBusinessCard(BusinessCard cardInfo) {
@@ -126,10 +111,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
           // 선택된 섹션 렌더링
           Expanded(
             child: _selectedIndex == 0
-                ? CardInfoWidget(
-              businessCards: widget.cardInfo,
-              loginEmail: _loginEmail!,
-            )
+                ? CardInfoWidget(businessCards: widget.cardInfo,)
                 : _selectedIndex == 1
                 ? PortfolioWidget(loginUserEmail: widget.cardInfo.userEmail ?? "이메일 없음", cardUserEmail:widget.cardInfo.userEmail ?? "이메일 없음" ,)
                 : HistoryWidget(loginUserEmail: widget.cardInfo.userEmail ?? "이메일 없음", cardUserEmail:widget.cardInfo.userEmail ?? "이메일 없음" ,),

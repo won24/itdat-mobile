@@ -32,7 +32,6 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
   BusinessCard? cardInfo;
   late BusinessCard frontCard;
   BusinessCard? backCard; // 있을 수도 없을 수도
-  String? _loginEmail;
 
   @override
   void initState() {
@@ -214,10 +213,7 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
           ),
           Expanded(
             child: _selectedIndex == 0
-                ? CardInfoWidget(
-              businessCards: frontCard!,
-              loginEmail: _loginEmail!,
-            )
+                ? CardInfoWidget(businessCards: frontCard!)
                 : _selectedIndex == 1
                 ? PortfolioWidget(
               loginUserEmail: widget.loginUserEmail,
