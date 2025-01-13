@@ -6,7 +6,7 @@ class AuthService {
   final LoginModel _loginModel = LoginModel();
 
   Future<bool> login(String identifier, String password) async {
-    print("서비스쪽: identifier = $identifier, password = $password");
+    // print("서비스쪽: identifier = $identifier, password = $password");
 
     Map<String, String> requestBody = {
       'identifier': identifier,
@@ -25,7 +25,7 @@ class AuthService {
           await storage.write(key: 'auth_token', value: token);
           await storage.write(key: 'user_email', value: userEmail); // 이메일 저장
           await storage.write(key: 'user_id', value: userId); // ID 저장
-          print("토큰, 이메일, 아이디 저장 완료");
+          // print("토큰, 이메일, 아이디 저장 완료");
           return true;
         } else {
           print("응답 데이터에 필요한 정보가 없습니다.");
@@ -47,7 +47,7 @@ class AuthService {
     try {
       await storage.delete(key: 'auth_token');
       await storage.delete(key: 'identifier'); // identifier 삭제
-      print("로그아웃 완료");
+      // print("로그아웃 완료");
       return true;
     } catch (e) {
       print("로그아웃 중 에러 발생: $e");

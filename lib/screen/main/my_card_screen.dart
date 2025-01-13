@@ -151,108 +151,116 @@ class _MyCardWidgetState extends State<MyCardScreen> {
             child: FutureBuilder<List<dynamic>>(
               future: _businessCards,
               builder: (context, snapshot) {
-                if (_businessCards == null) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+                // 데이터 로딩 중
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
+                }
+                // 에러 발생 시
+                else if (snapshot.hasError) {
                   return const Center(child: Text('명함을 가져오는 중 오류가 발생했습니다.'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                }
+                // 데이터가 없을 경우
+                else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return Center(
                     child: IconButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
-                          ),
-                        );
+                        if (_loginEmail != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  TemplateSelectionScreen(userEmail: _loginEmail!),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("로그인이 필요합니다.")),
+                          );
+                        }
                       },
                       icon: const Icon(Icons.add, size: 64),
                     ),
                   );
-                } else {
-                  // 최근 만들어진 순으로 정렬
-                  var businessCards = snapshot.data!
-                      .map((data) => BusinessCard.fromJson(data)).toList()
-                    ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
+                }
 
-                  // 명함 앞면만 렌더링 / 뒷면은 명함 클릭 시 볼 수 있음
-                  var filteredCards = businessCards
-                      .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
-                      .toList();
+                // 명함 데이터 처리
+                var businessCards = snapshot.data!
+                    .map((data) => BusinessCard.fromJson(data))
+                    .toList()
+                  ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
 
-                  // 초기 명함 설정
-                  _setInitialCard(filteredCards);
+                // 앞면 명함 필터링
+                var filteredCards = businessCards
+                    .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
+                    .toList();
 
-                  return Column(
-                    children: [
-                      Flexible(
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: filteredCards.length + 1,
-                          onPageChanged: (index) {
-                            setState(() {
-                              _cardIndex = index;
-                              if (index < filteredCards.length) {
-                                selectedCardInfo = filteredCards[index];
-                              }
-                            });
-                          },
-                          // 항상 명함 마지막 슬라이드에 명함 추가 버튼 렌더링
-                          itemBuilder: (context, index) {
-                            if (index == filteredCards.length) {
-                              return Center(
-                                child: IconButton(
-                                  onPressed: () {
+                // 초기 명함 설정
+                _setInitialCard(filteredCards);
+
+                return Column(
+                  children: [
+                    Flexible(
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: filteredCards.length + 1,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _cardIndex = index;
+                            if (index < filteredCards.length) {
+                              selectedCardInfo = filteredCards[index];
+                            }
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          if (index == filteredCards.length) {
+                            return Center(
+                              child: IconButton(
+                                onPressed: () {
+                                  if (_loginEmail != null) {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            TemplateSelectionScreen(userEmail: _loginEmail),
+                                            TemplateSelectionScreen(userEmail: _loginEmail!),
                                       ),
                                     );
-                                  },
-                                  icon: const Icon(Icons.add, size: 64),
-                                ),
-                              );
-                            } else {
-                              var cardInfo = filteredCards[index];
-
-                              // 명함 슬라이드 렌더링
-                              return GestureDetector(
-                                onTap: (){
-                                  BusinessCard? backCard;
-                                  for (var businessCard in businessCards) {
-                                    if (businessCard.cardNo == cardInfo.cardNo && businessCard.cardSide == 'BACK') {
-                                      backCard = businessCard;
-                                      break;
-                                    }
                                   }
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ExpandedCardScreen(
-                                        cardInfo: cardInfo,
-                                        backCard: backCard,
-                                      ),
-                                    ),
-                                  );
                                 },
-                                child: Container(
-                                  child: buildBusinessCard(cardInfo, context),
-                                ),
-                              );
-                            }
-                          },
-                        ),
+                                icon: const Icon(Icons.add, size: 64),
+                              ),
+                            );
+                          } else {
+                            var cardInfo = filteredCards[index];
+
+                            return GestureDetector(
+                              onTap: () {
+                                BusinessCard? backCard;
+                                for (var businessCard in businessCards) {
+                                  if (businessCard.cardNo == cardInfo.cardNo &&
+                                      businessCard.cardSide == 'BACK') {
+                                    backCard = businessCard;
+                                    break;
+                                  }
+                                }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ExpandedCardScreen(
+                                      cardInfo: cardInfo,
+                                      backCard: backCard,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: buildBusinessCard(cardInfo, context),
+                            );
+                          }
+                        },
                       ),
-                      // 슬라이드 아이콘
-                      renderCardSlideIcon(filteredCards),
-                    ],
-                  );
-                }
+                    ),
+                    renderCardSlideIcon(filteredCards),
+                  ],
+                );
               },
             ),
           ),
@@ -298,7 +306,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                       ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail)
                       : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
                 ),
-              ]
+              ],
             ),
           ),
         ],

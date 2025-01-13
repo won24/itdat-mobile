@@ -6,6 +6,9 @@ import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/providers/auth_provider.dart';
 import '../../widget/mycard/folder_detail_screen.dart';
 import '../card/card_wallet_card_detail_screen.dart';
+import '../card/template/no_1.dart';
+import '../card/template/no_2.dart';
+import '../card/template/no_3.dart';
 
 class CardWalletScreen extends StatefulWidget {
   const CardWalletScreen({Key? key}) : super(key: key);
@@ -293,6 +296,19 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
     }
   }
 
+  Widget buildBusinessCard(BusinessCard cardInfo) {
+    switch (cardInfo.appTemplate) {
+      case 'No1':
+        return No1(cardInfo: cardInfo);
+      case 'No2':
+        return No2(cardInfo: cardInfo);
+      case 'No3':
+        return No3(cardInfo: cardInfo);
+      default:
+        return No2(cardInfo: cardInfo); // 기본값
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -366,7 +382,14 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                                   ),
                                 ),
                               ).then((result) {
-                                if (result == true) {
+                                if (result != null && result is Map<String, dynamic>) {
+                                  final removedCard = result['card'] as BusinessCard;
+                                  final index = result['index'] as int;
+
+                                  setState(() {
+                                    _allCards.insert(index, removedCard);
+                                  });
+                                } else if (result == true) {
                                   refreshAllCards();
                                 }
                               });
@@ -409,7 +432,6 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
           ),
 
           Divider(),
-
           // 명함 섹션
           Expanded(
             flex: 6,
@@ -422,10 +444,10 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
             )
                 : GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-                childAspectRatio: 5 / 3,
+                crossAxisCount: 1,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                childAspectRatio: 4 / 3,
               ),
               itemCount: _allCards.length,
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -434,36 +456,23 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
 
                 return LongPressDraggable<BusinessCard>(
                   data: card,
-                  feedback: Material(
-                    color: Colors.transparent,
-                    child: Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              card.userName ?? '이름 없음',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                            const SizedBox(height: 8.0),
-                            Text(
-                              card.companyName ?? '회사 정보 없음',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              card.userEmail ?? '이메일 정보 없음',
-                              style: TextStyle(fontSize: 14),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          ],
+                  feedback: Transform.scale(
+                    scale: 0.4,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              buildBusinessCard(card), // 명함 템플릿 렌더링
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -476,27 +485,11 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              card.userName ?? '이름 없음',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                            const SizedBox(height: 8.0),
-                            Text(
-                              card.companyName ?? '회사 정보 없음',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              card.userEmail ?? '이메일 정보 없음',
-                              style: TextStyle(fontSize: 14),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
+                            buildBusinessCard(card), // 명함 템플릿 렌더링
                           ],
                         ),
                       ),
@@ -519,28 +512,13 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
+                      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                       child: Padding(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              card.userName ?? '이름 없음',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                            const SizedBox(height: 8.0),
-                            Text(
-                              card.companyName ?? '회사 정보 없음',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              card.userEmail ?? '이메일 정보 없음',
-                              style: TextStyle(fontSize: 14),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
+                            buildBusinessCard(card), // 명함 템플릿 렌더링
                           ],
                         ),
                       ),
@@ -550,7 +528,6 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
               },
             ),
           ),
-
         ],
       ),
     );

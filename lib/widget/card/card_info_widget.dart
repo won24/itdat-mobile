@@ -7,10 +7,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CardInfoWidget extends StatefulWidget {
   final BusinessCard businessCards;
+  final String loginEmail;
 
   CardInfoWidget({
     super.key,
     required this.businessCards,
+    required this.loginEmail,
   });
 
   @override
@@ -259,7 +261,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
               icon: Image.asset('assets/icons/location.png', height: 30, width: 30),
             ),
           ),
-          widget.businessCards.userEmail != _loginEmail
+          widget.businessCards.userEmail != widget.loginEmail
             ? ListTile(
                 title: Text('${widget.businessCards.description}', style: TextStyle(fontWeight: FontWeight.w600),),
                 subtitle: Text("메모", style: TextStyle(color: Colors.grey),),
