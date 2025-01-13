@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 class BusinessCard {
   String? appTemplate;
   String? userName;
@@ -16,6 +18,9 @@ class BusinessCard {
   bool? isPublic;
   String? description;
 
+  Color? backgroundColor;  // 사용자 선택 배경 색상
+  Color? textColor;  // 사용자 선택 텍스트 색상
+
   BusinessCard({
     required this.appTemplate,
     required this.userName,
@@ -33,7 +38,10 @@ class BusinessCard {
     required this.logoUrl,
     this.isPublic,
     this.description,
+    this.backgroundColor,
+    this.textColor,
   });
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
