@@ -52,17 +52,12 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   Future<void> _loadEmail() async {
     final storage = FlutterSecureStorage();
     final userEmail = await storage.read(key: 'user_email');
-    final userId = await storage.read(key: 'user_id');
-
-    print('로그인 사용자 이메일: $userEmail');
-    print('로그인 사용자 ID: $userId');
 
     if (userEmail != null) {
       setState(() {
         _loginEmail = userEmail;
         _businessCards = CardModel().getBusinessCard(_loginEmail);
       });
-      print(_loginEmail!);
     } else {
       Navigator.pushReplacementNamed(context, '/');
     }
@@ -90,7 +85,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   Widget _getTemplateWidget(BusinessCard cardInfo) {
     switch (cardInfo.appTemplate) {
       case 'No1':
-        return No1(cardInfo: cardInfo);
+        return No1(cardInfo: cardInfo,);
       case 'No2':
         return No2(cardInfo: cardInfo);
       case 'No3':
@@ -306,21 +301,10 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                 ),
                 Expanded(
                   child: _selectedIndex == 0 && selectedCardInfo != null
-                      ? CardInfoWidget(
-                    businessCards: selectedCardInfo!,
-                    loginEmail: _loginEmail!,
-                  )
-                      : _selectedIndex == 1 && selectedCardInfo != null
-                      ? PortfolioWidget(
-                    loginUserEmail: _loginEmail!,
-                    cardUserEmail: selectedCardInfo!.userEmail,
-                  )
-                      : _selectedIndex == 2 && selectedCardInfo != null
-                      ? HistoryWidget(
-                    loginUserEmail: _loginEmail!,
-                    cardUserEmail: selectedCardInfo!.userEmail,
-                  )
-                      : const Center(child: Text('선택된 명함이 없습니다.')),
+                      ? CardInfoWidget(businessCards: selectedCardInfo!)
+                      : _selectedIndex == 1
+                      ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail)
+                      : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
                 ),
               ],
             ),

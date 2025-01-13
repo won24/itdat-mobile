@@ -6,7 +6,7 @@ import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/screen/mainLayout.dart';
-
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class FormScreen extends StatefulWidget {
   final BusinessCard cardInfo;
@@ -24,6 +24,45 @@ class _FormScreenState extends State<FormScreen> {
 
   static const Color primaryColor = Color.fromRGBO(0, 202, 145, 1);
   static const double fieldSpacing = 10.0;
+
+  void _changeColor(Color currentColor, bool isBackgroundColor) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('색상 선택'),
+          content: ColorPicker(
+            pickerColor: currentColor,
+            onColorChanged: (color) {
+              setState(() {
+                if (isBackgroundColor) {
+                  widget.cardInfo.backgroundColor = color;
+                } else {
+                  widget.cardInfo.textColor = color;
+                }
+              });
+            },
+            showLabel: false,
+            pickerAreaHeightPercent: 0.8,
+          ),
+          actions: [
+            TextButton(
+              child: const Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   // 명함 저장
   void _saveCard() {
@@ -160,7 +199,23 @@ class _FormScreenState extends State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("명함 미리보기")),
+      appBar: AppBar(
+        title: const Text("명함 커스텀"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.color_lens),
+            onPressed: () {
+              _changeColor(widget.cardInfo.backgroundColor ?? Colors.white, true);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.text_fields),
+            onPressed: () {
+              _changeColor(widget.cardInfo.textColor ?? Colors.black, false);
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

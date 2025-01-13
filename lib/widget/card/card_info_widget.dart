@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CardInfoWidget extends StatefulWidget {
@@ -31,7 +31,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   @override
   void initState() {
     super.initState();
-
+    _loadLoginEmail();
     if (widget.businessCards != null) {
       _memoController.text = widget.businessCards.description?? '';
     }
@@ -190,14 +190,16 @@ class _InfoWidgetState extends State<CardInfoWidget> {
 
 
   // 로그인 유저 이메일
-  // Future<void> _loginEmail() async {
-  //   final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
-  //   if (userEmail != null) {
-  //     setState(() {
-  //       _loginEmail = userEmail;
-  //     });
-  //   }
-  // }
+  Future<void> _loadLoginEmail() async {
+    final storage = FlutterSecureStorage();
+    final userEmail = await storage.read(key: 'user_email');
+
+    if (userEmail != null) {
+      setState(() {
+        _loginEmail = userEmail;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
