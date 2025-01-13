@@ -5,6 +5,7 @@ import 'package:itdat/models/mywallet_model.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/providers/auth_provider.dart';
 import '../../widget/mycard/folder_detail_screen.dart';
+import '../card/card_wallet_card_detail_screen.dart';
 
 class CardWalletScreen extends StatefulWidget {
   const CardWalletScreen({Key? key}) : super(key: key);
@@ -79,6 +80,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
             .map((card) => BusinessCard.fromJson(card as Map<String, dynamic>))
             .toList();
       });
+      // debugPrint("API 응답 데이터: $allCardsResponse");
 
       // 폴더 목록 로드
       setState(() {
@@ -343,7 +345,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                   children: [
                     DragTarget<BusinessCard>(
                       onAccept: (card) {
-                        debugPrint("드롭된 명함 데이터: ${card.userName}, ${card.userEmail}");
+                        // debugPrint("드롭된 명함 데이터: ${card.userName}, ${card.userEmail}");
                         final userEmail =
                             Provider.of<AuthProvider>(context, listen: false).userEmail;
                         if (userEmail != null) {
@@ -430,23 +432,10 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
               itemBuilder: (context, index) {
                 final card = _allCards[index];
 
-                return Draggable<BusinessCard>(
-                  data: card, // 드래그 시 전달할 데이터
+                return LongPressDraggable<BusinessCard>(
+                  data: card,
                   feedback: Material(
-                    elevation: 4,
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      padding: const EdgeInsets.all(12.0),
-                      width: 150,
-                      color: Colors.grey[300],
-                      child: Text(
-                        card.userName ?? '이름 없음',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ),
-                  ),
-                  childWhenDragging: Opacity(
-                    opacity: 0.5, // 드래그 중일 때 원본 아이템의 투명도
+                    color: Colors.transparent,
                     child: Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
@@ -464,12 +453,12 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                             ),
                             const SizedBox(height: 8.0),
                             Text(
-                              "${card.companyName ?? '정보 없음'}",
+                              card.companyName ?? '회사 정보 없음',
                               style: TextStyle(fontSize: 14),
                             ),
                             const SizedBox(height: 4.0),
                             Text(
-                              "${card.userEmail ?? '이메일 없음'}",
+                              card.userEmail ?? '이메일 정보 없음',
                               style: TextStyle(fontSize: 14),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -479,34 +468,82 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                       ),
                     ),
                   ),
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                  childWhenDragging: Opacity(
+                    opacity: 0.5,
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              card.userName ?? '이름 없음',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              card.companyName ?? '회사 정보 없음',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              card.userEmail ?? '이메일 정보 없음',
+                              style: TextStyle(fontSize: 14),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            card.userName ?? '이름 없음',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      // 명함을 클릭했을 때 상세 화면으로 이동
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CardWalletCardDetailScreen(
+                            cardInfo: [card],
+                            loginUserEmail: Provider.of<AuthProvider>(context, listen: false).userEmail!,
                           ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            "${card.companyName ?? '정보 없음'}",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          const SizedBox(height: 4.0),
-                          Text(
-                            "${card.userEmail ?? '이메일 없음'}",
-                            style: TextStyle(fontSize: 14),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ],
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              card.userName ?? '이름 없음',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              card.companyName ?? '회사 정보 없음',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              card.userEmail ?? '이메일 정보 없음',
+                              style: TextStyle(fontSize: 14),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -514,6 +551,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
               },
             ),
           ),
+
         ],
       ),
     );

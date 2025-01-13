@@ -46,21 +46,21 @@ class BusinessCard {
 
   factory BusinessCard.fromJson(Map<String, dynamic> json) {
     return BusinessCard(
-      appTemplate: json['appTemplate'],
-      userName: json['userName'],
-      phone: json['phone'],
-      email: json['email'],
-      companyName: json['companyName'],
-      companyNumber: json['companyNumber'],
-      companyAddress: json['companyAddress'],
-      companyFax: json['companyFax'],
-      department: json['department'],
-      position: json['position'],
-      userEmail: json['userEmail'],
-      cardNo: json['cardNo'],
-      cardSide: json['cardSide'],
-      logoUrl: json['logoUrl'],
-      isPublic: json['isPublic']== true,
+      appTemplate: json['appTemplate'] ?? 'Default',
+      userName: json['userName'] ?? '이름 없음',
+      phone: json['phone'] ?? '전화번호 없음',
+      email: json['email'] ?? '이메일 없음',
+      companyName: json['companyName'] ?? '회사 없음',
+      companyNumber: json['companyNumber'] ?? '회사 번호 없음',
+      companyAddress: json['companyAddress'] ?? '주소 없음',
+      companyFax: json['companyFax'] ?? '팩스 없음',
+      department: json['department'] ?? '부서 없음',
+      position: json['position'] ?? '직급 없음',
+      userEmail: json['userEmail'] ?? '',
+      cardNo: json['cardNo'] ?? 0,
+      cardSide: json['cardSide'] ?? 'FRONT',
+      logoUrl: json['logoUrl'] ?? '',
+      isPublic: json['isPublic'] == true, // null-safe 처리
     );
   }
 

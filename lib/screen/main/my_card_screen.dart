@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
-import 'package:itdat/providers/auth_provider.dart';
 import 'package:itdat/screen/card/expanded_card_screen.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
@@ -11,7 +10,7 @@ import 'package:itdat/screen/card/template_selection_screen.dart';
 import 'package:itdat/widget/card/card_info_widget.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
 import 'package:itdat/widget/card/history/history_widget.dart';
-import 'package:provider/provider.dart';
+
 
 
 class MyCardScreen extends StatefulWidget {
@@ -23,7 +22,7 @@ class MyCardScreen extends StatefulWidget {
 
 class _MyCardWidgetState extends State<MyCardScreen> {
 
-  late String _userEmail;
+  late String _loginEmail;
   late Future<List<dynamic>>? _businessCards;
   BusinessCard? selectedCardInfo;
   final PageController _pageController = PageController();
@@ -51,12 +50,19 @@ class _MyCardWidgetState extends State<MyCardScreen> {
 
   // 로그인 이메일로 명함 데이터 가져오기
   Future<void> _loadEmail() async {
-    final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+    final storage = FlutterSecureStorage();
+    final userEmail = await storage.read(key: 'user_email');
+    final userId = await storage.read(key: 'user_id');
+
+    print('로그인 사용자 이메일: $userEmail');
+    print('로그인 사용자 ID: $userId');
+
     if (userEmail != null) {
       setState(() {
-        _userEmail = userEmail;
-        _businessCards = CardModel().getBusinessCard(_userEmail);
+        _loginEmail = userEmail;
+        _businessCards = CardModel().getBusinessCard(_loginEmail);
       });
+      print(_loginEmail!);
     } else {
       Navigator.pushReplacementNamed(context, '/');
     }
@@ -76,7 +82,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: _getTemplateWidget(cardInfo), // No1, No2, No3 중 해당 위젯 반환
+        child: _getTemplateWidget(cardInfo),
       ),
     );
   }
@@ -110,7 +116,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TemplateSelectionScreen(userEmail: _userEmail),
+                  builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
                 ),
               );
             },
@@ -164,7 +170,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TemplateSelectionScreen(userEmail: _userEmail),
+                            builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
                           ),
                         );
                       },
@@ -179,7 +185,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
 
                   // 명함 앞면만 렌더링 / 뒷면은 명함 클릭 시 볼 수 있음
                   var filteredCards = businessCards
-                      .where((card) => card.cardSide == 'FRONT' && card.userEmail == _userEmail)
+                      .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
                       .toList();
 
                   // 초기 명함 설정
@@ -209,7 +215,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            TemplateSelectionScreen(userEmail: _userEmail),
+                                            TemplateSelectionScreen(userEmail: _loginEmail),
                                       ),
                                     );
                                   },
@@ -294,8 +300,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                   child: _selectedIndex == 0 && selectedCardInfo != null
                       ? CardInfoWidget(businessCards: selectedCardInfo!)
                       : _selectedIndex == 1
-                      ? PortfolioWidget(loginUserEmail: _userEmail, cardUserEmail: _userEmail)
-                      : HistoryWidget(loginUserEmail: _userEmail, cardUserEmail: _userEmail),
+                      ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: selectedCardInfo!.userEmail)
+                      : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: selectedCardInfo!.userEmail),
                 ),
               ]
             ),

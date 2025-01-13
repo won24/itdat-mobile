@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class MyWalletModel {
-  // final String baseUrl = "http://10.0.2.2:8082/api/mywallet";
-  // final String baseUrl2 = "http://10.0.2.2:8082/api/auth";
+  final String baseUrl = "http://10.0.2.2:8082/api/mywallet";
+  final String baseUrl2 = "http://10.0.2.2:8082/api/auth";
 
-  final String baseUrl = "http://112.221.66.174:8001/api/mywallet";
-  final String baseUrl2 = "http://112.221.66.174:8001/api/auth";
+  // final String baseUrl = "http://112.221.66.174:8001/api/mywallet";
+  // final String baseUrl2 = "http://112.221.66.174:8001/api/auth";
 
   // final String baseUrl = "http://112.221.66.174:8002/api/mywallet"; // seo
   // final String baseUrl2 = "http://112.221.66.174:8002/api/auth"; // seo
@@ -18,8 +18,8 @@ class MyWalletModel {
     // print('API 요청: $url');
     try {
       final response = await http.get(Uri.parse(url));
-      // print('API 응답 상태 코드: ${response.statusCode}');
-      // print('API 응답 본문: ${response.body}');
+      print('API 응답 상태 코드: ${response.statusCode}');
+      print('API 응답 본문: ${response.body}');
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
