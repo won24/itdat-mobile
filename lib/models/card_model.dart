@@ -11,9 +11,9 @@ import 'package:http_parser/http_parser.dart';
 
 class CardModel{
    final storage = FlutterSecureStorage();
-  //final baseUrl = "http://112.221.66.174:8001/card";  // 원
+  final baseUrl = "http://112.221.66.174:8001/card";  // 원
   //  final baseUrl = "http://112.221.66.174:8000/card"; //정원
-  final String baseUrl = 'http://112.221.66.174:8002/card'; // seo
+  // final String baseUrl = 'http://112.221.66.174:8002/card'; // seo
 
 
   void logError(String functionName, dynamic error) {
@@ -243,4 +243,20 @@ class CardModel{
        throw Exception("deleteCard Error: $e");
      }
    }
+
+   // 명함첩 - 메모 추가
+  Future<void> saveMemo(Map<String, dynamic> card) async {
+    try {
+      final response = await http.put(
+          Uri.parse("$baseUrl/mywallet/cardmemo"),
+          headers: {"Content-Type": "application/json; charset=UTF-8"},
+          body: json.encode(card).trim()
+      );
+      handleResponse(response, "saveMemo");
+    } catch (e) {
+      logError("saveMemo", e);
+      throw Exception("saveMemo Error: $e");
+    }
+  }
+
 }

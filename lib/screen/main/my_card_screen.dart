@@ -51,10 +51,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
 
   // 로그인 이메일로 명함 데이터 가져오기
   Future<void> _loadEmail() async {
-    // final storage = FlutterSecureStorage();
-    // String? userEmail = await storage.read(key: 'email');
     final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
-
     if (userEmail != null) {
       setState(() {
         _userEmail = userEmail;

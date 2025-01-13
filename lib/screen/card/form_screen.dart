@@ -72,43 +72,6 @@ class _FormScreenState extends State<FormScreen> {
     );
   }
 
-  // void _saveCard() {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.zero,
-  //     ),
-  //     builder: (BuildContext context) {
-  //       return Container(
-  //         height: 150,
-  //         padding: EdgeInsets.all(16.0),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: <Widget>[
-  //             const Text("명함이 저장 되었습니다.", style: TextStyle(fontSize: 18),),
-  //             const Text("해당 명함의 뒷면을 추가로 만드시겠습니까?", style: TextStyle(fontSize: 15),),
-  //             const SizedBox(height: 20,),
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               crossAxisAlignment: CrossAxisAlignment.center,
-  //               children: [
-  //                 TextButton(onPressed: (){
-  //                   moveToBackFormScreen();
-  //                 }, child: const Text("네")),
-  //                 TextButton(
-  //                   onPressed: () {
-  //                     _createCard();
-  //                   },
-  //                   child: Text("아니오"),
-  //                 )
-  //               ],
-  //             )
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   void moveToBackFormScreen() async {
     await CardModel().createBusinessCard(widget.cardInfo);

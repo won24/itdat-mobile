@@ -35,7 +35,6 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
   late BusinessCard frontCard;
   BusinessCard? backCard; // 있을 수도 없을 수도
 
-
   @override
   void initState() {
     super.initState();

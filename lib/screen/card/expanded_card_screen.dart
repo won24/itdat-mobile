@@ -48,18 +48,26 @@ class ExpandedCardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            buildBusinessCard(cardInfo),
-            if (backCard != null) ...[
-              const SizedBox(height: 10),
-              buildBackCardWithLogo(backCard!),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("${cardInfo.userName.toString()}님의 명함"),
+      ),
+      body: Center(
+        child: InteractiveViewer(
+          boundaryMargin: const EdgeInsets.all(20), // 확대 시 이동 가능한 여백
+          minScale: 1.0, // 최소 확대 비율 (1.0은 기본 크기)
+          maxScale: 3.0, // 최대 확대 비율
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              buildBusinessCard(cardInfo),
+              if (backCard != null) ...[
+                const SizedBox(height: 20),
+                buildBackCardWithLogo(backCard!),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

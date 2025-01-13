@@ -14,6 +14,7 @@ class BusinessCard {
   String? cardSide;
   String? logoUrl;
   bool? isPublic;
+  String? description;
 
   BusinessCard({
     required this.appTemplate,
@@ -31,6 +32,7 @@ class BusinessCard {
     required this.cardSide,
     required this.logoUrl,
     this.isPublic,
+    this.description,
   });
   @override
   bool operator ==(Object other) {
