@@ -91,7 +91,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No1(cardInfo: cardInfo);
+        return No2(cardInfo: cardInfo);
     }
   }
 
@@ -293,7 +293,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                 ),
                 Expanded(
                   child: _selectedIndex == 0 && selectedCardInfo != null
-                      ? CardInfoWidget(businessCards: selectedCardInfo!)
+                      ? CardInfoWidget(businessCards: selectedCardInfo!, loginEmail: _loginEmail,)
                       : _selectedIndex == 1
                       ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail)
                       : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
