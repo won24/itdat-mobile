@@ -91,7 +91,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No2(cardInfo: cardInfo);
+        return No1(cardInfo: cardInfo);
     }
   }
 

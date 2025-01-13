@@ -35,7 +35,7 @@ class _CardFrontFixState extends State<CardFrontFix> {
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No2(cardInfo: cardInfo);
+        return No1(cardInfo: cardInfo);
     }
   }
 

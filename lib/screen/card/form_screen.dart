@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/back_form_screen.dart';
@@ -7,6 +9,8 @@ import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/screen/mainLayout.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 class FormScreen extends StatefulWidget {
   final BusinessCard cardInfo;
@@ -22,9 +26,11 @@ class FormScreen extends StatefulWidget {
 
 class _FormScreenState extends State<FormScreen> {
 
-  static const Color primaryColor = Color.fromRGBO(0, 202, 145, 1);
+  static const Color primaryColor = Colors.white;
   static const double fieldSpacing = 10.0;
+  File? _selectedCompanyImage;
 
+  // 색 선택
   void _changeColor(Color currentColor, bool isBackgroundColor) {
     showDialog(
       context: context,
@@ -37,6 +43,7 @@ class _FormScreenState extends State<FormScreen> {
               setState(() {
                 if (isBackgroundColor) {
                   widget.cardInfo.backgroundColor = color;
+                  print(color);
                 } else {
                   widget.cardInfo.textColor = color;
                 }
@@ -63,6 +70,80 @@ class _FormScreenState extends State<FormScreen> {
       },
     );
   }
+
+  // 갤러리 사진 선택
+  Future<File?> getImageFromGallery() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      return File(image.path);
+    } else {
+      print('선택된 이미지가 없습니다.');
+      return null;
+    }
+  }
+
+
+  // 갤러리 권한 받기
+  Future<bool> requestStoragePermission() async {
+    var status = await Permission.storage.status; // 권한 상태 확인
+    if (status.isGranted) {
+      return true; // 이미 권한이 허용된 경우
+    } else {
+      var result = await Permission.storage.request(); // 권한 요청
+      if (result.isGranted) {
+        return true; // 권한 허용된 경우
+      } else {
+        // 권한 거부된 경우 처리
+        print('갤러리 권한이 거부되었습니다.');
+        return false;
+      }
+    }
+  }
+
+  // 회사 이름 대신 이미지를 선택하는 함수
+  Future<void> _selectCompanyImage() async {
+    if (await requestStoragePermission()) {
+      File? image = await getImageFromGallery();
+      if (image != null) {
+        setState(() {
+          _selectedCompanyImage = image;
+          widget.cardInfo.logoUrl = image.path; // 모델에 이미지 경로 저장
+        });
+      }
+    }
+  }
+
+
+  // 회사 이름 입력 또는 이미지 선택 위젯 빌드
+  Widget _buildCompanyNameInput() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("회사 로고 이미지", style: TextStyle(fontSize: 16)),
+        Text("회사이름 대신 사용", style: TextStyle(color: Colors.grey.shade400),),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: _selectCompanyImage,
+          child: _selectedCompanyImage != null
+            ? Image.file(
+              _selectedCompanyImage!,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            )
+            : Container(
+                width: 100,
+                height: 100,
+                color: Colors.grey[300],
+                child: const Icon(Icons.add_a_photo, color: Colors.grey),
+            ),
+        ),
+      ],
+    );
+  }
+
 
   // 명함 저장
   void _saveCard() {
@@ -124,17 +205,31 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
+  // 저장
+  // void _createCard() async {
+  //   try {
+  //     await CardModel().createBusinessCard(widget.cardInfo);
+  //     _showSnackBar("명함 제작 성공");
+  //     Navigator.pushAndRemoveUntil(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => MainLayout()),
+  //           (route) => false,
+  //     );
+  //   } catch (e) {
+  //     _showSnackBar("명함 생성 실패. 다시 시도해주세요.", isError: true);
+  //   }
+  // }
+
   void _createCard() async {
     try {
-      await CardModel().createBusinessCard(widget.cardInfo);
+      await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
       _showSnackBar("명함 제작 성공");
       Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => MainLayout()),
-            (route) => false,
-      );
+          context,
+          MaterialPageRoute(builder: (BuildContext context) =>
+              MainLayout()), (route) => false);
     } catch (e) {
-      _showSnackBar("명함 생성 실패. 다시 시도해주세요.", isError: true);
+      _showSnackBar("명함 저장 실패. 다시 시도해주세요.", isError: true);
     }
   }
 
@@ -158,9 +253,9 @@ class _FormScreenState extends State<FormScreen> {
       case 'No2':
         return No2(cardInfo: cardInfo);
       case 'No3':
-        return No3(cardInfo: cardInfo);
+        return No3(cardInfo: cardInfo, image: _selectedCompanyImage,);
       default:
-        return No2(cardInfo: cardInfo); // 기본값
+        return No1(cardInfo: cardInfo); // 기본값
     }
   }
 
@@ -301,12 +396,15 @@ class _FormScreenState extends State<FormScreen> {
                 initialValue: widget.cardInfo.position,
                 onChanged: (value) => widget.cardInfo.position = value,
               ),
+              const SizedBox(height: fieldSpacing),
+
+              _buildCompanyNameInput(), // 회사 이름 또는 이미지 선택 UI
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   onPressed: _saveCard,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
+                    backgroundColor: Color.fromRGBO(0, 202, 145, 1),
                     foregroundColor: Colors.white,
                     textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
