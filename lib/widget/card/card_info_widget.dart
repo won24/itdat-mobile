@@ -1,18 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CardInfoWidget extends StatefulWidget {
   final BusinessCard businessCards;
-  final String loginEmail;
 
   CardInfoWidget({
     super.key,
     required this.businessCards,
-    required this.loginEmail,
   });
 
   @override
@@ -31,7 +29,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   @override
   void initState() {
     super.initState();
-    _loadLoginEmail();
+
     if (widget.businessCards != null) {
       _memoController.text = widget.businessCards.description?? '';
     }
@@ -190,16 +188,14 @@ class _InfoWidgetState extends State<CardInfoWidget> {
 
 
   // 로그인 유저 이메일
-  Future<void> _loadLoginEmail() async {
-    final storage = FlutterSecureStorage();
-    final userEmail = await storage.read(key: 'user_email');
-
-    if (userEmail != null) {
-      setState(() {
-        _loginEmail = userEmail;
-      });
-    }
-  }
+  // Future<void> _loginEmail() async {
+  //   final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+  //   if (userEmail != null) {
+  //     setState(() {
+  //       _loginEmail = userEmail;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +257,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
               icon: Image.asset('assets/icons/location.png', height: 30, width: 30),
             ),
           ),
-          widget.businessCards.userEmail != widget.loginEmail
+          widget.businessCards.userEmail != _loginEmail
             ? ListTile(
                 title: Text('${widget.businessCards.description}', style: TextStyle(fontWeight: FontWeight.w600),),
                 subtitle: Text("메모", style: TextStyle(color: Colors.grey),),
