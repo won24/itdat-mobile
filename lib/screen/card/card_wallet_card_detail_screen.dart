@@ -81,7 +81,7 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No2(cardInfo: cardInfo); // 기본값
+        return No1(cardInfo: cardInfo); // 기본값
     }
   }
 

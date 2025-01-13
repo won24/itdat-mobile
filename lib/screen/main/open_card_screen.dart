@@ -4,9 +4,7 @@ import 'package:itdat/screen/card/public_card_detail_screen.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
-
 import '../../models/BusinessCard.dart';
-import '../card/public_card_detail_screen.dart';
 
 class OpenCardScreen extends StatefulWidget {
   const OpenCardScreen({super.key});
@@ -65,7 +63,7 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No2(cardInfo: cardInfo); // 기본값
+        return No1(cardInfo: cardInfo); // 기본값
     }
   }
 

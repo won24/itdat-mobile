@@ -247,7 +247,7 @@ class CardModel{
    // 명함첩 - 메모 추가
   Future<void> saveMemo(Map<String, dynamic> card) async {
     try {
-      final response = await http.put(
+      final response = await http.post(
           Uri.parse("$baseUrl/mywallet/cardmemo"),
           headers: {"Content-Type": "application/json; charset=UTF-8"},
           body: json.encode(card).trim()

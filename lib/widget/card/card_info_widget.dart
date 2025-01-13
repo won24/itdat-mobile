@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
@@ -29,10 +28,10 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   @override
   void initState() {
     super.initState();
-    _loadLoginEmail();
     if (widget.businessCards != null) {
       _memoController.text = widget.businessCards.description?? '';
     }
+    _loadLoginEmail();
   }
 
   @override

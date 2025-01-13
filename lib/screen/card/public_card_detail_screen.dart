@@ -30,7 +30,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No2(cardInfo: cardInfo);
+        return No1(cardInfo: cardInfo);
     }
   }
   // commit 확인용.

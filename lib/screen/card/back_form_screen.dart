@@ -121,52 +121,13 @@ class _BackFormScreenState extends State<BackFormScreen> {
                   )
               ),
               const SizedBox(height: 20),
-
-              // TextFormField(
-              //   initialValue: widget.cardInfo.companyName?? "",
-              //   decoration: InputDecoration(labelText: "회사 이름"),
-              //   onChanged: (value){
-              //     setState(() {
-              //       widget.cardInfo.companyName = value;
-              //     });
-              //   }
-              // ),
-              // TextFormField(
-              //     initialValue: widget.cardInfo.companyNumber?? "",
-              //     decoration: InputDecoration(labelText: "회사 연락처"),
-              //     onChanged: (value){
-              //       setState(() {
-              //         widget.cardInfo.companyNumber = value;
-              //       });
-              //     }
-              // ),
-              // TextFormField(
-              //     initialValue: widget.cardInfo.companyAddress?? "",
-              //     decoration: InputDecoration(labelText: "회사 주소"),
-              //     onChanged: (value){
-              //       setState(() {
-              //         widget.cardInfo.companyAddress = value;
-              //       });
-              //     }
-              // ),
-              // TextFormField(
-              //     initialValue: widget.cardInfo.companyFax?? "",
-              //     decoration: InputDecoration(labelText: "팩스번호"),
-              //     onChanged: (value){
-              //       setState(() {
-              //         widget.cardInfo.companyFax = value;
-              //       });
-              //     }
-              // ),
-              // const SizedBox(height: 20),
-
               Column(
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("로고 선택",
+                      Text("로고 선택",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

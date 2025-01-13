@@ -21,7 +21,6 @@ class No1Back extends StatefulWidget {
 
 class _No1BackState extends State<No1Back> {
   File? _imageFile;
-  String serverUrl = 'http://112.221.66.174:8001';
   bool isLoading = false;
 
   @override
@@ -32,6 +31,8 @@ class _No1BackState extends State<No1Back> {
 
   // 네트워크에서 이미지를 다운로드하고 로컬 파일로 저장
   Future<void> _loadImage() async {
+    String serverUrl = 'http://112.221.66.174:8001';
+
     if (widget.cardInfo.logoUrl != null) {
       setState(() {
         isLoading = true;
@@ -77,15 +78,8 @@ class _No1BackState extends State<No1Back> {
     return Container(
       width: 380,
       height: 230,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromRGBO(255, 255, 255, 1.0),
-            Color.fromRGBO(177, 221, 210, 1.0)
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
+      decoration: BoxDecoration(
+          color: widget.cardInfo.backgroundColor
       ),
       padding: const EdgeInsets.all(16),
       child: isLoading
