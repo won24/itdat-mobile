@@ -504,7 +504,6 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      // 명함을 클릭했을 때 상세 화면으로 이동
                       Navigator.push(
                         context,
                         MaterialPageRoute(
