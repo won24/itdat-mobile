@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
+import 'package:itdat/providers/auth_provider.dart';
 import 'package:itdat/screen/card/expanded_card_screen.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
@@ -10,6 +11,8 @@ import 'package:itdat/screen/card/template_selection_screen.dart';
 import 'package:itdat/widget/card/card_info_widget.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
 import 'package:itdat/widget/card/history/history_widget.dart';
+import 'package:provider/provider.dart';
+
 
 class MyCardScreen extends StatefulWidget {
   const MyCardScreen({super.key});
@@ -48,8 +51,9 @@ class _MyCardWidgetState extends State<MyCardScreen> {
 
   // 로그인 이메일로 명함 데이터 가져오기
   Future<void> _loadEmail() async {
-    final storage = FlutterSecureStorage();
-    String? userEmail = await storage.read(key: 'email');
+    // final storage = FlutterSecureStorage();
+    // String? userEmail = await storage.read(key: 'email');
+    final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
 
     if (userEmail != null) {
       setState(() {
@@ -222,30 +226,20 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                               return GestureDetector(
                                 onTap: (){
                                   BusinessCard? backCard;
-                                  for (var cardItem in businessCards) {
-                                    if (cardItem.cardNo == cardInfo.cardNo && cardItem.cardSide == 'BACK') {
-                                      backCard = cardItem;
+                                  for (var businessCard in businessCards) {
+                                    if (businessCard.cardNo == cardInfo.cardNo && businessCard.cardSide == 'BACK') {
+                                      backCard = businessCard;
                                       break;
                                     }
                                   }
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (context) {
-                                      return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(1),
-                                        ),
-                                        child: SizedBox(
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          child: ExpandedCardScreen(
-                                            cardInfo: cardInfo,
-                                            backCard: backCard,
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ExpandedCardScreen(
+                                        cardInfo: cardInfo,
+                                        backCard: backCard,
+                                      ),
+                                    ),
                                   );
                                 },
                                 child: Container(
@@ -303,8 +297,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                   child: _selectedIndex == 0 && selectedCardInfo != null
                       ? CardInfoWidget(businessCards: selectedCardInfo!)
                       : _selectedIndex == 1
-                      ? PortfolioWidget(currentUserEmail: _userEmail, cardUserEmail: _userEmail)
-                      : HistoryWidget(currentUserEmail: _userEmail, cardUserEmail: _userEmail),
+                      ? PortfolioWidget(loginUserEmail: _userEmail, cardUserEmail: _userEmail)
+                      : HistoryWidget(loginUserEmail: _userEmail, cardUserEmail: _userEmail),
                 ),
               ]
             ),

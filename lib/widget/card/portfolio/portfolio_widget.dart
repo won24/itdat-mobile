@@ -4,12 +4,12 @@ import 'package:itdat/widget/card/portfolio/post_box.dart';
 import 'package:itdat/widget/card/portfolio/write_post.dart';
 
 class PortfolioWidget extends StatefulWidget {
-  final String currentUserEmail;
+  final String loginUserEmail;
   final String cardUserEmail;
 
   const PortfolioWidget({
     super.key,
-    required this.currentUserEmail,
+    required this.loginUserEmail,
     required this.cardUserEmail
   });
 
@@ -38,7 +38,7 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => WritePost(onPostSaved: _fetchPosts, userEmail: widget.currentUserEmail,),
+        builder: (context) => WritePost(onPostSaved: _fetchPosts, userEmail: widget.loginUserEmail,),
       ),
     );
   }
@@ -48,7 +48,7 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: posts.isEmpty
-          ? widget.cardUserEmail == widget.currentUserEmail? Center(child: Text('포트폴리오를 작성해주세요.')) : Center(child: Text('포트폴리오가 없습니다.'))
+          ? widget.cardUserEmail == widget.loginUserEmail? Center(child: Text('포트폴리오를 작성해주세요.')) : Center(child: Text('포트폴리오가 없습니다.'))
           : ListView.builder(
         padding: EdgeInsets.all(8.0),
         itemCount: posts.length,
@@ -58,13 +58,13 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: PostBox(
               post: post,
-              currentUserEmail: widget.currentUserEmail,
+              currentUserEmail: widget.loginUserEmail,
               onPostModified: _fetchPosts,
             ),
           );
         },
       ),
-      floatingActionButton: widget.cardUserEmail == widget.currentUserEmail
+      floatingActionButton: widget.cardUserEmail == widget.loginUserEmail
           ? FloatingActionButton(
         onPressed: _goToWritePost,
         backgroundColor: Colors.transparent,

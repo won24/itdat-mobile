@@ -22,9 +22,9 @@ class WritePost extends StatefulWidget {
 }
 
 class _WritePostState extends State<WritePost> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
-  final TextEditingController fileUrlController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  final TextEditingController _fileUrlController = TextEditingController();
 
   File? _selectedFile;
   bool _isVideo = false;
@@ -35,17 +35,21 @@ class _WritePostState extends State<WritePost> {
     super.initState();
 
     if (widget.post != null) {
-      titleController.text = widget.post!['title'] ?? '';
-      contentController.text = widget.post!['content'] ?? '';
-      fileUrlController.text = '';
+      _titleController.text = widget.post!['title'] ?? '';
+      _contentController.text = widget.post!['content'] ?? '';
+      _fileUrlController.text = '';
     }
   }
 
   @override
   void dispose() {
+    _titleController.dispose();
+    _contentController.dispose();
+    _fileUrlController.dispose();
     _videoController?.dispose();
     super.dispose();
   }
+
 
   Future<void> _pickMedia({required bool isVideo}) async {
     // 갤러리 권한 확인 및 요청
@@ -67,7 +71,7 @@ class _WritePostState extends State<WritePost> {
       setState(() {
         _selectedFile = File(pickedFile.path);
         _isVideo = isVideo;
-        fileUrlController.text = pickedFile.path;
+        _fileUrlController.text = pickedFile.path;
 
         if (_isVideo) {
           _videoController?.dispose();
@@ -140,73 +144,79 @@ class _WritePostState extends State<WritePost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.post == null ? '새 글 작성' : '게시글 수정: ${widget.post!['title']}'),
+        title: Text(widget.post == null ? '새 글 작성' : '포트폴리오 수정: ${widget.post!['title']}'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: '제목'),
-              ),
-              TextField(
-                controller: contentController,
-                decoration: const InputDecoration(labelText: '내용'),
-                maxLines: 10,
-              ),
-              TextField(
-                controller: fileUrlController,
-                decoration: const InputDecoration(labelText: '파일 URL (선택)'),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () => _pickMedia(isVideo: false),
-                    icon: const Icon(Icons.photo),
-                    label: const Text('이미지 선택'),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () => _pickMedia(isVideo: true),
-                    icon: const Icon(Icons.videocam),
-                    label: const Text('동영상 선택'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              if (_selectedFile != null)
-                _isVideo
-                    ? _videoController != null && _videoController!.value.isInitialized
-                    ? AspectRatio(
-                  aspectRatio: _videoController!.value.aspectRatio,
-                  child: VideoPlayer(_videoController!),
-                )
-                    : const CircularProgressIndicator()
-                    : Image.file(
-                  _selectedFile!,
-                  height: 100,
-                  width: 100,
-                  fit: BoxFit.cover,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              children: [
+                TextField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(labelText: '제목'),
                 ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  final postData = {
-                    'userEmail': widget.userEmail,
-                    'title': titleController.text,
-                    'content': contentController.text,
-                    'fileUrl': fileUrlController.text,
-                  };
-                  widget.post == null
-                      ? _savePost(context, postData)
-                      : _editPost(context, postData);
-                },
-                child: widget.post == null ? const Text('저장') : const Text('수정'),
-              ),
-            ],
+                TextField(
+                  controller: _contentController,
+                  decoration: const InputDecoration(labelText: '내용'),
+                  maxLines: 10,
+                ),
+                TextField(
+                  controller: _fileUrlController,
+                  decoration: const InputDecoration(labelText: '파일 URL (선택)'),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () => _pickMedia(isVideo: false),
+                      icon: const Icon(Icons.photo),
+                      label: const Text('이미지 선택'),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () => _pickMedia(isVideo: true),
+                      icon: const Icon(Icons.videocam),
+                      label: const Text('동영상 선택'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                if (_selectedFile != null)
+                  _isVideo
+                      ? _videoController != null && _videoController!.value.isInitialized
+                      ? AspectRatio(
+                    aspectRatio: _videoController!.value.aspectRatio,
+                    child: VideoPlayer(_videoController!),
+                  )
+                      : const CircularProgressIndicator()
+                      : Image.file(
+                    _selectedFile!,
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    final postData = {
+                      'userEmail': widget.userEmail,
+                      'title': _titleController.text,
+                      'content': _contentController.text,
+                      'fileUrl': _fileUrlController.text,
+                    };
+                    widget.post == null
+                        ? _savePost(context, postData)
+                        : _editPost(context, postData);
+                  },
+                  child: widget.post == null ? const Text('저장') : const Text('수정'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

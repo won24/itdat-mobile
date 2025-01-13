@@ -23,17 +23,16 @@ class PostBox extends StatefulWidget {
 class _PostBoxState extends State<PostBox> {
   VideoPlayerController? _videoController;
   bool _isPlaying = false;
-  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    print('fileUrl: ${widget.post['fileUrl']}');
     if (widget.post['fileUrl'] != null &&
         widget.post['fileUrl'].endsWith('.mp4')) {
       _initializeVideoPlayer(widget.post['fileUrl']);
     }
   }
+
 
   // 파일이 있는 지 확인
   Future<bool> checkFileExists(String url) async {
@@ -71,13 +70,7 @@ class _PostBoxState extends State<PostBox> {
     final fullUrl = getFullVideoUrl(videoUrl);
     _videoController = VideoPlayerController.networkUrl(Uri.parse(fullUrl))
       ..initialize().then((_) {
-        setState(() {
-          _isLoading = false;
-        });
       }).catchError((e) {
-        setState(() {
-          _isLoading = false;
-        });
         print('Error loading video: $e');
       });
   }
@@ -100,6 +93,67 @@ class _PostBoxState extends State<PostBox> {
     super.dispose();
   }
 
+
+  // 파일 렌더링
+  Widget _buildMediaContent(String fileUrl) {
+    // 동영상
+    if (fileUrl.endsWith('.mp4')) {
+      return FutureBuilder<bool>(
+        future: checkFileExists(getFullVideoUrl(fileUrl)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData && snapshot.data == true) {
+            return Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 250,
+                  child: AspectRatio(
+                    aspectRatio: _videoController!.value.aspectRatio,
+                    child: VideoPlayer(_videoController!),
+                  ),
+                ),
+                VideoProgressIndicator(_videoController!, allowScrubbing: true),
+                IconButton(
+                  icon: Icon(
+                    _isPlaying ? Icons.pause : Icons.play_arrow,
+                    size: 40.0,
+                  ),
+                  onPressed: _togglePlayPause,
+                ),
+              ],
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      );
+    } else {
+      // 이미지
+      return FutureBuilder<bool>(
+        future: checkFileExists(getFullImageUrl(fileUrl)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData && snapshot.data == true) {
+            return Container(
+              width: double.infinity,
+              height: 250,
+              child: Image.network(
+                getFullImageUrl(fileUrl),
+                fit: BoxFit.contain,
+              ),
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      );
+    }
+  }
+
+  // 스낵바
   void _showSnackBar(BuildContext context, String message,
       {bool isError = false}) {
     final snackBar = SnackBar(
@@ -175,55 +229,7 @@ class _PostBoxState extends State<PostBox> {
               ],
             ),
             if (widget.post['fileUrl'] != null && widget.post['fileUrl'].isNotEmpty)
-              FutureBuilder<bool>(
-                future: checkFileExists(getFullImageUrl(widget.post['fileUrl'])),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasData && snapshot.data == true) {
-                    if (widget.post['fileUrl'].endsWith('.mp4') &&
-                        _videoController != null &&
-                        _videoController!.value.isInitialized) {
-                      return Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 250,
-                            child: AspectRatio(
-                              aspectRatio: _videoController!.value.aspectRatio,
-                              child: VideoPlayer(_videoController!),
-                            ),
-                          ),
-                          VideoProgressIndicator(
-                              _videoController!, allowScrubbing: true),
-                          IconButton(
-                            icon: Icon(
-                              _isPlaying ? Icons.pause : Icons.play_arrow,
-                              size: 40.0,
-                            ),
-                            onPressed: _togglePlayPause,
-                          ),
-                        ],
-                      );
-                    } else {
-                      return Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 250,
-                            child: Image.network(
-                              getFullImageUrl(widget.post['fileUrl']),
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ],
-                      );
-                    }
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
+              _buildMediaContent(widget.post['fileUrl']),
             Text(widget.post['content'] ?? ''),
             SizedBox(height: 10),
           ],

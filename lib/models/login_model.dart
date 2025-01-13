@@ -4,15 +4,16 @@ import 'package:http/http.dart' as http;
 
 class LoginModel extends ChangeNotifier{
   // final String baseUrl = 'http://112.221.66.174:8001'; // 원
-  // final String baseUrl = 'http://10.0.2.2:8082';     // 김
+   final String baseUrl = 'http://10.0.2.2:8082';     // 김
   // final String baseUrl = 'http://112.221.66.174:8000'; // son
-  final String baseUrl = 'http://112.221.66.174:8002'; // seo
+  // final String baseUrl = 'http://112.221.66.174:8002'; // seo
 
 
-  Future<Map<String, dynamic>> login(Map<String,String> requestLogin) async {
+  Future<Map<String, dynamic>> login(Map<String, String> requestLogin) async {
     try {
       print("Request: $requestLogin");
       print("URL: $baseUrl/api/auth/login");
+
       final response = await http.post(
         Uri.parse('$baseUrl/api/auth/login'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
@@ -24,29 +25,11 @@ class LoginModel extends ChangeNotifier{
 
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
-          try {
-            Map<String, dynamic> responseBody = jsonDecode(response.body);
-            String? token = responseBody['token'];
-            print("Token: $token");
-
-            if (token != null) {
-              return {
-                'success': true,
-                'data': {'token': token},
-              };
-            } else {
-              return {
-                'success': false,
-                'message': 'Token not found in response.',
-              };
-            }
-          } catch (e) {
-            print('Error decoding JSON: $e');
-            return {
-              'success': false,
-              'message': 'Invalid response format.',
-            };
-          }
+          Map<String, dynamic> responseBody = jsonDecode(response.body);
+          return {
+            'success': true,
+            'data': responseBody,
+          };
         } else {
           return {
             'success': false,
@@ -56,11 +39,12 @@ class LoginModel extends ChangeNotifier{
       } else {
         return {
           'success': false,
-          'message': 'Login failed. Status code: ${response.statusCode}',
+          'message': jsonDecode(response.body)['message'] ??
+              'Login failed. Status code: ${response.statusCode}',
         };
       }
     } catch (e) {
-      print('Error during login: $e');
+      print("네트워크 오류: $e");
       return {
         'success': false,
         'message': 'An error occurred. Please try again later.',

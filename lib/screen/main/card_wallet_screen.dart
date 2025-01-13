@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:itdat/models/mywallet_model.dart';
 import 'package:itdat/models/BusinessCard.dart';
@@ -34,7 +35,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
   }
 
   Future<void> refreshAllCards() async {
-    final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+   final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
 
     if (userEmail != null) {
       try {
@@ -294,6 +295,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
   @override
   Widget build(BuildContext context) {
     final userEmail = Provider.of<AuthProvider>(context).userEmail ?? "unknown";
+
     return Scaffold(
       appBar: AppBar(
         title: Text("내 명함첩"),
@@ -316,9 +318,17 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
           ? Center(child: CircularProgressIndicator())
           : Column(
         children: [
+          // 폴더 섹션
           Expanded(
             flex: 2,
-            child: GridView.builder(
+            child: _folders.isEmpty
+                ? Center(
+              child: Text(
+                "폴더 없음",
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            )
+                : GridView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -334,7 +344,8 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                     DragTarget<BusinessCard>(
                       onAccept: (card) {
                         debugPrint("드롭된 명함 데이터: ${card.userName}, ${card.userEmail}");
-                        final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+                        final userEmail =
+                            Provider.of<AuthProvider>(context, listen: false).userEmail;
                         if (userEmail != null) {
                           _moveCardToFolder(userEmail, folder['folderName'], card);
                         }
@@ -394,18 +405,27 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
               },
             ),
           ),
+
           Divider(),
-          // 명함 선택 시 상세정보 보기 추가 해야됨. / 디자인 수정 필요.
+
+          // 명함 섹션
           Expanded(
             flex: 6,
-            child: GridView.builder(
+            child: _allCards.isEmpty
+                ? Center(
+              child: Text(
+                "명함 없음",
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            )
+                : GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 16.0,
                 mainAxisSpacing: 16.0,
                 childAspectRatio: 5 / 3,
               ),
-              itemCount: _allCards.length, // 전체 명함 개수
+              itemCount: _allCards.length,
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               itemBuilder: (context, index) {
                 final card = _allCards[index];
@@ -498,4 +518,5 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
       ),
     );
   }
+
 }
