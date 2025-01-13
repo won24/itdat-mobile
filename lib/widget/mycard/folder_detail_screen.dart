@@ -3,6 +3,10 @@ import 'package:itdat/models/mywallet_model.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../screen/card/card_wallet_card_detail_screen.dart';
+import '../../screen/card/template/no_1.dart';
+import '../../screen/card/template/no_2.dart';
+import '../../screen/card/template/no_3.dart';
 
 class FolderDetailScreen extends StatefulWidget {
   final String folderName;
@@ -43,12 +47,9 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
 
     try {
       final folderData = await _walletModel.getCardsByFolder(email, widget.folderName);
-      debugPrint("폴더 내부 명함 데이터: $folderData");
-
-      // 데이터 변환: businessCard 필드를 평탄화
       setState(() {
         _cards = folderData.map<BusinessCard>((cardData) {
-          final businessCard = cardData['businessCard'] ?? {}; // 중첩된 필드
+          final businessCard = cardData['businessCard'] ?? {};
           return BusinessCard(
             appTemplate: businessCard['appTemplate'],
             userName: businessCard['userName'] ?? '이름 없음',
@@ -76,13 +77,14 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
     }
   }
 
-
   Future<void> _removeCardFromFolder(BusinessCard card) async {
     try {
+      final originalIndex = _cards.indexOf(card);
+
       final success = await _walletModel.moveCardToFolder(
         userEmail,
         card.userEmail!,
-        "", // 폴더에서 제거 시 null 전달
+        "", // 폴더에서 제거 시 빈 문자열 전달
       );
 
       if (success) {
@@ -90,10 +92,10 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
           _cards.removeWhere((c) => c.userEmail == card.userEmail);
         });
 
-        Navigator.pop(context, true);
+        Navigator.pop(context, {'card': card, 'index': originalIndex});
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("${card.userName} 명함이 전체 명함으로 이동되었습니다.")),
+          SnackBar(content: Text("${card.userName} 명함이 폴더에서 제외되었습니다.")),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -104,6 +106,19 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("명함 제외 중 오류가 발생했습니다.")),
       );
+    }
+  }
+
+  Widget buildBusinessCard(BusinessCard cardInfo) {
+    switch (cardInfo.appTemplate) {
+      case 'No1':
+        return No1(cardInfo: cardInfo);
+      case 'No2':
+        return No2(cardInfo: cardInfo);
+      case 'No3':
+        return No3(cardInfo: cardInfo);
+      default:
+        return No2(cardInfo: cardInfo); // 기본값
     }
   }
 
@@ -124,56 +139,46 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
           : _cards.isEmpty
           ? Center(child: Text("폴더에 명함이 없습니다."))
           : GridView.builder(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16.0,
-          mainAxisSpacing: 16.0,
-          childAspectRatio: 4 / 3,
+          crossAxisCount: 1, // 한 줄에 명함 하나씩
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+          childAspectRatio: 4 / 3, // 명함 비율
         ),
         itemCount: _cards.length,
         itemBuilder: (context, index) {
           final card = _cards[index];
           return Stack(
             children: [
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        card.userName ?? '이름 없음',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CardWalletCardDetailScreen(
+                        cardInfo: [card],
+                        loginUserEmail: userEmail,
                       ),
-                      const SizedBox(height: 8.0),
-                      Text(
-                        card.companyName ?? '정보 없음',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      const SizedBox(height: 4.0),
-                      Text(
-                        card.userEmail ?? '이메일 없음',
-                        style: TextStyle(fontSize: 14),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ],
+                    ),
+                  );
+                },
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: buildBusinessCard(card), // 명함 템플릿 렌더링
                   ),
                 ),
               ),
               if (_isEditMode)
                 Positioned(
                   top: -10,
-                  right: 15,
+                  right: -5,
                   child: IconButton(
                     icon: Icon(Icons.remove_circle, color: Colors.red),
                     onPressed: () => _removeCardFromFolder(card),
