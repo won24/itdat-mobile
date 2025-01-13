@@ -23,7 +23,7 @@ class MyCardScreen extends StatefulWidget {
 
 class _MyCardWidgetState extends State<MyCardScreen> {
 
-  late String _userEmail;
+  String? _userEmail;
   late Future<List<dynamic>>? _businessCards;
   BusinessCard? selectedCardInfo;
   final PageController _pageController = PageController();
@@ -48,22 +48,27 @@ class _MyCardWidgetState extends State<MyCardScreen> {
     }
   }
 
-
   // 로그인 이메일로 명함 데이터 가져오기
   Future<void> _loadEmail() async {
-    // final storage = FlutterSecureStorage();
-    // String? userEmail = await storage.read(key: 'email');
-    final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+    final storage = FlutterSecureStorage();
+    final userEmail = await storage.read(key: 'user_email');
+    final userId = await storage.read(key: 'user_id');
+
+    print('로그인 사용자 이메일: $userEmail');
+    print('로그인 사용자 ID: $userId');
 
     if (userEmail != null) {
       setState(() {
         _userEmail = userEmail;
-        _businessCards = CardModel().getBusinessCard(_userEmail);
+        _businessCards = CardModel().getBusinessCard(_userEmail!);
       });
     } else {
       Navigator.pushReplacementNamed(context, '/');
     }
   }
+
+
+
 
   // 명함 템플릿
   Widget buildBusinessCard(BusinessCard cardInfo, BuildContext context) {
@@ -113,7 +118,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TemplateSelectionScreen(userEmail: _userEmail),
+                  builder: (context) => TemplateSelectionScreen(userEmail: _userEmail!),
                 ),
               );
             },
@@ -167,7 +172,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TemplateSelectionScreen(userEmail: _userEmail),
+                            builder: (context) => TemplateSelectionScreen(userEmail: _userEmail!),
                           ),
                         );
                       },
@@ -212,7 +217,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            TemplateSelectionScreen(userEmail: _userEmail),
+                                            TemplateSelectionScreen(userEmail: _userEmail!),
                                       ),
                                     );
                                   },
@@ -297,8 +302,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                   child: _selectedIndex == 0 && selectedCardInfo != null
                       ? CardInfoWidget(businessCards: selectedCardInfo!)
                       : _selectedIndex == 1
-                      ? PortfolioWidget(loginUserEmail: _userEmail, cardUserEmail: _userEmail)
-                      : HistoryWidget(loginUserEmail: _userEmail, cardUserEmail: _userEmail),
+                      ? PortfolioWidget(loginUserEmail: _userEmail!, cardUserEmail: _userEmail!)
+                      : HistoryWidget(loginUserEmail: _userEmail!, cardUserEmail: _userEmail!),
                 ),
               ]
             ),
