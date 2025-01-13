@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
+import 'package:itdat/models/card_model.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CardInfoWidget extends StatefulWidget {
   final BusinessCard businessCards;
 
-  const CardInfoWidget({
+  CardInfoWidget({
     super.key,
     required this.businessCards,
   });
@@ -16,9 +19,28 @@ class CardInfoWidget extends StatefulWidget {
 
 class _InfoWidgetState extends State<CardInfoWidget> {
 
+  late String _loginEmail;
+  final TextEditingController _memoController = TextEditingController();
+
   Uri get _telUrl => Uri.parse('tel:${widget.businessCards.phone}');
   Uri get _smsUrl => Uri.parse('sms:${widget.businessCards.phone}');
   Uri get _emailUrl => Uri.parse('mailto:${widget.businessCards.email}');
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.businessCards != null) {
+      _memoController.text = widget.businessCards.description?? '';
+    }
+  }
+
+  @override
+  void dispose() {
+    _memoController.dispose();
+    super.dispose();
+  }
+
 
   Future<void> _openMaps() async {
     final String address = "${widget.businessCards.companyAddress}";
@@ -30,7 +52,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     } else if (await canLaunchUrl(webUrl)) {
       await launchUrl(webUrl, mode: LaunchMode.externalApplication);
     } else {
-      _showSnackBarError('맵을 열 수 없습니다.');
+      _showSnackBar('맵을 열 수 없습니다.', isError: true);
     }
   }
 
@@ -62,10 +84,10 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   //   }
   // }
 
-  void _showSnackBarError(String message) {
+  void _showSnackBar(String message, {bool isError = false}) {
     final snackBar = SnackBar(
       content: Text(message),
-      backgroundColor: Colors.red,
+      backgroundColor: isError ? Colors.red : Colors.green,
       action: SnackBarAction(
         label: '확인',
         onPressed: () {},
@@ -73,6 +95,27 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  // 메모 저장
+  void _saveMemo(memo) async {
+
+    print("memo: $memo");
+    final card = {
+      'cardNo': widget.businessCards.cardNo,
+      'description': memo,
+      'myEmail': _loginEmail,
+      'userEmail': _memoController.text,
+    };
+
+    try {
+      await CardModel().saveMemo(card);
+      _showSnackBar("메모가 저장 되었습니다.");
+      Navigator.pop(context);
+    } catch (e) {
+      _showSnackBar("메모 저장 실패. 다시 시도해주세요.", isError: true);
+    }
+  }
+
 
   // void _showMapSelectionBottomSheet() {
   //   showModalBottomSheet(
@@ -144,6 +187,16 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   // }
 
 
+  // 로그인 유저 이메일
+  // Future<void> _loginEmail() async {
+  //   final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+  //   if (userEmail != null) {
+  //     setState(() {
+  //       _loginEmail = userEmail;
+  //     });
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,7 +214,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
                     if (await canLaunchUrl(_telUrl)) {
                       await launchUrl(_telUrl);
                     } else {
-                      throw '전화 실행 불가 $_telUrl';
+                      _showSnackBar("전화를 걸 수 없습니다. 다시 시도해주세요.", isError: true);
                     }
                   },
                   icon: Image.asset('assets/icons/call.png', height: 30, width: 30),
@@ -171,7 +224,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
                     if (await canLaunchUrl(_smsUrl)) {
                       await launchUrl(_smsUrl);
                     } else {
-                      throw '문자 실행 불가 $_smsUrl';
+                      _showSnackBar("문자를 보낼 수 없습니다. 다시 시도해주세요.", isError: true);
                     }
                   },
                   icon: Image.asset('assets/icons/sms.png', height: 30, width: 30),
@@ -187,7 +240,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
                 if (await canLaunchUrl(_emailUrl)) {
                   await launchUrl(_emailUrl);
                 } else {
-                  throw '이메일 실행 불가 $_emailUrl';
+                  _showSnackBar("이메일을 실행할 수 없습니다. 다시 시도해주세요.", isError: true);
                 }
               },
               icon: Image.asset('assets/icons/mail.png', height: 30, width: 30),
@@ -204,6 +257,57 @@ class _InfoWidgetState extends State<CardInfoWidget> {
               icon: Image.asset('assets/icons/location.png', height: 30, width: 30),
             ),
           ),
+          widget.businessCards.userEmail != _loginEmail
+            ? ListTile(
+                title: Text('${widget.businessCards.description}', style: TextStyle(fontWeight: FontWeight.w600),),
+                subtitle: Text("메모", style: TextStyle(color: Colors.grey),),
+                trailing: IconButton(
+                  onPressed: (){
+                    GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: Dialog(
+                        child: SingleChildScrollView(
+                          child: Container(
+                            width: 350,
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text('메모',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                                SizedBox(height: 10),
+                                TextField(
+                                  controller: _memoController,
+                                  decoration: const InputDecoration(labelText: '메모'),
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text('취소'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        _saveMemo(_memoController.text);
+                                      },
+                                      child: widget.businessCards.description == null ? const Text('저장') : const Text('수정'),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Image.asset('assets/icons/memo.png', height: 30, width: 30),
+                ),
+              )
+            : SizedBox.shrink()
         ],
         ),
 
