@@ -83,7 +83,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 hint: AppLocalizations.of(context)!.pleasename,
                 icon: Icons.person,
                 controller: _nameController,
-                validator: (value) => value == null || value.isEmpty ? "이름을 입력해주세요." : null,
+                validator: (value) => value == null || value.isEmpty ? AppLocalizations.of(context)!.pleasename : null,
               ),
               const SizedBox(height: 16),
               _buildTextField(

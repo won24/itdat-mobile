@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/models/mywallet_model.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,7 @@ import '../../screen/card/template/no_3.dart';
 class FolderDetailScreen extends StatefulWidget {
   final String folderName;
 
-  const FolderDetailScreen({Key? key, required this.folderName}) : super(key: key);
+   FolderDetailScreen({Key? key, required this.folderName}) : super(key: key);
 
   @override
   State<FolderDetailScreen> createState() => _FolderDetailScreenState();
@@ -36,7 +37,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         _fetchFolderCards(email);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("로그인이 필요합니다.")),
+          SnackBar(content: Text(AppLocalizations.of(context)!.loginRequired)),
         );
       }
     });
@@ -52,10 +53,10 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
           final businessCard = cardData['businessCard'] ?? {};
           return BusinessCard(
             appTemplate: businessCard['appTemplate'],
-            userName: businessCard['userName'] ?? '이름 없음',
+            userName: businessCard['userName'] ?? AppLocalizations.of(context)!.noName,
             phone: businessCard['phone'],
             email: businessCard['email'],
-            companyName: businessCard['companyName'] ?? '정보 없음',
+            companyName: businessCard['companyName'] ?? AppLocalizations.of(context)!.notfound,
             companyNumber: businessCard['companyNumber'],
             companyAddress: businessCard['companyAddress'],
             companyFax: businessCard['companyFax'],
@@ -70,7 +71,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("명함을 가져오는 중 오류가 발생했습니다.")),
+        SnackBar(content: Text(AppLocalizations.of(context)!.fetchCardsError)),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -83,7 +84,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
 
       final success = await _walletModel.moveCardToFolder(
         userEmail,
-        card.userEmail!,
+        card.userEmail,
         "", // 폴더에서 제거 시 빈 문자열 전달
       );
 
@@ -95,16 +96,16 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         Navigator.pop(context, {'card': card, 'index': originalIndex});
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("${card.userName} 명함이 폴더에서 제외되었습니다.")),
+          SnackBar(content: Text(AppLocalizations.of(context)!.cardRemoved(card.userName ?? AppLocalizations.of(context)!.noName))),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("명함 제외에 실패했습니다.")),
+          SnackBar(content: Text(AppLocalizations.of(context)!.removeCardFailed)),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("명함 제외 중 오류가 발생했습니다.")),
+        SnackBar(content: Text(AppLocalizations.of(context)!.removeCardError)),
       );
     }
   }
@@ -137,7 +138,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _cards.isEmpty
-          ? Center(child: Text("폴더에 명함이 없습니다."))
+          ? Center(child: Text(AppLocalizations.of(context)!.folderinnotcard))
           : GridView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

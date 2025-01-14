@@ -11,7 +11,7 @@ class LogoutWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.logout),
-          content: Text("로그아웃 동의"),
+          content: Text(AppLocalizations.of(context)!.logoutagree),
           actions: <Widget>[
             TextButton(
               child: Text(AppLocalizations.of(context)!.cancel),

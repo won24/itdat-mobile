@@ -31,6 +31,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     super.initState();
     if (widget.businessCards != null) {
       _memoController.text = widget.businessCards.description?? '';
+      _loadMemo();
     }
   }
 
@@ -51,6 +52,23 @@ class _InfoWidgetState extends State<CardInfoWidget> {
       await launchUrl(webUrl, mode: LaunchMode.externalApplication);
     } else {
       _showSnackBar('맵을 열 수 없습니다.', isError: true);
+    }
+  }
+  Future<void> _loadMemo() async {
+    try {
+      final card = {
+        'cardNo': widget.businessCards.cardNo,
+        'myEmail': _loginEmail,
+        'userEmail': widget.businessCards.userEmail,
+      };
+
+      final memo = await CardModel().loadMemo(card);
+      setState(() {
+        _memoController.text = memo ?? '';
+        widget.businessCards.description = memo;
+      });
+    } catch (e) {
+      _showSnackBar("메모를 불러오는데 실패했습니다.", isError: true);
     }
   }
 
