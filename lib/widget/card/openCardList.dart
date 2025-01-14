@@ -5,6 +5,7 @@ import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OpenBusinessCardList extends StatefulWidget {
   OpenBusinessCardList({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class OpenBusinessCardList extends StatefulWidget {
 class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
   final CardModel _cardModel = CardModel();
   final FlutterSecureStorage _storage = FlutterSecureStorage();
-  Future<dynamic>? _businessCards; // nullable로 변경
+  Future<dynamic>? _businessCards;
   bool _isEditMode = false;
   List<BusinessCard> _selectedCards = [];
   String? _userEmail;
@@ -82,7 +83,7 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
     if (alreadyPublicCards.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${alreadyPublicCards.length}개의 명함은 이미 공개 상태입니다.'),
+          content: Text(AppLocalizations.of(context)!.alreadyPublicCards(alreadyPublicCards.length)),
           duration: Duration(seconds: 2),
         ),
       );
@@ -103,7 +104,7 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
       }).toList();
 
       await _cardModel.updateCardsPublicStatus(selectedCardData);
-      
+
       setState(() {
         cardsToUpdate.forEach((card) {
           card.isPublic = makePublic;
@@ -113,7 +114,9 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              makePublic ? '${cardsToUpdate.length}개의 명함이 공개되었습니다.' : '${cardsToUpdate.length}개의 명함이 비공개로 설정되었습니다.'),
+              makePublic
+                  ? AppLocalizations.of(context)!.cardsSetPublic(cardsToUpdate.length)
+                  : AppLocalizations.of(context)!.cardsSetPrivate(cardsToUpdate.length)),
           duration: Duration(seconds: 2),
         ),
       );
@@ -121,7 +124,7 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('명함 공개 상태 변경 중 오류가 발생했습니다.'),
+          content: Text(AppLocalizations.of(context)!.errorChangingCardStatus),
           duration: Duration(seconds: 2),
         ),
       );
@@ -129,6 +132,7 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
 
     _toggleEditMode();
   }
+
   Future<void> _reloadBusinessCards() async {
     if (_userEmail != null) {
       setState(() {
@@ -141,7 +145,7 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('명함 목록'),
+        title: Text(AppLocalizations.of(context)!.businessCardList),
         actions: [
           IconButton(
             icon: Icon(_isEditMode ? Icons.close : Icons.edit),
@@ -157,9 +161,9 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('명함을 가져오는 중 오류가 발생했습니다.'));
+            return Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
           } else if (!snapshot.hasData || snapshot.data.isEmpty) {
-            return const Center(child: Text('명함이 없습니다.'));
+            return Center(child: Text(AppLocalizations.of(context)!.noCards));
           } else {
             var businessCards = snapshot.data;
 
@@ -188,10 +192,10 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
                 return GestureDetector(
                   onTap: _isEditMode
                       ? () {
-                          setState(() {
-                            _toggleCardSelection(cardInfo);
-                          });
-                        }
+                    setState(() {
+                      _toggleCardSelection(cardInfo);
+                    });
+                  }
                       : null,
                   child: Transform.scale(
                     scale: 0.9,
@@ -239,20 +243,20 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
       ),
       bottomNavigationBar: _isEditMode
           ? BottomAppBar(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => _updateSelectedCardsVisibility(true),
-                    child: Text('공개로 설정'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _updateSelectedCardsVisibility(false),
-                    child: Text('비공개로 설정'),
-                  ),
-                ],
-              ),
-            )
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () => _updateSelectedCardsVisibility(true),
+              child: Text(AppLocalizations.of(context)!.setPublic),
+            ),
+            ElevatedButton(
+              onPressed: () => _updateSelectedCardsVisibility(false),
+              child: Text(AppLocalizations.of(context)!.setPrivate),
+            ),
+          ],
+        ),
+      )
           : null,
     );
   }

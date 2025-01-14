@@ -65,8 +65,8 @@ class LoginModel extends ChangeNotifier{
         body: jsonEncode(formData),
       );
 
-      print("응답 상태 코드: ${response.statusCode}");
-      print("응답 데이터: ${response.body}");
+      // print("응답 상태 코드: ${response.statusCode}");
+      // print("응답 데이터: ${response.body}");
 
       if (response.statusCode == 200) {
         print("회원가입 성공: ${response.body}");

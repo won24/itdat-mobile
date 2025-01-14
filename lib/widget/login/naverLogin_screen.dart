@@ -75,7 +75,7 @@ class _NaverLoginScreenState extends State<NaverLoginScreen> {
     } catch (e) {
       print('로그인 처리 오류: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('로그인 처리 실패: $e')),
+        SnackBar(content: Text('Login Failed: $e')),
       );
     }
   }
@@ -107,7 +107,7 @@ class _NaverLoginScreenState extends State<NaverLoginScreen> {
     } catch (e) {
       print('Naver 로그인 오류: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Naver 로그인 실패: $e')),
+        SnackBar(content: Text('Naver Login Failed: $e')),
       );
     }
   }
@@ -117,7 +117,7 @@ class _NaverLoginScreenState extends State<NaverLoginScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _startNaverLogin());
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Naver 로그인 중...')),
+      appBar: AppBar(title: const Text('Naver Logining...')),
       body: const Center(child: CircularProgressIndicator()),
     );
   }

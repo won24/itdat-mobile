@@ -160,7 +160,7 @@ class CardModel{
    Future<void> updateCardsPublicStatus(List<Map<String, dynamic>> cardData) async {
      try {
        final response = await http.post(
-         Uri.parse('$baseUrl/public'),
+         Uri.parse('$baseUrl/publicstatus'),
          headers: {"Content-Type": "application/json"},
          body: json.encode(cardData),
        );
@@ -258,5 +258,26 @@ class CardModel{
       throw Exception("saveMemo Error: $e");
     }
   }
+
+   Future<String?> loadMemo(Map<String, dynamic> card) async {
+     try {
+       final response = await http.post(
+         Uri.parse("$baseUrl/mywallet/loadmemo"),
+         headers: {"Content-Type": "application/json; charset=UTF-8"},
+         body: json.encode(card),
+       );
+
+       if (response.statusCode == 200) {
+         // 서버에서 직접 문자열을 반환한다고 가정
+         return response.body;
+       } else {
+         print("메모 로드 실패: ${response.statusCode}");
+         return null;
+       }
+     } catch (e) {
+       print("loadMemo Error: $e");
+       throw Exception("loadMemo Error: $e");
+     }
+   }
 
 }
