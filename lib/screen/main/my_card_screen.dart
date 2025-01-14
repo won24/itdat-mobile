@@ -22,7 +22,7 @@ class MyCardScreen extends StatefulWidget {
 
 class _MyCardWidgetState extends State<MyCardScreen> {
 
-  late String _loginEmail;
+  late String _loginEmail = "";
   late Future<List<dynamic>>? _businessCards;
   BusinessCard? selectedCardInfo;
   final PageController _pageController = PageController();
@@ -269,6 +269,11 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                           _selectedIndex = 0;
                         });
                       },
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                          fontWeight: _selectedIndex == 0 ? FontWeight.w900 : FontWeight.normal,
+                        ),
+                      ),
                       child: const Text("연락처"),
                     ),
                     const Text("|"),
@@ -278,6 +283,11 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                           _selectedIndex = 1;
                         });
                       },
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                          fontWeight: _selectedIndex == 1 ? FontWeight.w900 : FontWeight.normal,
+                        ),
+                      ),
                       child: const Text("포트폴리오"),
                     ),
                     const Text("|"),
@@ -287,6 +297,11 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                           _selectedIndex = 2;
                         });
                       },
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                          fontWeight: _selectedIndex == 2 ? FontWeight.w900 : FontWeight.normal,
+                        ),
+                      ),
                       child: const Text("히스토리"),
                     ),
                   ],

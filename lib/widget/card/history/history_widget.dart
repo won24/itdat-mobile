@@ -78,6 +78,8 @@ class _HistoryWidgetState extends State<HistoryWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: posts.isEmpty
           ? widget.cardUserEmail == widget.loginUserEmail
@@ -133,7 +135,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
         },
         backgroundColor: Colors.transparent,
         elevation: 0,
-        child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30),
+        child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
       )
           : null,
     );

@@ -74,7 +74,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
       'cardNo': widget.businessCards.cardNo,
       'description': memo,
       'myEmail': widget.loginEmail,
-      'userEmail': _memoController.text,
+      'userEmail': widget.businessCards.userEmail,
     };
 
     try {
@@ -88,6 +88,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -106,7 +107,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
                       _showSnackBar("전화를 걸 수 없습니다. 다시 시도해주세요.", isError: true);
                     }
                   },
-                  icon: Image.asset('assets/icons/call.png', height: 30, width: 30),
+                  icon: Image.asset('assets/icons/call.png', height: 30, width: 30,),
                 ),
                 IconButton(
                   onPressed: () async {
