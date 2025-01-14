@@ -3,9 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class LoginModel extends ChangeNotifier{
+<<<<<<< HEAD
+   final String baseUrl = 'http://112.221.66.174:8001'; // 원
+  // final String baseUrl = 'http://10.0.2.2:8082';     // 김
+  // final String baseUrl = 'http://112.221.66.174:8000'; // son
+=======
   //final String baseUrl = 'http://112.221.66.174:8001'; // 원
   // final String baseUrl = 'http://10.0.2.2:8082';     // 김
    final String baseUrl = 'http://112.221.66.174:8000'; // son
+>>>>>>> ba3ccee3bdf7860c915b57fd560c1094ad3ab877
   // final String baseUrl = 'http://112.221.66.174:8002'; // seo
 
 

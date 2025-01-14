@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class FontProvider with ChangeNotifier {
-  String _currentFont = 'System';
+  String _currentFont = 'Gowun Dodum';
   final FlutterSecureStorage _storage = FlutterSecureStorage();
   
   String get currentFont => _currentFont;
@@ -44,6 +44,7 @@ class FontProvider with ChangeNotifier {
   // 언어별 폰트 리스트
   Map<String, List<String>> get fontsByLanguage => {
     'en': [
+      'Gowun Dodum',
       'System',
       'Roboto',
       'Open Sans',
@@ -56,6 +57,7 @@ class FontProvider with ChangeNotifier {
       'Poppins',
     ],
     'ko': [
+      'Gowun Dodum',
       'System',
       'Noto Sans KR',
       'Nanum Gothic',
@@ -69,6 +71,7 @@ class FontProvider with ChangeNotifier {
       'Stylish',
     ],
     'ja': [
+      'Gowun Dodum',
       'System',
       'Noto Sans JP',
       'Kosugi',

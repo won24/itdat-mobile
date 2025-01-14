@@ -12,7 +12,7 @@ class _QRGeneratorWidgetState extends State<QRGeneratorWidget> {
 
   static Future<String?> _loadEmail() async {
     final storage = FlutterSecureStorage();
-    return await storage.read(key: 'email');
+    return await storage.read(key: 'user_email');
   }
 
   @override

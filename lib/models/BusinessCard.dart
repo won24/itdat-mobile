@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 class BusinessCard {
@@ -18,9 +19,13 @@ class BusinessCard {
   bool? isPublic;
   String? description;
 
-  Color? backgroundColor;  // 사용자가 선택한 배경 색상
-  Color? textColor;  // 사용자가 선택한 텍스트 색상
-  String? font; // 사용자가 선택한 글씨체
+  // 커스텀 정보
+  String? backgroundColor;
+  String? textColor;
+  String? fontFamily;
+  String? customText;
+  Bool? isTextEnabled;
+  String? textPosition;
 
   BusinessCard({
     required this.appTemplate,
@@ -41,7 +46,10 @@ class BusinessCard {
     this.description,
     this.backgroundColor,
     this.textColor,
-    this.font,
+    this.fontFamily,
+    this.customText,
+    this.isTextEnabled,
+    this.textPosition
   });
 
   @override
@@ -71,7 +79,12 @@ class BusinessCard {
       cardSide: json['cardSide'] ?? 'FRONT',
       logoUrl: json['logoUrl'] ?? '',
       isPublic: json['isPublic'] == true, // null-safe 처리
-
+      backgroundColor: json['backgroundColor'],
+      textColor: json['textColor'],
+      fontFamily: json['fontFamily'],
+      customText: json['customText'],
+      isTextEnabled: json['isTextEnabled'],
+      textPosition: json['textPosition']
     );
   }
 
@@ -92,6 +105,12 @@ class BusinessCard {
       'cardSide': cardSide,
       'logoUrl': logoUrl,
       'isPublic': isPublic,
+      'backgroundColor': backgroundColor,
+      'textColor': textColor,
+      'fontFamily': fontFamily,
+      'customText ': customText,
+      'isTextEnabled ': isTextEnabled,
+      'textPosition ' :textPosition
     };
   }
 
