@@ -5,6 +5,7 @@ import './date_picker.dart';
 import '../../models/login_model.dart';
 import 'PrivacyPolicy.dart';
 import 'TermsOfService.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'address_screen.dart';
 import 'email_verification_service.dart';
 

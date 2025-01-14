@@ -5,8 +5,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class NfcModel {
   // final String baseUrl = "http://112.221.66.174:8002"; // seo
+<<<<<<< HEAD
 
   final String baseUrl = "http://112.221.66.174:8001";
+=======
+  final String baseUrl = "http://112.221.66.174:8000"; // seo
+>>>>>>> ba3ccee3bdf7860c915b57fd560c1094ad3ab877
   final Dio _dio = Dio();
   final FlutterSecureStorage _storage = FlutterSecureStorage();
 

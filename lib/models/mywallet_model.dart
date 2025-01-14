@@ -5,6 +5,11 @@ import 'package:http/http.dart' as http;
 class MyWalletModel {
   // final String baseUrl = "http://10.0.2.2:8082/api/mywallet";
   // final String baseUrl2 = "http://10.0.2.2:8082/api/auth";
+<<<<<<< HEAD
+=======
+  final String baseUrl = "http://112.221.66.174:8000/api/mywallet";
+  final String baseUrl2 = "http://112.221.66.174:8000/api/auth";
+>>>>>>> ba3ccee3bdf7860c915b57fd560c1094ad3ab877
 
   final String baseUrl = "http://112.221.66.174:8001/api/mywallet";
   final String baseUrl2 = "http://112.221.66.174:8001/api/auth";
