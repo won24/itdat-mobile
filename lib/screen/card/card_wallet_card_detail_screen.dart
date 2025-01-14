@@ -213,7 +213,7 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
           ),
           Expanded(
             child: _selectedIndex == 0
-                ? CardInfoWidget(businessCards: frontCard!)
+                ? CardInfoWidget(businessCards: frontCard!, loginEmail: widget.loginUserEmail,)
                 : _selectedIndex == 1
                 ? PortfolioWidget(
               loginUserEmail: widget.loginUserEmail,

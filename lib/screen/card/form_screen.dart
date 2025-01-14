@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
@@ -27,7 +28,6 @@ class FormScreen extends StatefulWidget {
 class _FormScreenState extends State<FormScreen> {
 
   static const Color primaryColor = Colors.white;
-  static const double fieldSpacing = 10.0;
   File? _selectedCompanyImage;
 
   // 색 선택
@@ -49,7 +49,7 @@ class _FormScreenState extends State<FormScreen> {
                 }
               });
             },
-            showLabel: false,
+            labelTypes: [ColorLabelType.rgb, ColorLabelType.hex],
             pickerAreaHeightPercent: 0.8,
           ),
           actions: [
@@ -70,6 +70,70 @@ class _FormScreenState extends State<FormScreen> {
       },
     );
   }
+
+
+  // 글씨체 선택
+  void _changeFontFamily() {
+    // 사용할 글꼴 이름 리스트
+    final fontList = [
+      'Nanum Gothic',
+      'Do Hyeon',
+      'Gowun Batang',
+      'Gowun Dodum',
+      'Gugi',
+      'Song Myung',
+      'Orbit',
+      'IBM Plex Sans KR',
+      'Roboto',
+      'Lobster',
+      'Noto Sans KR',
+      'Roboto Mono',
+      'Playfair Display',
+      'Jura',
+      'Major Mono Display',
+    ];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('글씨체 선택'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: fontList.length,
+              itemBuilder: (context, index) {
+                final fontName = fontList[index];
+                return ListTile(
+                  title: Text(
+                    fontName,
+                    style: GoogleFonts.getFont(fontName),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      widget.cardInfo.font = fontName;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('취소'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+
 
   // 갤러리 사진 선택
   Future<File?> getImageFromGallery() async {
@@ -102,21 +166,21 @@ class _FormScreenState extends State<FormScreen> {
     }
   }
 
-  // 회사 이름 대신 이미지를 선택하는 함수
+  // 이미지 선택
   Future<void> _selectCompanyImage() async {
     if (await requestStoragePermission()) {
       File? image = await getImageFromGallery();
       if (image != null) {
         setState(() {
           _selectedCompanyImage = image;
-          widget.cardInfo.logoUrl = image.path; // 모델에 이미지 경로 저장
+          widget.cardInfo.logoUrl = image.path;
         });
       }
     }
   }
 
 
-  // 회사 이름 입력 또는 이미지 선택 위젯 빌드
+  // 이미지 선택 위젯
   Widget _buildCompanyNameInput() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +209,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // 명함 저장
+  // 명함 저장 버튼
   void _saveCard() {
     showDialog(
       context: context,
@@ -160,12 +224,12 @@ class _FormScreenState extends State<FormScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text("명함이 저장 되었습니다.",
+              Text("명함이 저장 되었습니다.",
                 style: TextStyle(fontSize: 18),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
-              const Text("추가로 명함 뒷장 만들기",
+              Text("추가로 명함 뒷장 만들기",
                 style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
@@ -176,7 +240,7 @@ class _FormScreenState extends State<FormScreen> {
                 children: [
                   TextButton(onPressed: (){
                     moveToBackFormScreen();
-                  }, child: const Text("네")),
+                  }, child: Text("네")),
                   TextButton(
                     onPressed: () {
                       _createCard();
@@ -205,24 +269,15 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // 저장
-  // void _createCard() async {
-  //   try {
-  //     await CardModel().createBusinessCard(widget.cardInfo);
-  //     _showSnackBar("명함 제작 성공");
-  //     Navigator.pushAndRemoveUntil(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => MainLayout()),
-  //           (route) => false,
-  //     );
-  //   } catch (e) {
-  //     _showSnackBar("명함 생성 실패. 다시 시도해주세요.", isError: true);
-  //   }
-  // }
 
+  // 저장
   void _createCard() async {
     try {
-      await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
+      if(widget.cardInfo.logoUrl != null){
+        await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
+      }else{
+        await CardModel().createBusinessCard(widget.cardInfo);
+      }
       _showSnackBar("명함 제작 성공");
       Navigator.pushAndRemoveUntil(
           context,
@@ -295,7 +350,7 @@ class _FormScreenState extends State<FormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("명함 커스텀"),
+        title: const Text("명함 제작"),
         actions: [
           IconButton(
             icon: const Icon(Icons.color_lens),
@@ -308,6 +363,10 @@ class _FormScreenState extends State<FormScreen> {
             onPressed: () {
               _changeColor(widget.cardInfo.textColor ?? Colors.black, false);
             },
+          ),
+          IconButton(
+            icon: const Icon(Icons.font_download),
+            onPressed: _changeFontFamily,
           ),
         ],
       ),
@@ -332,7 +391,7 @@ class _FormScreenState extends State<FormScreen> {
                 onChanged: (value) => widget.cardInfo.userName = value,
                 validator: (value) => value == null || value.isEmpty ? "이름을 입력하세요." : null,
               ),
-              const SizedBox(height: fieldSpacing),
+              const SizedBox(height: 10),
               _buildTextField(
                 label: "연락처",
                 hint: "연락처를 입력하세요",
@@ -340,7 +399,7 @@ class _FormScreenState extends State<FormScreen> {
                 initialValue: widget.cardInfo.phone,
                 onChanged: (value) => widget.cardInfo.phone = value,
               ),
-              const SizedBox(height: fieldSpacing),
+              const SizedBox(height: 10),
               _buildTextField(
                 label: "이메일",
                 hint: "이메일을 입력하세요",
@@ -348,7 +407,7 @@ class _FormScreenState extends State<FormScreen> {
                 initialValue: widget.cardInfo.email,
                 onChanged: (value) => widget.cardInfo.email = value,
               ),
-              const SizedBox(height: fieldSpacing),
+              const SizedBox(height: 10),
               _buildTextField(
                 label: "회사 이름",
                 hint: "회사 이름을 입력하세요",
@@ -356,7 +415,7 @@ class _FormScreenState extends State<FormScreen> {
                 initialValue: widget.cardInfo.companyName,
                 onChanged: (value) => widget.cardInfo.companyName = value,
               ),
-              const SizedBox(height: fieldSpacing),
+              const SizedBox(height: 10),
               _buildTextField(
                 label: "회사 연락처",
                 hint: "회사 연락처를 입력하세요",
@@ -364,7 +423,7 @@ class _FormScreenState extends State<FormScreen> {
                 initialValue: widget.cardInfo.companyNumber,
                 onChanged: (value) => widget.cardInfo.companyNumber = value,
               ),
-              const SizedBox(height: fieldSpacing),
+              const SizedBox(height: 10),
               _buildTextField(
                 label: "회사 주소",
                 hint: "회사 주소를 입력하세요",
@@ -372,7 +431,7 @@ class _FormScreenState extends State<FormScreen> {
                 initialValue: widget.cardInfo.companyAddress,
                 onChanged: (value) => widget.cardInfo.companyAddress = value,
               ),
-              const SizedBox(height: fieldSpacing),
+              const SizedBox(height: 10),
               _buildTextField(
                 label: "팩스 번호",
                 hint: "팩스 번호를 입력하세요",
@@ -380,7 +439,7 @@ class _FormScreenState extends State<FormScreen> {
                 initialValue: widget.cardInfo.companyFax,
                 onChanged: (value) => widget.cardInfo.companyFax = value,
               ),
-              const SizedBox(height: fieldSpacing),
+              const SizedBox(height: 10),
               _buildTextField(
                 label: "부서",
                 hint: "부서를 입력하세요",
@@ -388,7 +447,7 @@ class _FormScreenState extends State<FormScreen> {
                 initialValue: widget.cardInfo.department,
                 onChanged: (value) => widget.cardInfo.department = value,
               ),
-              const SizedBox(height: fieldSpacing),
+              const SizedBox(height: 10),
               _buildTextField(
                 label: "직급",
                 hint: "직급을 입력하세요",
@@ -396,7 +455,7 @@ class _FormScreenState extends State<FormScreen> {
                 initialValue: widget.cardInfo.position,
                 onChanged: (value) => widget.cardInfo.position = value,
               ),
-              const SizedBox(height: fieldSpacing),
+              const SizedBox(height: 10),
 
               _buildCompanyNameInput(), // 회사 이름 또는 이미지 선택 UI
               const SizedBox(height: 20),
