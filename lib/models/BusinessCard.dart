@@ -17,7 +17,7 @@ class BusinessCard {
   String? logoUrl;
   bool? isPublic;
   String? description;
-
+  int? cardId;
   Color? backgroundColor;  // 사용자 선택 배경 색상
   Color? textColor;  // 사용자 선택 텍스트 색상
 
@@ -40,6 +40,7 @@ class BusinessCard {
     this.description,
     this.backgroundColor,
     this.textColor,
+    this.cardId,
   });
 
   @override

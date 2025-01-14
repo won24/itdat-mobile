@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:itdat/providers/auth_provider.dart';
 import 'package:itdat/widget/register/register_screen.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../screen/mainLayout.dart';
 import 'googleLogin_sacreen.dart';
 import 'kakaoLogin_screen.dart';
@@ -80,11 +80,11 @@ class LoginScreen extends StatelessWidget {
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('존재하지 않는 사용자입니다.')),
+                          SnackBar(content: Text(AppLocalizations.of(context)!.notfounduser)),
                         );
                       }
                     },
-                    child: Text('로그인'),
+                    child: Text(AppLocalizations.of(context)!.login),
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: Colors.teal),
                       shape: RoundedRectangleBorder(
@@ -105,7 +105,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Text('회원가입'),
+                    child: Text(AppLocalizations.of(context)!.register),
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: Colors.teal),
                       shape: RoundedRectangleBorder(
@@ -117,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(height: 10),
 
                 Text(
-                  "또는",
+                  AppLocalizations.of(context)!.or,
                   style: TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 SizedBox(height: 10),
