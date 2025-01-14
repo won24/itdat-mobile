@@ -3,16 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class LoginModel extends ChangeNotifier{
-   // final String baseUrl = 'http://112.221.66.174:8001'; // 원
-  final String baseUrl = 'http://10.0.2.2:8082';     // 김
-  // final String baseUrl = 'http://112.221.66.174:8000'; // son
+  //final String baseUrl = 'http://112.221.66.174:8001'; // 원
+  // final String baseUrl = 'http://10.0.2.2:8082';     // 김
+   final String baseUrl = 'http://112.221.66.174:8000'; // son
   // final String baseUrl = 'http://112.221.66.174:8002'; // seo
 
 
   Future<Map<String, dynamic>> login(Map<String, String> requestLogin) async {
     try {
-      // print("Request: $requestLogin");
-      // print("URL: $baseUrl/api/auth/login");
+      print("Request: $requestLogin");
+      print("URL: $baseUrl/api/auth/login");
 
       final response = await http.post(
         Uri.parse('$baseUrl/api/auth/login'),
@@ -20,8 +20,8 @@ class LoginModel extends ChangeNotifier{
         body: jsonEncode(requestLogin),
       );
 
-      // print("Response Status Code: ${response.statusCode}");
-      // print("Response Body: ${response.body}");
+      print("Response Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
 
 
       if (response.statusCode == 200) {

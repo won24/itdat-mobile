@@ -95,5 +95,55 @@
   "nfcNotWritable": "이 NFC 태그는 쓰기가 불가능합니다.",
   "noStoredEmail": "저장된 이메일이 없습니다. 다시 로그인해 주세요.",
   "nfcNotAvailable" : "NFC 기능 비활성화",
-  "nfcNotAvailableMessage" : "휴대전화 설정에서 NFC기능을 기본모드로 활성화해 주세요."
+  "nfcNotAvailableMessage" : "휴대전화 설정에서 NFC기능을 기본모드로 활성화해 주세요.",
+  "noQRCodeFound": "QR 코드를 찾을 수 없습니다",
+  "errorAnalyzingImage": "이미지 분석 중 오류가 발생했습니다",
+  "qrCodeFormatError": "QR 코드 형식이 올바르지 않습니다",
+  "loginRequired": "로그인이 필요합니다",
+  "missingQRData": "QR 코드 데이터가 누락되었습니다",
+  "qrProcessSuccess": "QR 코드가 성공적으로 처리되었습니다",
+  "qrProcessError": "QR 코드 처리 중 오류가 발생했습니다",
+  "tryAgain" : "다시 시도해 주세요.",
+  "image" : "사진",
+  "loginRequired": "로그인이 필요합니다.",
+  "fetchCardsError": "명함을 가져오는 중 오류가 발생했습니다.",
+  "removeCardError": "명함 제외 중 오류가 발생했습니다.",
+  "removeCardFailed": "명함 제외에 실패했습니다.",
+  "folderTitle": "폴더: {folderName}",
+  "@folderTitle": {
+    "description": "폴더 이름을 표시하는 제목",
+    "placeholders": {
+      "folderName": {
+        "type": "String"
+      }
+    }
+  },
+  "noCardsInFolder": "폴더에 명함이 없습니다.",
+  "cardRemoved": "{userName} 명함이 폴더에서 제외되었습니다.",
+  "@cardRemoved": {
+    "description": "명함이 폴더에서 제외되었을 때의 메시지",
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "logoutagree" : "로그아웃 동의",
+  "register" : "회원가입",
+  "or" : "또는",
+  "notfounduser" : "사용자가 존재하지 않습니다.",
+  "notfindcard" : "명함을 찾을 수 없습니다.",
+  "qrsave" : "QR 코드 저장",
+  "businessCardList": "명함 목록",
+  "errorFetchingCards": "명함을 가져오는 중 오류가 발생했습니다.",
+  "noCards": "명함이 없습니다.",
+  "setPublic": "공개로 설정",
+  "setPrivate": "비공개로 설정",
+  "alreadyPublicCards": "{count}개의 명함은 이미 공개 상태입니다.",
+  "cardsSetPublic": "{count}개의 명함이 공개되었습니다.",
+  "cardsSetPrivate": "{count}개의 명함이 비공개로 설정되었습니다.",
+  "errorChangingCardStatus": "명함 공개 상태 변경 중 오류가 발생했습니다.",
+  "noName" : "이름없음",
+  "folderinnotcard" : "폴더에 명함이 없습니다."
+
 }

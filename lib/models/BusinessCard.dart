@@ -18,8 +18,9 @@ class BusinessCard {
   bool? isPublic;
   String? description;
 
-  Color? backgroundColor;  // 사용자 선택 배경 색상
-  Color? textColor;  // 사용자 선택 텍스트 색상
+  Color? backgroundColor;  // 사용자가 선택한 배경 색상
+  Color? textColor;  // 사용자가 선택한 텍스트 색상
+  String? font; // 사용자가 선택한 글씨체
 
   BusinessCard({
     required this.appTemplate,
@@ -35,11 +36,12 @@ class BusinessCard {
     required this.userEmail,
     required this.cardNo,
     required this.cardSide,
-    required this.logoUrl,
+    this.logoUrl,
     this.isPublic,
     this.description,
     this.backgroundColor,
     this.textColor,
+    this.font,
   });
 
   @override
@@ -69,6 +71,7 @@ class BusinessCard {
       cardSide: json['cardSide'] ?? 'FRONT',
       logoUrl: json['logoUrl'] ?? '',
       isPublic: json['isPublic'] == true, // null-safe 처리
+
     );
   }
 

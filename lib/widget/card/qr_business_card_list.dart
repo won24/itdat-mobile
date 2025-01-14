@@ -5,6 +5,7 @@ import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -70,7 +71,7 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () => _saveQrCodeWithCanvas(qrData, context),
-                        child: Text('QR 코드 저장'),
+                        child: Text(AppLocalizations.of(context)!.qrsave),
                       ),
                     ],
                   ),
@@ -136,7 +137,7 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
 
         if (result['isSuccess']) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('QR 코드가 성공적으로 저장되었습니다.')),
+           SnackBar(content: Text(AppLocalizations.of(context)!.qrProcessSuccess)),
           );
         } else {
           throw Exception('이미지 저장 실패');
@@ -147,7 +148,7 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
     } catch (e) {
       print('QR 코드 저장 중 오류 발생: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('QR 코드 저장 실패.')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.qrProcessError)),
       );
     }
   }
@@ -165,9 +166,9 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return const Center(child: Text('명함을 가져오는 중 오류가 발생했습니다.'));
+          return  Center(child: Text(AppLocalizations.of(context)!.fetchCardsError));
         } else if (!snapshot.hasData || snapshot.data.isEmpty) {
-          return const Center(child: Text('저장된 명함이 없습니다.'));
+          return  Center(child: Text(AppLocalizations.of(context)!.notfindcard));
         } else {
           var businessCards = snapshot.data;
 
