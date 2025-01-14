@@ -9,7 +9,7 @@ class CardInfoWidget extends StatefulWidget {
 
   CardInfoWidget({
     super.key,
-    required this.businessCards,
+    required this.businessCards, required String loginEmail,
   });
 
   @override
