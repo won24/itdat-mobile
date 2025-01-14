@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
@@ -13,9 +14,22 @@ class No3 extends StatelessWidget {
     this.image,
   });
 
+  TextStyle _buildTextStyle({
+    required Color? textColor,
+    required String? fontFamily,
+    double fontSize = 14,
+    FontWeight fontWeight = FontWeight.normal,
+  }) {
+    return GoogleFonts.getFont(
+      fontFamily ?? 'Nanum Gothic',
+      color: textColor ?? Colors.black87,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-
     // 이미지 가져오기
     String getFullImageUrl() {
       const baseUrl = 'http://112.221.66.174:8001';
@@ -70,26 +84,28 @@ class No3 extends StatelessWidget {
                         } else {
                           return Text(
                             cardInfo.companyName ?? "회사 이름",
-                            style: TextStyle(
+                            style: _buildTextStyle(
+                              textColor: cardInfo.textColor,
+                              fontFamily: cardInfo.font,
                               fontSize: 18,
-                              color: cardInfo.textColor,
                               fontWeight: FontWeight.bold,
                             ),
                           );
                         }
                       } else {
-                        if (image != null){
+                        if (image != null) {
                           return Image.file(
                             image!,
                             height: 50,
                             fit: BoxFit.contain,
                           );
-                        }else{
+                        } else {
                           return Text(
                             cardInfo.companyName ?? "회사 이름",
-                            style: TextStyle(
+                            style: _buildTextStyle(
+                              textColor: cardInfo.textColor,
+                              fontFamily: cardInfo.font,
                               fontSize: 18,
-                              color: cardInfo.textColor,
                               fontWeight: FontWeight.bold,
                             ),
                           );
@@ -98,41 +114,54 @@ class No3 extends StatelessWidget {
                     },
                   ),
                   Container(
-                    width: 1, // 세로 줄의 두께
-                    height: 180, // 세로 줄의 길이
-                    color: cardInfo.textColor ?? Colors.grey
+                    width: 1,
+                    height: 180,
+                    color: cardInfo.textColor ?? Colors.grey,
                   ),
                   Column(
                     children: [
                       Text(
                         cardInfo.userName ?? "이름",
-                        style: TextStyle(
-                            fontSize: 23,
-                            color: cardInfo.textColor,
-                            fontWeight: FontWeight.bold),
+                        style: _buildTextStyle(
+                          textColor: cardInfo.textColor,
+                          fontFamily: cardInfo.font,
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         cardInfo.phone ?? "핸드폰 번호",
-                        style: TextStyle(color: cardInfo.textColor),
+                        style: _buildTextStyle(
+                          textColor: cardInfo.textColor,
+                          fontFamily: cardInfo.font,
+                        ),
                       ),
-                      if (cardInfo.email != null && cardInfo.email!.isNotEmpty)
-                      ...[
+                      if (cardInfo.email != null && cardInfo.email!.isNotEmpty) ...[
                         Text(
                           cardInfo.email ?? "이메일",
-                          style: TextStyle(color: cardInfo.textColor),
+                          style: _buildTextStyle(
+                            textColor: cardInfo.textColor,
+                            fontFamily: cardInfo.font,
+                          ),
                         ),
                       ],
                       Text(
                         cardInfo.companyAddress ?? "회사 주소",
-                        style: TextStyle(color: cardInfo.textColor),
+                        style: _buildTextStyle(
+                          textColor: cardInfo.textColor,
+                          fontFamily: cardInfo.font,
+                        ),
                       ),
-                      if (cardInfo.companyNumber != null && cardInfo.companyNumber!.isNotEmpty)
-                        ...[
-                          Text(
-                            "T. ${cardInfo.companyNumber ?? "회사 번호"}",
-                            style: TextStyle(color: cardInfo.textColor),
+                      if (cardInfo.companyNumber != null &&
+                          cardInfo.companyNumber!.isNotEmpty) ...[
+                        Text(
+                          "T. ${cardInfo.companyNumber ?? "회사 번호"}",
+                          style: _buildTextStyle(
+                            textColor: cardInfo.textColor,
+                            fontFamily: cardInfo.font,
                           ),
-                        ],
+                        ),
+                      ],
                     ],
                   ),
                 ],

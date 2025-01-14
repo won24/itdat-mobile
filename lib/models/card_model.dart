@@ -82,10 +82,6 @@ class CardModel{
         ));
       }
 
-      // request.headers.addAll({
-      //   'Content-Type': 'multipart/form-data',
-      // });
-
       final response = await request.send();
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print("saveBusinessCardWithLogo 성공");

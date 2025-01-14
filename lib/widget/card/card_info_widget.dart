@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 class CardInfoWidget extends StatefulWidget {
   final BusinessCard businessCards;
+  final String loginEmail;
 
   CardInfoWidget({
     super.key,
     required this.businessCards,
+    required this.loginEmail
   });
 
   @override
@@ -18,7 +20,6 @@ class CardInfoWidget extends StatefulWidget {
 
 class _InfoWidgetState extends State<CardInfoWidget> {
 
-  late String _loginEmail;
   final TextEditingController _memoController = TextEditingController();
 
   Uri get _telUrl => Uri.parse('tel:${widget.businessCards.phone}');
@@ -31,7 +32,6 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     if (widget.businessCards != null) {
       _memoController.text = widget.businessCards.description?? '';
     }
-    _loadLoginEmail();
   }
 
   @override
@@ -39,7 +39,6 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     _memoController.dispose();
     super.dispose();
   }
-
 
   Future<void> _openMaps() async {
     final String address = "${widget.businessCards.companyAddress}";
@@ -54,34 +53,6 @@ class _InfoWidgetState extends State<CardInfoWidget> {
       _showSnackBar('맵을 열 수 없습니다.', isError: true);
     }
   }
-
-  // Future<void> _openNaverMap() async {
-  //   final Uri appUrl = Uri.parse("nmap://search?query=${widget.businessCards.companyAddress}");
-  //   final Uri webUrl = Uri.parse("https://map.naver.com/v5/search/${widget.businessCards.companyAddress}");
-  //
-  //   if (await canLaunchUrl(appUrl)) {
-  //     await launchUrl(appUrl, mode: LaunchMode.externalApplication);
-  //   } else if (await canLaunchUrl(webUrl)) {
-  //       await launchUrl(webUrl, mode: LaunchMode.externalApplication);
-  //   } else {
-  //     _showSnackBarError("네이버 지도를 열 수 없습니다.");
-  //   }
-  // }
-  //
-  // Future<void> _openKakaoMap() async {
-  //
-  //   final Uri appUrl = Uri.parse("kakaomap://search?q=${widget.businessCards.companyAddress}");
-  //   final Uri webSearchUrl = Uri.parse("https://map.kakao.com/link/search/${widget.businessCards.companyAddress}");
-  //
-  //
-  //   if (await canLaunchUrl(appUrl)) {
-  //     await launchUrl(appUrl, mode: LaunchMode.externalApplication);
-  //   } else if (await canLaunchUrl(webSearchUrl)) {
-  //       await launchUrl(webSearchUrl, mode: LaunchMode.externalApplication);
-  //   } else {
-  //     _showSnackBarError("카카오맵을 열 수 없습니다.");
-  //   }
-  // }
 
   void _showSnackBar(String message, {bool isError = false}) {
     final snackBar = SnackBar(
@@ -102,7 +73,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     final card = {
       'cardNo': widget.businessCards.cardNo,
       'description': memo,
-      'myEmail': _loginEmail,
+      'myEmail': widget.loginEmail,
       'userEmail': _memoController.text,
     };
 
@@ -112,89 +83,6 @@ class _InfoWidgetState extends State<CardInfoWidget> {
       Navigator.pop(context);
     } catch (e) {
       _showSnackBar("메모 저장 실패. 다시 시도해주세요.", isError: true);
-    }
-  }
-
-
-  // void _showMapSelectionBottomSheet() {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.zero,
-  //     ),
-  //     builder: (context) => Container(
-  //       height: 200,
-  //       padding: const EdgeInsets.all(16.0),
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         crossAxisAlignment: CrossAxisAlignment.center,
-  //         children: [
-  //           const Text(
-  //             "어플 선택",
-  //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-  //           ),
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //             children: [
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   Navigator.pop(context);
-  //                   _openGoogleMaps();
-  //                 },
-  //                 child: Column(
-  //                   children: [
-  //                     Image.asset('assets/icons/google_map_icon.png', width: 50, height: 50),
-  //                     SizedBox(height: 10),
-  //                     Text('Google'),
-  //                   ],
-  //                 ),
-  //               ),
-  //
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   Navigator.pop(context);
-  //                   _openNaverMap();
-  //                 },
-  //                 child: Column(
-  //                   children: [
-  //                     Image.asset('assets/icons/naver_map_icon.png', width: 50, height: 50),
-  //                     SizedBox(height: 10),
-  //                     Text('Naver'),
-  //                   ],
-  //                 ),
-  //               ),
-  //
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   Navigator.pop(context);
-  //                   _openKakaoMap();
-  //                 },
-  //                 child: Column(
-  //                   children: [
-  //                     Image.asset('assets/icons/kakao_map_icon.png', width: 50, height: 50),
-  //                     SizedBox(height: 10),
-  //                     Text('Kakao'),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ],
-  //       )
-  //     ),
-  //   );
-  // }
-
-
-  // 로그인 유저 이메일
-  Future<void> _loadLoginEmail() async {
-    final storage = FlutterSecureStorage();
-    final userEmail = await storage.read(key: 'user_email');
-
-    if (userEmail != null) {
-      setState(() {
-        _loginEmail = userEmail;
-      });
     }
   }
 
@@ -258,7 +146,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
               icon: Image.asset('assets/icons/location.png', height: 30, width: 30),
             ),
           ),
-          widget.businessCards.userEmail != _loginEmail
+          widget.businessCards.userEmail != widget.loginEmail
               ? ListTile(
             title: Text('${widget.businessCards.description}', style: TextStyle(fontWeight: FontWeight.w600),),
             subtitle: Text("메모", style: TextStyle(color: Colors.grey),),

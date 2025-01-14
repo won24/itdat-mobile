@@ -111,7 +111,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
           // 선택된 섹션 렌더링
           Expanded(
             child: _selectedIndex == 0
-                ? CardInfoWidget(businessCards: widget.cardInfo,)
+                ? CardInfoWidget(businessCards: widget.cardInfo, loginEmail: widget.cardInfo.userEmail,)
                 : _selectedIndex == 1
                 ? PortfolioWidget(loginUserEmail: widget.cardInfo.userEmail ?? "이메일 없음", cardUserEmail:widget.cardInfo.userEmail ?? "이메일 없음" ,)
                 : HistoryWidget(loginUserEmail: widget.cardInfo.userEmail ?? "이메일 없음", cardUserEmail:widget.cardInfo.userEmail ?? "이메일 없음" ,),

@@ -93,10 +93,11 @@ class _No1BackState extends State<No1Back> {
           widget.image == null && _imageFile == null
               ? Text(
             widget.cardInfo.companyName ?? "",
-            style: const TextStyle(
-                fontSize: 20,
-                color: Colors.black87,
-                fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: 20,
+              color: widget.cardInfo.textColor,
+              fontWeight: FontWeight.w600,
+            fontFamily: widget.cardInfo.font,),
           )
               : FittedBox(
             fit: BoxFit.contain,
