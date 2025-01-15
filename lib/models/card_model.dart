@@ -28,6 +28,8 @@ class CardModel{
     }
   }
 
+  // test
+
 
   // 유저 정보로 명함 기본 정보 가져오기
   Future<Map<String, dynamic>> getUserById(String userEmail) async {
@@ -42,7 +44,6 @@ class CardModel{
       throw Exception("getUserById Error: $e");
     }
   }
-
 
   // 로고 없는 명함 저장
   Future<BusinessCard> createBusinessCard(BusinessCard card) async {
