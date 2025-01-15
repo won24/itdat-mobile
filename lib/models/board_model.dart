@@ -4,13 +4,15 @@ import 'package:mime/mime.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:http_parser/http_parser.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BoardModel{
 
-  static const String baseUrl = "http://112.221.66.174:8001/board/portfolio"; // 원
-  static const String historyBaseUrl = "http://112.221.66.174:8001/board/history"; // 원
-  // final String baseUrl = 'http://112.221.66.174:8002/board'; // seo
+  // static const String baseUrl = "http://112.221.66.174:8001/board/portfolio";
+  // static const String historyBaseUrl = "http://112.221.66.174:8001/board/history";
 
+  final baseUrl = "${dotenv.env['BASE_URL']}/board/portfolio";
+  final historyBaseUrl = "${dotenv.env['BASE_URL']}/board/history";
 
   void logError(String functionName, dynamic error) {
     print("[$functionName] Error: $error");

@@ -143,7 +143,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
         children: [
           Expanded(
             child: FutureBuilder<List<dynamic>>(
@@ -319,10 +320,11 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
                   ),
                 ]
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 }
