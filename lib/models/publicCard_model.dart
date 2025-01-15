@@ -1,6 +1,8 @@
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'BusinessCard.dart';
 
 class PublicCardModel {
 
@@ -8,7 +10,7 @@ class PublicCardModel {
   // 전체 공개 명함 가져오기
   Future<List<dynamic>> getAllPublicCards() async {
     try {
-      final response = await http.get(Uri.parse("$baseUrl/all"));
+      final response = await http.get(Uri.parse("$baseUrl/card/public/all"));
 
       if (response.statusCode == 200) {
         // print("응답 성공: ${response.body}");
@@ -32,7 +34,7 @@ class PublicCardModel {
   }) async {
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/update"),
+        Uri.parse("$baseUrl/card/public/update"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "userEmail": userEmail,

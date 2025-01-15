@@ -1,18 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SocialsModel {
-
+  final baseUrl = dotenv.env['BASE_URL'];
  //final String baseUrl = 'http://10.0.2.2:8082'; // 김
-   final String baseUrl = "http://112.221.66.174:8000";
+ //   final String baseUrl = "http://112.221.66.174:8000";
 //   final String baseUrl = "http://112.221.66.174:8002"; // seo
 
 
   // Google 로그인
   Future<Map<String, dynamic>> googleLogin(String idToken) async {
     final String googleUrl = '$baseUrl/api/oauth/google';
-    print('Google API 호출 시작: $googleUrl');
-    print('전송 데이터: $idToken');
 
     try {
       final response = await http.post(
@@ -20,8 +19,6 @@ class SocialsModel {
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode({'idToken': idToken}),
       );
-      print('Google API 응답 상태 코드: ${response.statusCode}');
-      print('Google API 응답 데이터: ${response.body}');
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
@@ -44,8 +41,6 @@ class SocialsModel {
   // Kakao OAuth 인증 코드 전달 및 처리
   Future<Map<String, dynamic>> handleKakaoAuthCode(String code) async {
     final String kakaoUrl = '$baseUrl/api/oauth/callback/kakao';
-    print('Kakao Authorization Code 전달 시작: $kakaoUrl');
-    print('전송 데이터: $code');
 
     try {
       final response = await http.post(
@@ -55,9 +50,6 @@ class SocialsModel {
         },
         body: jsonEncode({'code': code}),
       );
-
-      print('Kakao 서버 응답 상태 코드: ${response.statusCode}');
-      print('Kakao 서버 응답 데이터: ${response.body}');
 
       final responseBody = jsonDecode(response.body);
 
@@ -82,8 +74,6 @@ class SocialsModel {
   // Kakao 로그인
   Future<Map<String, dynamic>> kakaoLogin(String accessToken) async {
     final String kakaoUrl = '$baseUrl/api/oauth/kakao';
-    print('Kakao API 호출 시작: $kakaoUrl');
-    print('kakao 전송 데이터: $accessToken');
 
     try {
       final response = await http.post(
@@ -94,12 +84,7 @@ class SocialsModel {
         },
       );
 
-      print('Kakao API 응답 상태 코드: ${response.statusCode}');
-      print('Kakao API 응답 데이터: ${response.body}');
-
       final responseBody = jsonDecode(response.body);
-
-      print("Kakao 응답 데이터: ${response.body}");
 
       if (response.statusCode == 200) {
         return {

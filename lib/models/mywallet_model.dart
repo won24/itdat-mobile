@@ -2,15 +2,16 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyWalletModel {
 
   final baseUrl = dotenv.env['BASE_URL'];
   final baseUrl2 = dotenv.env['BASE_URL'];
+
   // 명함 가져오기
   Future<List<dynamic>> getCards(String myEmail) async {
-    final url = '$baseUrl/cards?myEmail=$myEmail';
-    // print('API 요청: $url');
+    final url = '$baseUrl/api/mywallet/cards?myEmail=$myEmail';
     try {
       final response = await http.get(Uri.parse(url));
       print('API 응답 상태 코드: ${response.statusCode}');
@@ -29,12 +30,9 @@ class MyWalletModel {
 
   // 폴더 가져오기
   Future<List<dynamic>> getFolders(String userEmail) async {
-    final url = '$baseUrl/folders?userEmail=$userEmail';
-    // print('폴더 API 요청: $url');
+    final url = '$baseUrl/api/mywallet/folders?userEmail=$userEmail';
     try {
       final response = await http.get(Uri.parse(url));
-      // print('폴더 API 응답 상태 코드: ${response.statusCode}');
-      // print('폴더 API 응답 본문: ${response.body}');
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -49,7 +47,7 @@ class MyWalletModel {
 
   // 폴더 내부 명함 가져오기
   Future<List<dynamic>> getFolderCards(String folderName) async {
-    final url = '$baseUrl/folderCards?folderName=$folderName';
+    final url = '$baseUrl/api/mywallet/folderCards?folderName=$folderName';
     try {
       final response = await http.get(Uri.parse(url));
 
@@ -66,7 +64,7 @@ class MyWalletModel {
   // 폴더 생성
   Future<bool> createFolder(String userEmail, String folderName) async {
     final response = await http.post(
-      Uri.parse("$baseUrl/folders/create"),
+      Uri.parse("$baseUrl/api/mywallet/folders/create"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"userEmail": userEmail, "folderName": folderName}),
     );
@@ -76,7 +74,7 @@ class MyWalletModel {
   // 폴더 이름 업데이트
   Future<bool> updateFolderName(String userEmail, String oldFolderName, String newFolderName) async {
     final response = await http.put(
-      Uri.parse("$baseUrl/folders/update"),
+      Uri.parse("$baseUrl/api/mywallet/folders/update"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "userEmail": userEmail,
@@ -97,7 +95,7 @@ class MyWalletModel {
   // 폴더 삭제
   Future<bool> deleteFolder(String userEmail, String folderName) async {
     final response = await http.delete(
-      Uri.parse("$baseUrl/folders/$folderName?userEmail=$userEmail"),
+      Uri.parse("$baseUrl/api/mywallet/folders/$folderName?userEmail=$userEmail"),
     );
     return response.statusCode == 200;
   }
@@ -106,7 +104,7 @@ class MyWalletModel {
   Future<bool> moveCardToFolder(String myEmail, String userEmail, String folderName) async {
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/moveCard"),
+        Uri.parse("$baseUrl/api/mywallet/moveCard"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "myEmail": myEmail,
@@ -114,8 +112,6 @@ class MyWalletModel {
           "folderName": folderName.isEmpty ? null : folderName, // 폴더 이름 처리
         }),
       );
-      // debugPrint("응답 상태 코드: ${response.statusCode}");
-      // debugPrint("응답 본문: ${response.body}");
 
       if (response.statusCode == 200) {
         return true;
@@ -132,7 +128,7 @@ class MyWalletModel {
 
   Future<Map<String, String>> getUserInfoByEmail(String email) async {
     final response = await http.get(
-      Uri.parse('$baseUrl2/info?email=$email'),
+      Uri.parse('$baseUrl/api/auth/info?email=$email'),
     );
 
     if (response.statusCode == 200) {
@@ -143,7 +139,7 @@ class MyWalletModel {
   }
 
   Future<List<dynamic>> getAllCards(String userEmail) async {
-    final url = '$baseUrl/allCards?userEmail=$userEmail';
+    final url = '$baseUrl/api/mywallet/allCards?userEmail=$userEmail';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -156,7 +152,7 @@ class MyWalletModel {
   // 폴더에 속하지 않은 명함 가져오기
   Future<List<dynamic>> getCardsWithoutFolder(String myEmail) async {
     final response = await http.get(
-      Uri.parse("$baseUrl/cards/withoutFolder?myEmail=$myEmail"),
+      Uri.parse("$baseUrl/api/mywallet/cards/withoutFolder?myEmail=$myEmail"),
     );
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -168,7 +164,7 @@ class MyWalletModel {
   // 특정 폴더의 명함 가져오기
   Future<List<dynamic>> getCardsByFolder(String myEmail, String folderName) async {
     final response = await http.get(
-      Uri.parse("$baseUrl/cards/byFolder?myEmail=$myEmail&folderName=$folderName"),
+      Uri.parse("$baseUrl/api/mywallet/cards/byFolder?myEmail=$myEmail&folderName=$folderName"),
     );
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
