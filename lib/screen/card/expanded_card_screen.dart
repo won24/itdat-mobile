@@ -15,8 +15,6 @@ class ExpandedCardScreen extends StatelessWidget {
     required this.backCard,
   });
 
-  //test
-
   // 앞면 렌더링
   Widget buildBusinessCard(BusinessCard cardInfo) {
     switch (cardInfo.appTemplate) {
