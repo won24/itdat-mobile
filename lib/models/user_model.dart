@@ -1,44 +1,19 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/io_client.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+
+import 'package:itdat/models/http_client_model.dart';
 
 class UserModel {
-
   final storage = FlutterSecureStorage();
   final baseUrl = dotenv.env['BASE_URL'];
-  IOClient? _httpClient;
-
-  Future<IOClient> createHttpClient() async {
-    if (_httpClient != null) return _httpClient!; // 이미 HttpClient 객체가 생성된 경우 재사용
-
-    // 인증서 파일 로드 (res/raw/ca_bundle.crt)
-    final ByteData data = await rootBundle.load('res/raw/ca_bundle.crt');
-    final List<int> bytes = data.buffer.asUint8List();
-
-    // 인증서 파일을 SecurityContext에 추가
-    final SecurityContext context = SecurityContext(withTrustedRoots: false);
-    context.setTrustedCertificatesBytes(bytes);
-
-    // dart:io HttpClient 생성 및 인증서 적용
-    final HttpClient httpClient = HttpClient(context: context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-
-    // IOClient 생성
-    _httpClient = IOClient(httpClient);
-
-    return _httpClient!;
-  }
-
 
   Future<Map<String, dynamic>> getUserInfo() async {
-    final client = await createHttpClient();
+    final client = await HttpClientModel().createHttpClient();
     String? email = await storage.read(key: 'email');
     print('email: $email');
-    print('url: $baseUrl');
     if (email == null) {
       throw Exception('email not found');
     }
@@ -59,6 +34,7 @@ class UserModel {
   }
 
   Future<bool> updateUserInfo(Map<String, dynamic> map) async {
+    final client = await HttpClientModel().createHttpClient();
     String? email = await storage.read(key: 'email');
     if (email == null) {
       throw Exception('email not found');
@@ -67,7 +43,7 @@ class UserModel {
     print('Sending request to: $baseUrl/nfc/updateuser');
     print('Request body!!: ${jsonEncode(map)}');
 
-    final response = await http.post(
+    final response = await client.post(
         Uri.parse('$baseUrl/nfc/updateuser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -83,6 +59,7 @@ class UserModel {
   }
 
   Future<bool> verifyPassword(String password, String email) async {
+    final client = await HttpClientModel().createHttpClient();
     final String url = '$baseUrl/nfc/password';
 
     try {
@@ -92,7 +69,7 @@ class UserModel {
       };
       print(password);
 
-      final response = await http.post(
+      final response = await client.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(requestBody),
@@ -111,6 +88,7 @@ class UserModel {
     }
   }
   Future<bool> changePassword(String newPassword) async {
+    final client = await HttpClientModel().createHttpClient();
     String? email = await storage.read(key: 'email');
     print("오긴하나");
     print(newPassword);
@@ -125,7 +103,7 @@ class UserModel {
         'password': newPassword
       };
 
-      final response = await http.post(
+      final response = await client.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(requestBody),
@@ -144,13 +122,14 @@ class UserModel {
   }
 
   Future<bool> deleteAccount(String userEmail) async {
+    final client = await HttpClientModel().createHttpClient();
     final String url = '$baseUrl/nfc/deleteaccount';
     try {
       final Map<String, dynamic> requestBody = {
         'email': userEmail,
       };
       String? authToken = await storage.read(key: 'auth_token');
-      final response = await http.post(
+      final response = await client.post(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
