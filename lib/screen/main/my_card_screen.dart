@@ -319,10 +319,10 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
                   ),
                 ]
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
   }
 }

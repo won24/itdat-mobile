@@ -8,9 +8,7 @@ import 'package:http/io_client.dart';
 
 class LoginModel extends ChangeNotifier{
   final baseUrl = dotenv.env['BASE_URL'];
-
   IOClient? _httpClient;
-
   Future<IOClient> createHttpClient() async {
     if (_httpClient != null) return _httpClient!; // 이미 HttpClient 객체가 생성된 경우 재사용
 

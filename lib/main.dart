@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/login_model.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
 import 'package:itdat/widget/login/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';

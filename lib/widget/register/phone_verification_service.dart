@@ -1,24 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PhoneVerificationService {
-  final String sendSmsUrl = "http://10.0.2.2:8082/api/sms/send";
-  final String verifySmsUrl = "http://10.0.2.2:8082/api/sms/verify";
+  final baseUrl = dotenv.env['BASE_URL'];
 
   // 인증번호 발송
   Future<bool> sendVerificationCode(String phoneNumber) async {
     try {
-      print("SMS API 호출 시작: $sendSmsUrl"); // 디버깅 출력
-      print("요청 데이터: $phoneNumber");
-
       final response = await http.post(
-        Uri.parse(sendSmsUrl),
+        Uri.parse('$baseUrl/api/sms/send'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'phoneNumber': phoneNumber}),
       );
-
-      print("응답 상태 코드: ${response.statusCode}");
-      print("응답 바디: ${response.body}");
 
       return response.statusCode == 200;
     } catch (e) {
@@ -32,7 +26,7 @@ class PhoneVerificationService {
   Future<bool> verifyCode(String phoneNumber, String code) async {
     try {
       final response = await http.post(
-        Uri.parse(verifySmsUrl),
+        Uri.parse('$baseUrl/api/sms/verify'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'phoneNumber': phoneNumber, 'code': code}),
       );

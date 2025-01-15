@@ -11,7 +11,7 @@ import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/screen/mainLayout.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FormScreen extends StatefulWidget {
@@ -27,7 +27,7 @@ class FormScreen extends StatefulWidget {
 }
 
 class _FormScreenState extends State<FormScreen> {
-
+  final _formKey = GlobalKey<FormState>();
   File? _selectedCompanyImage;
   late Color backgroundColor;
 
@@ -253,44 +253,48 @@ class _FormScreenState extends State<FormScreen> {
 
   // 명함 저장 버튼
   void _saveCard() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: Border.all(
-          color: Colors.transparent,
-        ),
-        content: SizedBox(
-          width: double.infinity,
-          height: 150,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("추가로 명함 뒷면을 제작하시겠습니까?",
-                style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextButton(onPressed: (){
-                    moveToBackFormScreen();
-                  }, child: Text("네")),
-                  TextButton(
-                    onPressed: () {
-                      _createCard();
-                    },
-                    child: Text("아니오"),
-                  )
-                ],
-              )
-            ],
+    if(_formKey.currentState!.validate()){
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: Border.all(
+            color: Colors.transparent,
+          ),
+          content: SizedBox(
+            width: double.infinity,
+            height: 150,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("추가로 명함 뒷면을 제작하시겠습니까?",
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextButton(onPressed: (){
+                      moveToBackFormScreen();
+                    }, child: Text("네")),
+                    TextButton(
+                      onPressed: () {
+                        _createCard();
+                      },
+                      child: Text("아니오"),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }else{
+      _showSnackBar("입력하신 정보를 확인해주세요.", isError: true);
+    }
   }
 
 
@@ -310,13 +314,11 @@ class _FormScreenState extends State<FormScreen> {
   // 저장
   void _createCard() async {
     try {
-
       if (_selectedCompanyImage == null) {
         await CardModel().createBusinessCard(widget.cardInfo);
       } else {
         await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
       }
-
       _showSnackBar("명함 제작 성공");
       Navigator.pushAndRemoveUntil(
           context,
@@ -326,6 +328,7 @@ class _FormScreenState extends State<FormScreen> {
       _showSnackBar("명함 저장 실패. 다시 시도해주세요.", isError: true);
     }
   }
+
 
   void _showSnackBar(String message, {bool isError = false}) {
     final snackBar = SnackBar(
@@ -360,6 +363,7 @@ class _FormScreenState extends State<FormScreen> {
     required String? initialValue,
     required Function(String) onChanged,
     String? Function(String?)? validator,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return TextFormField(
       initialValue: initialValue,
@@ -382,6 +386,7 @@ class _FormScreenState extends State<FormScreen> {
       ),
       validator: validator,
       onChanged: (value) => setState(() => onChanged(value)),
+      inputFormatters: inputFormatters,
     );
   }
 
@@ -411,8 +416,7 @@ class _FormScreenState extends State<FormScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -424,96 +428,114 @@ class _FormScreenState extends State<FormScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              _buildTextField(
-                label: "이름",
-                hint: "이름을 입력하세요",
-                icon: Icons.person,
-                initialValue: widget.cardInfo.userName,
-                onChanged: (value) => widget.cardInfo.userName = value,
-                validator: (value) => value == null || value.isEmpty ? "이름을 입력하세요." : null,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                label: "연락처",
-                hint: "연락처를 입력하세요",
-                icon: Icons.phone_android_sharp,
-                initialValue: widget.cardInfo.phone,
-                onChanged: (value) => widget.cardInfo.phone = value,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                label: "이메일",
-                hint: "이메일을 입력하세요",
-                icon: Icons.mail,
-                initialValue: widget.cardInfo.email,
-                onChanged: (value) => widget.cardInfo.email = value,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                label: "회사 이름",
-                hint: "회사 이름을 입력하세요",
-                icon: Icons.business,
-                initialValue: widget.cardInfo.companyName,
-                onChanged: (value) => widget.cardInfo.companyName = value,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                label: "회사 연락처",
-                hint: "회사 연락처를 입력하세요",
-                icon: Icons.call,
-                initialValue: widget.cardInfo.companyNumber,
-                onChanged: (value) => widget.cardInfo.companyNumber = value,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                label: "회사 주소",
-                hint: "회사 주소를 입력하세요",
-                icon: Icons.location_on,
-                initialValue: widget.cardInfo.companyAddress,
-                onChanged: (value) => widget.cardInfo.companyAddress = value,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                label: "팩스 번호",
-                hint: "팩스 번호를 입력하세요",
-                icon: Icons.fax_sharp,
-                initialValue: widget.cardInfo.companyFax,
-                onChanged: (value) => widget.cardInfo.companyFax = value,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                label: "부서",
-                hint: "부서를 입력하세요",
-                icon: Icons.work_sharp,
-                initialValue: widget.cardInfo.department,
-                onChanged: (value) => widget.cardInfo.department = value,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                label: "직급",
-                hint: "직급을 입력하세요",
-                icon: Icons.work,
-                initialValue: widget.cardInfo.position,
-                onChanged: (value) => widget.cardInfo.position = value,
-              ),
-              const SizedBox(height: 10),
+            SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    _buildTextField(
+                      label: "이름",
+                      hint: "이름을 입력하세요",
+                      icon: Icons.person,
+                      initialValue: widget.cardInfo.userName,
+                      onChanged: (value) => widget.cardInfo.userName = value,
+                      validator: (value) => value == null || value.isEmpty ? "이름을 입력하세요." : null,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      label: "연락처",
+                      hint: "연락처를 입력하세요",
+                      icon: Icons.phone_android_sharp,
+                      initialValue: widget.cardInfo.phone,
+                      onChanged: (value) => widget.cardInfo.phone = value,
+                      validator: (value) => value == null || value.isEmpty ? "전화번호를 입력하세요." : null,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      label: "이메일",
+                      hint: "이메일을 입력하세요",
+                      icon: Icons.mail,
+                      initialValue: widget.cardInfo.email,
+                      onChanged: (value) => widget.cardInfo.email = value,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      label: "회사 이름",
+                      hint: "회사 이름을 입력하세요",
+                      icon: Icons.business,
+                      initialValue: widget.cardInfo.companyName,
+                      onChanged: (value) => widget.cardInfo.companyName = value,
+                      validator: (value) => value == null || value.isEmpty ? "이름을 입력하세요." : null,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      label: "회사 연락처",
+                      hint: "회사 연락처를 입력하세요",
+                      icon: Icons.call,
+                      initialValue: widget.cardInfo.companyNumber,
+                      onChanged: (value) => widget.cardInfo.companyNumber = value,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      label: "회사 주소",
+                      hint: "회사 주소를 입력하세요",
+                      icon: Icons.location_on,
+                      initialValue: widget.cardInfo.companyAddress,
+                      onChanged: (value) => widget.cardInfo.companyAddress = value,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      label: "팩스 번호",
+                      hint: "팩스 번호를 입력하세요",
+                      icon: Icons.fax_sharp,
+                      initialValue: widget.cardInfo.companyFax,
+                      onChanged: (value) => widget.cardInfo.companyFax = value,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      label: "부서",
+                      hint: "부서를 입력하세요",
+                      icon: Icons.work_sharp,
+                      initialValue: widget.cardInfo.department,
+                      onChanged: (value) => widget.cardInfo.department = value,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      label: "직급",
+                      hint: "직급을 입력하세요",
+                      icon: Icons.work,
+                      initialValue: widget.cardInfo.position,
+                      onChanged: (value) => widget.cardInfo.position = value,
+                    ),
+                    const SizedBox(height: 10),
 
-              _buildCompanyNameInput(), // 회사 이름 또는 이미지 선택 UI
-              const SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: _saveCard,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(0, 202, 145, 1),
-                    foregroundColor: Colors.white,
-                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  child: const Text("저장"),
+                    _buildCompanyNameInput(), // 회사 이름 또는 이미지 선택 UI
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: _saveCard,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromRGBO(0, 202, 145, 1),
+                          foregroundColor: Colors.white,
+                          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        child: Text("저장"),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+              ))
             ],
           ),
-        ),
       ),
     );
   }

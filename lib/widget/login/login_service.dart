@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../models/login_model.dart';
+import '../../utils/HttpClientManager.dart';
 
 class AuthService {
   final FlutterSecureStorage storage = FlutterSecureStorage();
