@@ -18,8 +18,6 @@ class ExpandedCardScreen extends StatelessWidget {
     required this.backCard,
   }) : super(key: key);
 
-  //test
-
   // 앞면 렌더링
   Widget buildBusinessCard(BusinessCard cardInfo) {
     switch (cardInfo.appTemplate) {
@@ -34,19 +32,6 @@ class ExpandedCardScreen extends StatelessWidget {
     }
   }
 
-  // 뒷면 렌더링
-  Widget buildBackCardWithLogo(BusinessCard cardInfo) {
-    switch (cardInfo.appTemplate) {
-      case 'No1':
-        return No1Back(cardInfo: cardInfo);
-      case 'No2':
-        return No2Back(cardInfo: cardInfo);
-      case 'No3':
-        return No3Back(cardInfo: cardInfo);
-      default:
-        return No2Back(cardInfo: cardInfo); // 기본값
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
