@@ -19,7 +19,6 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async{
   await dotenv.load(fileName: ".env");
-  final HttpClientManager httpClientManager = HttpClientManager();
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
     nativeAppKey: '387812a6ae2897c3e9e59952c211374e',
@@ -34,7 +33,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => FontProvider()),
-        ChangeNotifierProvider(create: (_) => LoginModel(httpClientManager)),
+        ChangeNotifierProvider(create: (_) => LoginModel()),
       ],
       child: MyApp(),
     ),

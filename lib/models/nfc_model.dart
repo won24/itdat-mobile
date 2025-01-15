@@ -1,16 +1,15 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:itdat/models/http_client_model.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class NfcModel {
+
   final baseUrl = dotenv.env['BASE_URL'];
   final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   Future<void> processCardInfo(Map<String, dynamic> cardInfo) async {
-    final client = await HttpClientModel().createHttpClient();
-
     try {
       String? userEmail = await _storage.read(key: 'user_email');
       if (userEmail == null) {
@@ -18,7 +17,7 @@ class NfcModel {
       }
       cardInfo['myEmail'] = userEmail;
 
-      final response = await client.post(
+      final response = await http.post(
         Uri.parse('$baseUrl/nfc/save'),
         headers: {"Content-Type": "application/json; charset=UTF-8"},
         body: jsonEncode(cardInfo),
@@ -36,10 +35,8 @@ class NfcModel {
   }
 
   Future<void> saveMemo(Map<String, dynamic> card) async {
-    final client = await HttpClientModel().createHttpClient();
-
     try {
-      final response = await client.post(
+      final response = await http.post(
           Uri.parse("$baseUrl/nfc/mywallet/cardmemo"),
           headers: {"Content-Type": "application/json; charset=UTF-8"},
           body: json.encode(card).trim()
@@ -52,10 +49,8 @@ class NfcModel {
   }
 
   Future<String?> loadMemo(Map<String, dynamic> card) async {
-    final client = await HttpClientModel().createHttpClient();
-
     try {
-      final response = await client.post(
+      final response = await http.post(
         Uri.parse("$baseUrl/nfc/mywallet/loadmemo"),
         headers: {"Content-Type": "application/json; charset=UTF-8"},
         body: json.encode(card),
@@ -75,7 +70,6 @@ class NfcModel {
   }
 
   void handleResponse(http.Response response, String functionName) {
-
     if (response.statusCode >= 200 && response.statusCode < 300) {
       print("[$functionName] 성공");
     } else {
