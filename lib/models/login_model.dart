@@ -13,8 +13,6 @@ class LoginModel extends ChangeNotifier{
 
   Future<Map<String, dynamic>> login(Map<String, String> requestLogin) async {
     try {
-      print("Request: $requestLogin");
-      print("URL: $baseUrl/api/auth/login");
 
       final response = await http.post(
         Uri.parse('$baseUrl/api/auth/login'),
@@ -67,9 +65,6 @@ class LoginModel extends ChangeNotifier{
         body: jsonEncode(formData),
       );
 
-      // print("응답 상태 코드: ${response.statusCode}");
-      // print("응답 데이터: ${response.body}");
-
       if (response.statusCode == 200) {
         print("회원가입 성공: ${response.body}");
         return true;
@@ -87,18 +82,13 @@ class LoginModel extends ChangeNotifier{
     final String url = '$baseUrl/api/auth/check-availability?type=$type&value=$value';
 
     try {
-      // print("요청 URL: $url");
       final response = await http.get(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
       );
 
-      // print("응답 상태 코드: ${response.statusCode}");
-      // print("응답 데이터: ${response.body}");
-
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        // print("중복 여부: ${responseBody['available']}");
         return responseBody['available'] ?? false;
       } else {
         print("서버 오류: 상태 코드 ${response.statusCode}");
