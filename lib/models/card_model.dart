@@ -42,7 +42,6 @@ class CardModel{
     }
   }
 
-
   // 로고 없는 명함 저장
   Future<BusinessCard> createBusinessCard(BusinessCard card) async {
     try {
