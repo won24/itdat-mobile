@@ -267,6 +267,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.contact,
                           style: TextStyle(
+                            fontWeight: _selectedIndex == 0? FontWeight.w900: null,
                             color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                           ),
                         ),
@@ -286,6 +287,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.portfolio,
                           style: TextStyle(
+                            fontWeight: _selectedIndex == 1? FontWeight.w900: null,
                             color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                           ),
                         ),
@@ -305,6 +307,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.history,
                           style: TextStyle(
+                            fontWeight: _selectedIndex == 2? FontWeight.w900: null,
                             color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                           ),
                         ),

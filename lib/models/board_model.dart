@@ -11,34 +11,19 @@ class BoardModel{
   final baseUrl = "${dotenv.env['BASE_URL']}/board/portfolio";
   final historyBaseUrl = "${dotenv.env['BASE_URL']}/board/history";
 
-  void logError(String functionName, dynamic error) {
-    print("[$functionName] Error: $error");
-  }
 
-  void handleResponse(http.Response response, String functionName) {
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      print("[$functionName] 성공");
-    } else {
-      print("[$functionName] 실패: ${response.statusCode}");
-      throw Exception("[$functionName] Error: ${response.statusCode}");
-    }
-  }
-
-  // 포트폴리오 가져오기
   Future<List<Map<String,dynamic>>> getPosts(String userEmail) async {
     final client = await HttpClientModel().createHttpClient();
 
     try {
       final response = await client.get(Uri.parse("$baseUrl/$userEmail"));
-      handleResponse(response, "getPosts");
       return List<Map<String, dynamic>>.from(jsonDecode(utf8.decode(response.bodyBytes)));
     } catch (e) {
-      logError("getPosts", e);
       throw Exception("getPosts Error: $e");
     }
   }
 
-  // 포트폴리오 저장
+
   Future<void> savePost(Map<String, dynamic> postData) async {
     final client = await HttpClientModel().createHttpClient();
 
@@ -64,22 +49,15 @@ class BoardModel{
       }
 
       final response = await client.send(request);
+      print(response);
 
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("[savePost] 성공");
-      } else {
-        print("[savePost] 실패: ${response.statusCode}");
-        throw Exception("savePost Error: ${response.statusCode}");
-      }
     } catch (e) {
-      print("[savePost] Error: $e");
       throw Exception("savePost Error: $e");
     }
   }
 
 
 
-  // 포트폴리오 수정
   Future<void> editPost(Map<String, dynamic> postData, int postId) async {
     final client = await HttpClientModel().createHttpClient();
 
@@ -104,94 +82,78 @@ class BoardModel{
         );
       }
 
-      final response = await client.send(request);
+      await client.send(request);
 
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("[savePost] 성공");
-      } else {
-        print("[savePost] 실패: ${response.statusCode}");
-        throw Exception("savePost Error: ${response.statusCode}");
-      }
     } catch (e) {
-      print("[savePost] Error: $e");
       throw Exception("savePost Error: $e");
     }
   }
 
 
-  // 포트폴리오 삭제
+
   Future<void> deletePost(int postId) async {
     final client = await HttpClientModel().createHttpClient();
 
     try{
-      final response = await client.delete(Uri.parse("$baseUrl/delete/$postId"));
-      handleResponse(response, "deletePost");
+      await client.delete(Uri.parse("$baseUrl/delete/$postId"));
     } catch (e) {
-      logError("deletePost", e);
       throw Exception("deletePost Error: $e");
     }
   }
 
 
 
-  // 히스토리 가져오기
+
   Future<List<Map<String,dynamic>>> getHistories(String userEmail) async {
     final client = await HttpClientModel().createHttpClient();
 
     try {
       final response = await client.get(Uri.parse("$historyBaseUrl/$userEmail"));
-      handleResponse(response, "getHistories");
       return List<Map<String, dynamic>>.from(jsonDecode(utf8.decode(response.bodyBytes)));
     } catch (e) {
-      logError("getHistories", e);
       throw Exception("getHistories Error: $e");
     }
   }
 
 
-  // 히스토리 저장
+
   Future<void> saveHistory(Map<String, dynamic> postData) async {
     final client = await HttpClientModel().createHttpClient();
 
     try {
-      final response = await client.post(
+      await client.post(
         Uri.parse('$historyBaseUrl/save'),
         headers: {"Content-Type": "application/json; charset=UTF-8"},
         body: json.encode(postData).trim()
       );
-      handleResponse(response, "saveHistoryPost");
+
     } catch (e) {
-      logError("saveHistoryPost", e);
       throw Exception("saveHistoryPost Error: $e");
     }
   }
 
-  // 히스토리 수정
+
   Future<void> editHistory(Map<String, dynamic> postData, int postId) async {
     final client = await HttpClientModel().createHttpClient();
 
     try {
-      final response = await client.put(
+      await client.put(
           Uri.parse("$historyBaseUrl/edit/$postId"),
           headers: {"Content-Type": "application/json; charset=UTF-8"},
           body: json.encode(postData).trim()
       );
-      handleResponse(response, "editHistoryPost");
     } catch (e) {
-      logError("editHistoryPost", e);
       throw Exception("editHistoryPost Error: $e");
     }
   }
 
-  // 삭제
+
   Future<void> deleteHistory(int postId) async {
     final client = await HttpClientModel().createHttpClient();
 
     try{
-      final response = await client.delete(Uri.parse("$historyBaseUrl/delete/$postId"));
-      handleResponse(response, "deleteHistory");
+      await client.delete(Uri.parse("$historyBaseUrl/delete/$postId"));
     } catch (e) {
-      logError("deleteHistory", e);
       throw Exception("deleteHistory Error: $e");
     }
   }

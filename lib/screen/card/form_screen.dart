@@ -39,7 +39,6 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // Hex -> Color
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
     if (hex == null || hex.isEmpty) return fallback;
     try {
@@ -50,7 +49,6 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // Color -> Hex
   String colorToHex(Color color) {
     int r = (color.r * 255).toInt();
     int g = (color.g * 255).toInt();
@@ -60,7 +58,6 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // 색 선택
   void _changeColor(Color currentColor, bool isBackgroundColor) {
     showDialog(
       context: context,
@@ -100,7 +97,7 @@ class _FormScreenState extends State<FormScreen> {
     );
   }
 
-  // 글씨체 선택
+
   void _changeFontFamily() {
     final fontList = [
       'Nanum Gothic',
@@ -159,7 +156,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // 갤러리 사진 선택
+
   Future<File?> getImageFromGallery() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -173,24 +170,21 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // 갤러리 권한 받기
   Future<bool> requestStoragePermission() async {
-    var status = await Permission.storage.status; // 권한 상태 확인
+    var status = await Permission.storage.status;
     if (status.isGranted) {
-      return true; // 이미 권한이 허용된 경우
+      return true;
     } else {
-      var result = await Permission.storage.request(); // 권한 요청
+      var result = await Permission.storage.request();
       if (result.isGranted) {
-        return true; // 권한 허용된 경우
+        return true;
       } else {
-        // 권한 거부된 경우 처리
-        print('갤러리 권한이 거부되었습니다.');
         return false;
       }
     }
   }
 
-  // 이미지 선택
+
   Future<void> _selectCompanyImage() async {
     if (await requestStoragePermission()) {
       File? image = await getImageFromGallery();
@@ -203,7 +197,7 @@ class _FormScreenState extends State<FormScreen> {
     }
   }
 
-  // 이미지 삭제
+
   void _removeCompanyImage() {
     setState(() {
       _selectedCompanyImage = null;
@@ -212,7 +206,6 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // 이미지 선택 위젯
   Widget _buildCompanyNameInput() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +242,6 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // 명함 저장 버튼
   void _saveCard() {
     if(_formKey.currentState!.validate()){
       showDialog(
@@ -297,7 +289,7 @@ class _FormScreenState extends State<FormScreen> {
 
 
   void moveToBackFormScreen() async {
-    await CardModel().createBusinessCard(widget.cardInfo);
+    await CardModel().saveBusinessCard(widget.cardInfo);
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -308,12 +300,10 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-
-  // 저장
   void _createCard() async {
     try {
       if (_selectedCompanyImage == null) {
-        await CardModel().createBusinessCard(widget.cardInfo);
+        await CardModel().saveBusinessCard(widget.cardInfo);
       } else {
         await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
       }
@@ -340,7 +330,7 @@ class _FormScreenState extends State<FormScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  // 명함 템플릿
+
   Widget buildBusinessCard(BusinessCard cardInfo) {
     switch (cardInfo.appTemplate) {
       case 'No1':
@@ -350,7 +340,7 @@ class _FormScreenState extends State<FormScreen> {
       case 'No3':
         return No3(cardInfo: cardInfo, image: _selectedCompanyImage,);
       default:
-        return No1(cardInfo: cardInfo); // 기본값
+        return No1(cardInfo: cardInfo);
     }
   }
 
@@ -514,8 +504,7 @@ class _FormScreenState extends State<FormScreen> {
                       onChanged: (value) => widget.cardInfo.position = value,
                     ),
                     const SizedBox(height: 10),
-
-                    _buildCompanyNameInput(), // 회사 이름 또는 이미지 선택 UI
+                    _buildCompanyNameInput(),
                     const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
