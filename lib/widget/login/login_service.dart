@@ -1,9 +1,10 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../models/login_model.dart';
+import '../../utils/HttpClientManager.dart';
 
 class AuthService {
   final FlutterSecureStorage storage = FlutterSecureStorage();
-  final LoginModel _loginModel = LoginModel();
+  final LoginModel _loginModel = LoginModel(HttpClientManager());
 
   Future<bool> login(String identifier, String password) async {
     // print("서비스쪽: identifier = $identifier, password = $password");

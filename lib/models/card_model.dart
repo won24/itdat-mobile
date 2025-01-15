@@ -10,7 +10,6 @@ import 'package:http_parser/http_parser.dart';
 
 class CardModel{
    final storage = FlutterSecureStorage();
-  // final baseUrl = "http://112.221.66.174:8001/card";
    final baseUrl = "${dotenv.env['BASE_URL']}/card";
 
 

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final String baseUrl = "http://112.221.66.174:8002"; // seo
+final baseUrl = dotenv.env['BASE_URL'];
 
 class ReportModel {
-
 
   Future<bool> sendNewReport(String reason, String loginedUserEmail, String reportedUserEmail, String selectedCategory) async {
     final dio = Dio();

@@ -7,10 +7,6 @@ import 'package:http_parser/http_parser.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BoardModel{
-
-  // static const String baseUrl = "http://112.221.66.174:8001/board/portfolio";
-  // static const String historyBaseUrl = "http://112.221.66.174:8001/board/history";
-
   final baseUrl = "${dotenv.env['BASE_URL']}/board/portfolio";
   final historyBaseUrl = "${dotenv.env['BASE_URL']}/board/history";
 
