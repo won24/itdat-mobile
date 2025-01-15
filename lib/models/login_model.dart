@@ -1,34 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/io_client.dart';
 
 class LoginModel extends ChangeNotifier{
   final baseUrl = dotenv.env['BASE_URL'];
-  IOClient? _httpClient;
-  Future<IOClient> createHttpClient() async {
-    if (_httpClient != null) return _httpClient!; // 이미 HttpClient 객체가 생성된 경우 재사용
-
-    // 인증서 파일 로드 (res/raw/ca_bundle.crt)
-    final ByteData data = await rootBundle.load('res/raw/ca_bundle.crt');
-    final List<int> bytes = data.buffer.asUint8List();
-
-    // 인증서 파일을 SecurityContext에 추가
-    final SecurityContext context = SecurityContext(withTrustedRoots: false);
-    context.setTrustedCertificatesBytes(bytes);
-
-    // dart:io HttpClient 생성 및 인증서 적용
-    final HttpClient httpClient = HttpClient(context: context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-
-    // IOClient 생성
-    _httpClient = IOClient(httpClient);
-
-    return _httpClient!;
-  }
 
 
   Future<Map<String, dynamic>> login(Map<String, String> requestLogin) async {
