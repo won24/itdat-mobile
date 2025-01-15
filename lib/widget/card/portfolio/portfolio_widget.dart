@@ -46,6 +46,8 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: posts.isEmpty
           ? widget.cardUserEmail == widget.loginUserEmail? Center(child: Text('포트폴리오를 작성해주세요.')) : Center(child: Text('포트폴리오가 없습니다.'))
@@ -69,7 +71,7 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
         onPressed: _goToWritePost,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        child: Image.asset('assets/icons/addBoard.png', height: 30, width: 30),
+        child: Image.asset('assets/icons/addBoard.png', height: 30, width: 30, color: isDarkMode ? Colors.grey[200] : Colors.black,),
       )
           : null,
     );

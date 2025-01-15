@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class NfcModel {
-  final String baseUrl = "http://112.221.66.174:8000";
+
+  final baseUrl = dotenv.env['BASE_URL'];
   final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   Future<void> processCardInfo(Map<String, dynamic> cardInfo) async {

@@ -7,11 +7,9 @@ import 'package:http_parser/http_parser.dart';
 
 class BoardModel{
 
-  // static const String baseUrl = "http://112.221.66.174:8001/board/portfolio"; // 원
-  // static const String historyBaseUrl = "http://112.221.66.174:8001/board/history"; // 원
+  static const String baseUrl = "http://112.221.66.174:8001/board/portfolio"; // 원
+  static const String historyBaseUrl = "http://112.221.66.174:8001/board/history"; // 원
   // final String baseUrl = 'http://112.221.66.174:8002/board'; // seo
-  static const String baseUrl = "http://112.221.66.174:8000/boagrd/portfolio"; // 원
-  static const String historyBaseUrl = "http://112.221.66.174:8000/board/history"; // 원
 
 
   void logError(String functionName, dynamic error) {

@@ -28,8 +28,37 @@ class FormScreen extends StatefulWidget {
 
 class _FormScreenState extends State<FormScreen> {
 
-  static const Color primaryColor = Colors.white;
   File? _selectedCompanyImage;
+  late Color backgroundColor;
+
+
+  @override
+  void initState() {
+    super.initState();
+    backgroundColor = hexToColor(widget.cardInfo.backgroundColor ?? "#FFFFFF");
+  }
+
+
+  // Hex -> Color
+  Color hexToColor(String? hex, {Color fallback = Colors.white}) {
+    if (hex == null || hex.isEmpty) return fallback;
+    try {
+      return Color(int.parse(hex.replaceFirst('#', '0xFF')));
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+
+  // Color -> Hex
+  String colorToHex(Color color) {
+    int r = (color.r * 255).toInt();
+    int g = (color.g * 255).toInt();
+    int b = (color.b * 255).toInt();
+
+    return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}';
+  }
+
 
   // 색 선택
   void _changeColor(Color currentColor, bool isBackgroundColor) {
@@ -43,10 +72,9 @@ class _FormScreenState extends State<FormScreen> {
             onColorChanged: (color) {
               setState(() {
                 if (isBackgroundColor) {
-                  widget.cardInfo.backgroundColor = color;
-                  print(color);
+                  widget.cardInfo.backgroundColor = colorToHex(color);
                 } else {
-                  widget.cardInfo.textColor = color;
+                  widget.cardInfo.textColor = colorToHex(color);
                 }
               });
             },
@@ -72,16 +100,13 @@ class _FormScreenState extends State<FormScreen> {
     );
   }
 
-
   // 글씨체 선택
   void _changeFontFamily() {
-    // 사용할 글꼴 이름 리스트
     final fontList = [
       'Nanum Gothic',
       'Do Hyeon',
       'Gowun Batang',
       'Gowun Dodum',
-      'Gugi',
       'Song Myung',
       'Orbit',
       'IBM Plex Sans KR',
@@ -112,7 +137,7 @@ class _FormScreenState extends State<FormScreen> {
                   ),
                   onTap: () {
                     setState(() {
-                      widget.cardInfo.font = fontName;
+                      widget.cardInfo.fontFamily = fontName;
                     });
                     Navigator.of(context).pop();
                   },
@@ -180,6 +205,14 @@ class _FormScreenState extends State<FormScreen> {
     }
   }
 
+  // 이미지 삭제
+  void _removeCompanyImage() {
+    setState(() {
+      _selectedCompanyImage = null;
+      widget.cardInfo.logoUrl = null;
+    });
+  }
+
 
   // 이미지 선택 위젯
   Widget _buildCompanyNameInput() {
@@ -192,17 +225,25 @@ class _FormScreenState extends State<FormScreen> {
         GestureDetector(
           onTap: _selectCompanyImage,
           child: _selectedCompanyImage != null
-            ? Image.file(
-              _selectedCompanyImage!,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
+            ? Row(
+              children: [
+                Image.file(
+                  _selectedCompanyImage!,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(width: 16),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.grey),
+                  onPressed: _removeCompanyImage,
+                ),
+              ],
             )
             : Container(
-                width: 100,
-                height: 100,
-                color: Colors.grey[300],
-                child: const Icon(Icons.add_a_photo, color: Colors.grey),
+              width: 100,
+              height: 100,
+              color: Colors.grey[300],
+              child: const Icon(Icons.add_a_photo, color: Colors.grey),
             ),
         ),
       ],
@@ -225,13 +266,8 @@ class _FormScreenState extends State<FormScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("명함이 저장 되었습니다.",
+              Text("추가로 명함 뒷면을 제작하시겠습니까?",
                 style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text("추가로 명함 뒷장 만들기",
-                style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -274,11 +310,13 @@ class _FormScreenState extends State<FormScreen> {
   // 저장
   void _createCard() async {
     try {
-      if(widget.cardInfo.logoUrl != null){
-        await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
-      }else{
+
+      if (_selectedCompanyImage == null) {
         await CardModel().createBusinessCard(widget.cardInfo);
+      } else {
+        await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
       }
+
       _showSnackBar("명함 제작 성공");
       Navigator.pushAndRemoveUntil(
           context,
@@ -305,9 +343,9 @@ class _FormScreenState extends State<FormScreen> {
   Widget buildBusinessCard(BusinessCard cardInfo) {
     switch (cardInfo.appTemplate) {
       case 'No1':
-        return No1(cardInfo: cardInfo);
+        return No1(cardInfo: cardInfo, image: _selectedCompanyImage);
       case 'No2':
-        return No2(cardInfo: cardInfo);
+        return No2(cardInfo: cardInfo, image: _selectedCompanyImage);
       case 'No3':
         return No3(cardInfo: cardInfo, image: _selectedCompanyImage,);
       default:
@@ -333,7 +371,7 @@ class _FormScreenState extends State<FormScreen> {
           borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: primaryColor, width: 1.0),
+          borderSide: BorderSide(color: Color.fromRGBO(0, 202, 145, 1), width: 1.0),
         ),
         errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.red, width: 1.0),
@@ -349,24 +387,26 @@ class _FormScreenState extends State<FormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("명함 제작"),
         actions: [
           IconButton(
-            icon: const Icon(Icons.color_lens),
+            icon: Image.asset('assets/icons/background.png', height: 25, width: 25,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
             onPressed: () {
-              _changeColor(widget.cardInfo.backgroundColor ?? Colors.white, true);
+              _changeColor(backgroundColor, true);
             },
           ),
           IconButton(
-            icon: const Icon(Icons.text_fields),
+            icon: Image.asset('assets/icons/text.png', height: 25, width: 25,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
             onPressed: () {
-              _changeColor(widget.cardInfo.textColor ?? Colors.black, false);
+              _changeColor(backgroundColor, false);
             },
           ),
           IconButton(
-            icon: const Icon(Icons.font_download),
+            icon: Image.asset('assets/icons/font.png', height: 25, width: 25,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
             onPressed: _changeFontFamily,
           ),
         ],

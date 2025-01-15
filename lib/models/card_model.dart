@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'dart:convert';
@@ -11,9 +12,7 @@ import 'package:http_parser/http_parser.dart';
 
 class CardModel{
    final storage = FlutterSecureStorage();
-  //final baseUrl = "http://112.221.66.174:8001/card";  // 원
-    final baseUrl = "http://112.221.66.174:8000/card"; //정원
-  // final String baseUrl = 'http://112.221.66.174:8002/card'; // seo
+   final baseUrl = dotenv.env['BASE_URL'];
 
 
   void logError(String functionName, dynamic error) {
@@ -67,7 +66,9 @@ class CardModel{
     try {
       final url = Uri.parse('$baseUrl/save/logo');
       var request = http.MultipartRequest('POST', url);
+
       request.fields['cardInfo'] = jsonEncode(cardInfo.toJson()).trim();
+      print("Serialized cardInfo: ${request.fields['cardInfo']}");
 
       if (cardInfo.logoUrl != null && cardInfo.logoUrl!.isNotEmpty) {
         final logoFile = File(cardInfo.logoUrl!);

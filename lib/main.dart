@@ -12,10 +12,12 @@ import 'package:itdat/providers/locale_provider.dart';
 import 'package:itdat/providers/font_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+void main() async{
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
     nativeAppKey: '387812a6ae2897c3e9e59952c211374e',

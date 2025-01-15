@@ -1,13 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/screen/card/expanded_card_screen.dart';
+import 'package:itdat/screen/card/template/back_template.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
-import 'package:itdat/screen/card/template/no_1_back.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
-import 'package:itdat/screen/card/template/no_2_back.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
-import 'package:itdat/screen/card/template/no_3_back.dart';
 import 'package:itdat/widget/card/card_info_widget.dart';
 import 'package:itdat/widget/card/history/history_widget.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
@@ -85,19 +82,6 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
     }
   }
 
-  // 명함 뒷장 템플릿
-  Widget buildBackCardWithLogo(BusinessCard cardInfo) {
-    switch (cardInfo.appTemplate) {
-      case 'No1':
-        return No1Back(cardInfo: cardInfo, image: File(""));
-      case 'No2':
-        return No2Back(cardInfo: cardInfo, image: File(""));
-      case 'No3':
-        return No3Back(cardInfo: cardInfo, image: File(""));
-      default:
-        return No2Back(cardInfo: cardInfo, image: File("")); // 기본값
-    }
-  }
 
   // 명함이 뒷면이 있다면 버튼을 눌러서 보기
   Widget renderFlipButton() {
@@ -130,6 +114,7 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
     }
 
     return Scaffold(
+      appBar: AppBar(title: const Text("명함 상세 정보")),
       body: Column(
         children: [
           Card(
@@ -164,8 +149,8 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
                           );
                         },
                         child: _isFlipped
-                            ? buildBackCardWithLogo(backCard!)
-                            : buildBusinessCard(frontCard!),
+                            ? BackTemplate(cardInfo: backCard!)
+                            : buildBusinessCard(frontCard),
                       ),
                       if (canFlip())
                         Positioned(

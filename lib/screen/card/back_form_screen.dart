@@ -1,11 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
-import 'package:itdat/screen/card/template/no_1_back.dart';
-import 'package:itdat/screen/card/template/no_2_back.dart';
-import 'package:itdat/screen/card/template/no_3_back.dart';
+import 'package:itdat/screen/card/template/back_template.dart';
 import 'package:itdat/screen/mainLayout.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path;
@@ -25,6 +25,10 @@ class BackFormScreen extends StatefulWidget {
 class _BackFormScreenState extends State<BackFormScreen> {
 
   File? _image;
+  String? _customText;
+  bool _isTextEnabled = false;
+  String _textPosition = '';
+
 
   // 갤러리 사진 선택
   Future<File?> getImageFromGallery() async {
@@ -60,6 +64,10 @@ class _BackFormScreenState extends State<BackFormScreen> {
   void _saveCard() async {
     widget.cardInfo.cardSide = 'BACK';
     widget.cardInfo.logoUrl = _image?.path;
+    widget.cardInfo.appTemplate = 'BackTemplate';
+    widget.cardInfo.customText = _customText;
+    widget.cardInfo.isTextEnabled = _isTextEnabled;
+    widget.cardInfo.textPosition = _textPosition;
 
     if (_image == null) {
       _showSnackBar("로고 이미지를 선택해주세요.", isError: true);
@@ -90,24 +98,10 @@ class _BackFormScreenState extends State<BackFormScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  // 명함 템플릿
-  Widget buildBusinessCard(BusinessCard cardInfo) {
-    switch (cardInfo.appTemplate) {
-      case 'No1':
-        return No1Back(cardInfo: cardInfo, image: _image);
-      case 'No2':
-        return No2Back(cardInfo: cardInfo, image: _image);
-      case 'No3':
-        return No3Back(cardInfo: cardInfo, image: _image);
-      default:
-        return No2Back(cardInfo: cardInfo, image: _image); // 기본값
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("명함 미리보기")),
+      appBar: AppBar(title: Text("명함 뒷장")),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -117,7 +111,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
               Center(
                   child: Container(
                     width: double.infinity,
-                    child: buildBusinessCard(widget.cardInfo),
+                    child: BackTemplate(cardInfo: widget.cardInfo, image: _image),
                   )
               ),
               const SizedBox(height: 20),
@@ -184,7 +178,56 @@ class _BackFormScreenState extends State<BackFormScreen> {
                   ),
                 ],
               ),
-
+              SwitchListTile(
+                title: Text("명함에 텍스트 추가"),
+                value: _isTextEnabled,
+                onChanged: (bool value) {
+                  setState(() {
+                    _isTextEnabled = value;
+                    widget.cardInfo.isTextEnabled = _isTextEnabled;
+                    print(widget.cardInfo.isTextEnabled);
+                  });
+                },
+              ),
+              if (_isTextEnabled) ...[
+                TextField(
+                  decoration: InputDecoration(labelText: "명함 텍스트 입력"),
+                  onChanged: (value) {
+                    setState(() {
+                      _customText = value;
+                      widget.cardInfo.customText = _customText;
+                    });
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text("텍스트 위치: "),
+                    Radio<String>(
+                      value: 'above',
+                      groupValue: _textPosition,
+                      onChanged: (String? value) {
+                        setState(() {
+                          _textPosition = value!;
+                          widget.cardInfo.textPosition = _textPosition;
+                        });
+                      },
+                    ),
+                    Text("로고 위"),
+                    Radio<String>(
+                      value: 'below',
+                      groupValue: _textPosition,
+                      onChanged: (String? value) {
+                        setState(() {
+                          _textPosition = value!;
+                          widget.cardInfo.textPosition = _textPosition;
+                        });
+                      },
+                    ),
+                    Text("로고 아래"),
+                  ],
+                ),
+              ],
               SizedBox(height:100),
               Align(
                 alignment: Alignment.bottomCenter,

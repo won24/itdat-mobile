@@ -91,7 +91,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
       'cardNo': widget.businessCards.cardNo,
       'description': memo,
       'myEmail': widget.loginEmail,
-      'userEmail':  widget.businessCards.userEmail,
+      'userEmail': widget.businessCards.userEmail,
     };
 
     try {
@@ -105,6 +105,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -123,7 +124,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
                       _showSnackBar(AppLocalizations.of(context)!.cannotMakeCall, isError: true);
                     }
                   },
-                  icon: Image.asset('assets/icons/call.png', height: 30, width: 30),
+                  icon: Image.asset('assets/icons/call.png', height: 30, width: 30,),
                 ),
                 IconButton(
                   onPressed: () async {

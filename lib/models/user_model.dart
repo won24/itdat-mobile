@@ -1,16 +1,18 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class UserModel {
   final storage = FlutterSecureStorage();
-   final String baseUrl = "http://112.221.66.174:8000";
+  final baseUrl = dotenv.env['BASE_URL'];
   // final String baseUrl = "http://112.221.66.174:8001";
   // final String baseUrl = "http://112.221.66.174:8002"; // seo
 
   Future<Map<String, dynamic>> getUserInfo() async {
     String? email = await storage.read(key: 'email');
     print('email: $email');
+    print('url: $baseUrl');
     if (email == null) {
       throw Exception('email not found');
     }

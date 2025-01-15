@@ -1,19 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class MyWalletModel {
-  // final String baseUrl = "http://10.0.2.2:8082/api/mywallet";
-  // final String baseUrl2 = "http://10.0.2.2:8082/api/auth";
-  final String baseUrl = "http://112.221.66.174:8000/api/mywallet";
-  final String baseUrl2 = "http://112.221.66.174:8000/api/auth";
 
-  // final String baseUrl = "http://112.221.66.174:8001/api/mywallet";
-  // final String baseUrl2 = "http://112.221.66.174:8001/api/auth";
-
-  // final String baseUrl = "http://112.221.66.174:8002/api/mywallet"; // seo
-  // final String baseUrl2 = "http://112.221.66.174:8002/api/auth"; // seo
-
+  final baseUrl = dotenv.env['BASE_URL'];
+  final baseUrl2 = dotenv.env['BASE_URL'];
   // 명함 가져오기
   Future<List<dynamic>> getCards(String myEmail) async {
     final url = '$baseUrl/cards?myEmail=$myEmail';
