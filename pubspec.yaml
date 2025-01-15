@@ -66,3 +66,4 @@ flutter:
     - assets/qr.png
     - assets/waitAnime.json
     - .env
+    - assets/ca_bundle.crt

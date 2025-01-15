@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:itdat/models/http_client_model.dart';
 import 'package:mime/mime.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
@@ -7,10 +8,6 @@ import 'package:http_parser/http_parser.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BoardModel{
-
-  // static const String baseUrl = "http://112.221.66.174:8001/board/portfolio";
-  // static const String historyBaseUrl = "http://112.221.66.174:8001/board/history";
-
   final baseUrl = "${dotenv.env['BASE_URL']}/board/portfolio";
   final historyBaseUrl = "${dotenv.env['BASE_URL']}/board/history";
 
@@ -29,8 +26,10 @@ class BoardModel{
 
   // 포트폴리오 가져오기
   Future<List<Map<String,dynamic>>> getPosts(String userEmail) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
-      final response = await http.get(Uri.parse("$baseUrl/$userEmail"));
+      final response = await client.get(Uri.parse("$baseUrl/$userEmail"));
       handleResponse(response, "getPosts");
       return List<Map<String, dynamic>>.from(jsonDecode(utf8.decode(response.bodyBytes)));
     } catch (e) {
@@ -41,6 +40,8 @@ class BoardModel{
 
   // 포트폴리오 저장
   Future<void> savePost(Map<String, dynamic> postData) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
       final url = Uri.parse("$baseUrl/save");
       var request = http.MultipartRequest('POST', url);
@@ -62,7 +63,7 @@ class BoardModel{
         );
       }
 
-      final response = await request.send();
+      final response = await client.send(request);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print("[savePost] 성공");
@@ -80,6 +81,8 @@ class BoardModel{
 
   // 포트폴리오 수정
   Future<void> editPost(Map<String, dynamic> postData, int postId) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
       final url = Uri.parse("$baseUrl/edit/$postId");
       var request = http.MultipartRequest('PUT', url);
@@ -101,7 +104,7 @@ class BoardModel{
         );
       }
 
-      final response = await request.send();
+      final response = await client.send(request);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print("[savePost] 성공");
@@ -118,8 +121,10 @@ class BoardModel{
 
   // 포트폴리오 삭제
   Future<void> deletePost(int postId) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try{
-      final response = await http.delete(Uri.parse("$baseUrl/delete/$postId"));
+      final response = await client.delete(Uri.parse("$baseUrl/delete/$postId"));
       handleResponse(response, "deletePost");
     } catch (e) {
       logError("deletePost", e);
@@ -131,8 +136,10 @@ class BoardModel{
 
   // 히스토리 가져오기
   Future<List<Map<String,dynamic>>> getHistories(String userEmail) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
-      final response = await http.get(Uri.parse("$historyBaseUrl/$userEmail"));
+      final response = await client.get(Uri.parse("$historyBaseUrl/$userEmail"));
       handleResponse(response, "getHistories");
       return List<Map<String, dynamic>>.from(jsonDecode(utf8.decode(response.bodyBytes)));
     } catch (e) {
@@ -144,8 +151,10 @@ class BoardModel{
 
   // 히스토리 저장
   Future<void> saveHistory(Map<String, dynamic> postData) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
-      final response = await http.post(
+      final response = await client.post(
         Uri.parse('$historyBaseUrl/save'),
         headers: {"Content-Type": "application/json; charset=UTF-8"},
         body: json.encode(postData).trim()
@@ -159,8 +168,10 @@ class BoardModel{
 
   // 히스토리 수정
   Future<void> editHistory(Map<String, dynamic> postData, int postId) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
-      final response = await http.put(
+      final response = await client.put(
           Uri.parse("$historyBaseUrl/edit/$postId"),
           headers: {"Content-Type": "application/json; charset=UTF-8"},
           body: json.encode(postData).trim()
@@ -174,8 +185,10 @@ class BoardModel{
 
   // 삭제
   Future<void> deleteHistory(int postId) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try{
-      final response = await http.delete(Uri.parse("$historyBaseUrl/delete/$postId"));
+      final response = await client.delete(Uri.parse("$historyBaseUrl/delete/$postId"));
       handleResponse(response, "deleteHistory");
     } catch (e) {
       logError("deleteHistory", e);

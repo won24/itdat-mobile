@@ -2,6 +2,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:itdat/models/http_client_model.dart';
+
 class UserModel {
   final storage = FlutterSecureStorage();
    final String baseUrl = "http://112.221.66.174:8000";
@@ -9,13 +11,14 @@ class UserModel {
   // final String baseUrl = "http://112.221.66.174:8002"; // seo
 
   Future<Map<String, dynamic>> getUserInfo() async {
+    final client = await HttpClientModel().createHttpClient();
     String? email = await storage.read(key: 'email');
     print('email: $email');
     if (email == null) {
       throw Exception('email not found');
     }
 
-    final response = await http.post(
+    final response = await client.post(
         Uri.parse('$baseUrl/nfc/userinfo'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -31,6 +34,7 @@ class UserModel {
   }
 
   Future<bool> updateUserInfo(Map<String, dynamic> map) async {
+    final client = await HttpClientModel().createHttpClient();
     String? email = await storage.read(key: 'email');
     if (email == null) {
       throw Exception('email not found');
@@ -39,7 +43,7 @@ class UserModel {
     print('Sending request to: $baseUrl/nfc/updateuser');
     print('Request body!!: ${jsonEncode(map)}');
 
-    final response = await http.post(
+    final response = await client.post(
         Uri.parse('$baseUrl/nfc/updateuser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -55,6 +59,7 @@ class UserModel {
   }
 
   Future<bool> verifyPassword(String password, String email) async {
+    final client = await HttpClientModel().createHttpClient();
     final String url = '$baseUrl/nfc/password';
 
     try {
@@ -64,7 +69,7 @@ class UserModel {
       };
       print(password);
 
-      final response = await http.post(
+      final response = await client.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(requestBody),
@@ -83,6 +88,7 @@ class UserModel {
     }
   }
   Future<bool> changePassword(String newPassword) async {
+    final client = await HttpClientModel().createHttpClient();
     String? email = await storage.read(key: 'email');
     print("오긴하나");
     print(newPassword);
@@ -97,7 +103,7 @@ class UserModel {
         'password': newPassword
       };
 
-      final response = await http.post(
+      final response = await client.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(requestBody),
@@ -116,13 +122,14 @@ class UserModel {
   }
 
   Future<bool> deleteAccount(String userEmail) async {
+    final client = await HttpClientModel().createHttpClient();
     final String url = '$baseUrl/nfc/deleteaccount';
     try {
       final Map<String, dynamic> requestBody = {
         'email': userEmail,
       };
       String? authToken = await storage.read(key: 'auth_token');
-      final response = await http.post(
+      final response = await client.post(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',

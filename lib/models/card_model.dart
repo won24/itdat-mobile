@@ -4,13 +4,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:itdat/models/http_client_model.dart';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 
 class CardModel{
    final storage = FlutterSecureStorage();
-  // final baseUrl = "http://112.221.66.174:8001/card";
    final baseUrl = "${dotenv.env['BASE_URL']}/card";
 
 
@@ -31,8 +31,10 @@ class CardModel{
 
   // 유저 정보로 명함 기본 정보 가져오기
   Future<Map<String, dynamic>> getUserById(String userEmail) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
-      final response = await http.get(Uri.parse("$baseUrl/userinfo/$userEmail"));
+      final response = await client.get(Uri.parse("$baseUrl/userinfo/$userEmail"));
       handleResponse(response, "getUserById");
       return jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
     } catch (e) {
@@ -44,8 +46,10 @@ class CardModel{
 
   // 로고 없는 명함 저장
   Future<BusinessCard> createBusinessCard(BusinessCard card) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
-      final response = await http.post(
+      final response = await client.post(
         Uri.parse('$baseUrl/save'),
         headers: {"Content-Type": "application/json; charset=UTF-8"},
         body: json.encode(card.toJson()),
@@ -62,6 +66,8 @@ class CardModel{
 
   // 로고있는 명함 저장
   Future<void> saveBusinessCardWithLogo(BusinessCard cardInfo) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
       final url = Uri.parse('$baseUrl/save/logo');
       var request = http.MultipartRequest('POST', url);
@@ -82,7 +88,7 @@ class CardModel{
         ));
       }
 
-      final response = await request.send();
+      final response = await client.send(request);
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print("saveBusinessCardWithLogo 성공");
       } else {
@@ -98,8 +104,10 @@ class CardModel{
 
   // 명함 가져오기
   Future<List<dynamic>> getBusinessCard(String userEmail) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
-      final response = await http.get(Uri.parse("$baseUrl/$userEmail"));
+      final response = await client.get(Uri.parse("$baseUrl/$userEmail"));
       handleResponse(response, "getBusinessCard");
       return jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
     } catch (e) {
@@ -154,8 +162,10 @@ class CardModel{
    // }
 
    Future<void> updateCardsPublicStatus(List<Map<String, dynamic>> cardData) async {
+     final client = await HttpClientModel().createHttpClient();
+
      try {
-       final response = await http.post(
+       final response = await client.post(
          Uri.parse('$baseUrl/publicstatus'),
          headers: {"Content-Type": "application/json"},
          body: json.encode(cardData),
@@ -187,10 +197,14 @@ class CardModel{
        print('Error in updateCardsPublicStatus: $e');
      }
    }
+
+
    Future<bool> updateBusinessCard(BusinessCard card) async {
+     final client = await HttpClientModel().createHttpClient();
+
      try {
        print("updateBusinessCard: $card");
-       final response = await http.post(
+       final response = await client.post(
          Uri.parse('$baseUrl/front/update'),
          headers: {"Content-Type": "application/json; charset=UTF-8"},
          body: json.encode(card.toJson()),
@@ -209,6 +223,8 @@ class CardModel{
    }
 
    Future<bool> deleteCard(int cardId) async {
+     final client = await HttpClientModel().createHttpClient();
+
      try {
        // 저장된 이메일 가져오기
        String? userEmail = await storage.read(key: 'user_email');
@@ -243,8 +259,10 @@ class CardModel{
 
    // 명함첩 - 메모 추가
   Future<void> saveMemo(Map<String, dynamic> card) async {
+    final client = await HttpClientModel().createHttpClient();
+
     try {
-      final response = await http.post(
+      final response = await client.post(
           Uri.parse("$baseUrl/mywallet/cardmemo"),
           headers: {"Content-Type": "application/json; charset=UTF-8"},
           body: json.encode(card).trim()
@@ -257,8 +275,10 @@ class CardModel{
   }
 
    Future<String?> loadMemo(Map<String, dynamic> card) async {
+     final client = await HttpClientModel().createHttpClient();
+
      try {
-       final response = await http.post(
+       final response = await client.post(
          Uri.parse("$baseUrl/mywallet/loadmemo"),
          headers: {"Content-Type": "application/json; charset=UTF-8"},
          body: json.encode(card),

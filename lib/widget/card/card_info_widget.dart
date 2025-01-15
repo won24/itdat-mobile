@@ -32,8 +32,9 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     super.initState();
     if (widget.businessCards != null) {
       _memoController.text = widget.businessCards.description ?? '';
-      _loadMemo();
     }
+    if (widget.loginEmail != widget.businessCards.userEmail)
+      _loadMemo();
   }
 
   @override
