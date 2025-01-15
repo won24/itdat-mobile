@@ -1,14 +1,14 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 import 'package:itdat/models/http_client_model.dart';
 
 class UserModel {
   final storage = FlutterSecureStorage();
-   final String baseUrl = "http://112.221.66.174:8000";
-  // final String baseUrl = "http://112.221.66.174:8001";
-  // final String baseUrl = "http://112.221.66.174:8002"; // seo
+  final baseUrl = dotenv.env['BASE_URL'];
 
   Future<Map<String, dynamic>> getUserInfo() async {
     final client = await HttpClientModel().createHttpClient();

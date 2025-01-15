@@ -6,13 +6,6 @@ import 'BusinessCard.dart';
 
 class PublicCardModel {
   final baseUrl = dotenv.env['BASE_URL'];
-  // final String baseUrl = "http://10.0.2.2:8082/card/public";
-  //  final String baseUrl = "http://112.221.66.174:8001/card/public";
-
-  //final String baseUrl = "http://10.0.2.2:8082/card/public";
-  // final String baseUrl = "http://112.221.66.174:8001/card/public";
-  // final String baseUrl = "http://112.221.66.174:8002/card/public"; // seo
-  // final String baseUrl = "http://112.221.66.174:8000/card/public";
 
   // 전체 공개 명함 가져오기
   Future<List<dynamic>> getAllPublicCards() async {

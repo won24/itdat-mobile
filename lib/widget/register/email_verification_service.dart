@@ -1,21 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class EmailVerificationService {
   final String sendEmailUrl = "http://10.0.2.2:8082/api/email/send";
   final String verifyEmailUrl = "http://10.0.2.2:8082/api/email/verify";
 
-
-  // final String sendEmailUrl = "http://112.221.66.174:8001/api/email/send";
-  // final String verifyEmailUrl = "http://112.221.66.174:8001/api/email/verify";
+  final baseUrl = dotenv.env['BASE_URL'];
 
   // 이메일 인증 코드 발송
-  //test
   Future<bool> sendVerificationCode(String email) async {
     try {
       final response = await http.post(
-        Uri.parse(sendEmailUrl),
+        Uri.parse('$baseUrl/api/email/send'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
@@ -38,7 +36,7 @@ class EmailVerificationService {
   Future<bool> verifyCode(String email, String code) async {
     try {
       final response = await http.post(
-        Uri.parse(verifyEmailUrl),
+        Uri.parse('$baseUrl/api/email/verify'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'code': code}),
       );
