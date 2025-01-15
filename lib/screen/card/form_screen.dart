@@ -159,8 +159,6 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-
-
   // 갤러리 사진 선택
   Future<File?> getImageFromGallery() async {
     final ImagePicker _picker = ImagePicker();
@@ -220,7 +218,7 @@ class _FormScreenState extends State<FormScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("회사 로고 이미지", style: TextStyle(fontSize: 16)),
-        Text("회사이름 대신 사용", style: TextStyle(color: Colors.grey.shade400),),
+        Text("회사 이름 대신 사용", style: TextStyle(color: Colors.grey.shade400),),
         const SizedBox(height: 8),
         GestureDetector(
           onTap: _selectCompanyImage,
@@ -416,7 +414,8 @@ class _FormScreenState extends State<FormScreen> {
           ),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -428,8 +427,7 @@ class _FormScreenState extends State<FormScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-            SingleChildScrollView(
-              child: Form(
+              Form(
                 key: _formKey,
                 child: Column(
                   children: [
@@ -448,7 +446,7 @@ class _FormScreenState extends State<FormScreen> {
                       icon: Icons.phone_android_sharp,
                       initialValue: widget.cardInfo.phone,
                       onChanged: (value) => widget.cardInfo.phone = value,
-                      validator: (value) => value == null || value.isEmpty ? "전화번호를 입력하세요." : null,
+                      validator: (value) => value == null || value.isEmpty ? "연락처를 입력하세요." : null,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                       ],
@@ -468,7 +466,6 @@ class _FormScreenState extends State<FormScreen> {
                       icon: Icons.business,
                       initialValue: widget.cardInfo.companyName,
                       onChanged: (value) => widget.cardInfo.companyName = value,
-                      validator: (value) => value == null || value.isEmpty ? "이름을 입력하세요." : null,
                     ),
                     const SizedBox(height: 10),
                     _buildTextField(
@@ -533,10 +530,11 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                   ],
                 ),
-              ))
+              )
             ],
           ),
-      ),
+        ),
+      )
     );
   }
 }

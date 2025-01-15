@@ -4,7 +4,7 @@ import '../../utils/HttpClientManager.dart';
 
 class AuthService {
   final FlutterSecureStorage storage = FlutterSecureStorage();
-  final LoginModel _loginModel = LoginModel(HttpClientManager());
+  final LoginModel _loginModel = LoginModel();
 
   Future<bool> login(String identifier, String password) async {
     // print("서비스쪽: identifier = $identifier, password = $password");

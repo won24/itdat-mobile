@@ -1,9 +1,10 @@
 import 'dart:io';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:http/http.dart' as http;
+import 'package:itdat/models/http_client_model.dart';
 
 class No1 extends StatelessWidget {
   final BusinessCard cardInfo;
@@ -32,7 +33,7 @@ class No1 extends StatelessWidget {
 
   // 이미지 가져오기
   String getFullImageUrl() {
-    const baseUrl = 'http://112.221.66.174:8001';
+    final baseUrl = "${dotenv.env['BASE_URL']}";
     if (cardInfo.logoUrl != null &&
         (cardInfo.logoUrl!.startsWith('http://') || cardInfo.logoUrl!.startsWith('https://'))) {
       return cardInfo.logoUrl!;
@@ -43,8 +44,9 @@ class No1 extends StatelessWidget {
 
   // 이미지 있는 지 확인
   Future<bool> checkFileExists(String url) async {
+    final client = await HttpClientModel().createHttpClient();
     try {
-      final response = await http.head(Uri.parse(url));
+      final response = await client.head(Uri.parse(url));
       return response.statusCode == 200;
     } catch (e) {
       return false;
