@@ -99,7 +99,6 @@ class _FormScreenState extends State<FormScreen> {
     );
   }
 
-
   // 글씨체 선택
   void _changeFontFamily() {
     final fontList = [
