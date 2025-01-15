@@ -58,7 +58,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     try {
       final card = {
         'cardNo': widget.businessCards.cardNo,
-        'myEmail': _loginEmail,
+        'myEmail': widget.loginEmail,
         'userEmail': widget.businessCards.userEmail,
       };
 
