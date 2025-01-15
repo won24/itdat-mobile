@@ -3,6 +3,8 @@ import 'package:itdat/models/board_model.dart';
 import 'package:itdat/widget/card/portfolio/write_post.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:itdat/models/http_client_model.dart';
 
 class PostBox extends StatefulWidget {
   final Map<String, dynamic> post;
@@ -36,8 +38,9 @@ class _PostBoxState extends State<PostBox> {
 
   // 파일이 있는 지 확인
   Future<bool> checkFileExists(String url) async {
+    final client = await HttpClientModel().createHttpClient();
     try {
-      final response = await http.head(Uri.parse(url));
+      final response = await client.head(Uri.parse(url));
       return response.statusCode == 200;
     } catch (e) {
       return false;
@@ -47,7 +50,7 @@ class _PostBoxState extends State<PostBox> {
 
   // 이미지 가져오기
   String getFullImageUrl(String fileUrl) {
-    const baseUrl = 'http://112.221.66.174:8001';
+    final baseUrl = "${dotenv.env['BASE_URL']}";
     if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
       return fileUrl;
     } else {

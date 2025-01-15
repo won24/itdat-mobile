@@ -68,7 +68,7 @@ class CardModel{
       var request = http.MultipartRequest('POST', url);
 
       request.fields['cardInfo'] = jsonEncode(cardInfo.toJson()).trim();
-      print("Serialized cardInfo: ${request.fields['cardInfo']}");
+      print("저장 할 카드정보 : ${request.fields['cardInfo']}");
 
       if (cardInfo.logoUrl != null && cardInfo.logoUrl!.isNotEmpty) {
         final logoFile = File(cardInfo.logoUrl!);
