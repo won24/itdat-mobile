@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
@@ -20,6 +21,24 @@ class PublicCardDetailScreen extends StatefulWidget {
 
 class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
   int _selectedIndex = 0;
+  late String _loginEmail = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmail();
+  }
+
+  Future<void> _loadEmail() async {
+    final storage = FlutterSecureStorage();
+    final userEmail = await storage.read(key: 'user_email');
+
+    if (userEmail != null) {
+      setState(() {
+        _loginEmail = userEmail;
+      });
+    }
+  }
 
   // 명함 템플릿 렌더링
   Widget buildBusinessCard(BusinessCard cardInfo) {
@@ -112,10 +131,10 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
           // 선택된 섹션 렌더링
           Expanded(
             child: _selectedIndex == 0
-                ? CardInfoWidget(businessCards: widget.cardInfo, loginEmail: widget.cardInfo.userEmail,)
+                ? CardInfoWidget(businessCards: widget.cardInfo, loginEmail: _loginEmail)
                 : _selectedIndex == 1
-                ? PortfolioWidget(loginUserEmail: widget.cardInfo.userEmail ?? "이메일 없음", cardUserEmail:widget.cardInfo.userEmail ?? "이메일 없음" ,)
-                : HistoryWidget(loginUserEmail: widget.cardInfo.userEmail ?? "이메일 없음", cardUserEmail:widget.cardInfo.userEmail ?? "이메일 없음" ,),
+                ? PortfolioWidget(loginUserEmail:_loginEmail, cardUserEmail:widget.cardInfo.userEmail)
+                : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail:widget.cardInfo.userEmail),
           ),
         ],
       ),

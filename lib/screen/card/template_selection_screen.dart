@@ -37,7 +37,6 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
   }
 
 
-  // 기존 정보 가져오기
   Future<void> fetchUserDataAndBusinessCards() async {
     setState(() => isLoading = true);
 
@@ -48,7 +47,6 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       setState(() {
         userData = fetchedUserData;
 
-        // 가장 최근에 만들어진 명함 찾기
         if (fetchedBusinessCards.isNotEmpty) {
           final latestCard = fetchedBusinessCards.reduce((a, b) {
             DateTime aDate = DateTime.parse(a['createdAt']);
@@ -56,22 +54,18 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
 
             return aDate.isAfter(bDate) ? a : b;
           });
-
           cardNo = latestCard['cardNo'] + 1;
         } else {
-          cardNo = 1; // 명함이 없으면 1부터 시작
+          cardNo = 1;
         }
 
         _initializeCard();
       });
     } catch (e) {
-      print("유저 기본 정보, 카드 정보 가져오기 실패 : $e");
-
-      // 기본값으로 초기화
       setState(() {
         userData = {};
-        cardNo = 1; // 기본 카드 번호
-        _initializeCard(); // 안전한 초기화
+        cardNo = 1;
+        _initializeCard();
       });
     } finally {
       setState(() => isLoading = false);
@@ -79,7 +73,6 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
   }
 
 
-  // 명함 정보 초기화
   void _initializeCard() {
     _card = BusinessCard(
       appTemplate: "",
@@ -100,7 +93,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       isPublic: userData?['isPublic'] ?? false,
     );
 
-    // 템플릿 초기화
+
     templates = [
       No1(cardInfo: _card),
       No2(cardInfo: _card),
