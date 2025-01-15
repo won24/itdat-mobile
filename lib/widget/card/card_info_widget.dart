@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../models/nfc_model.dart';
 
 class CardInfoWidget extends StatefulWidget {
   final BusinessCard businessCards;
@@ -19,7 +21,6 @@ class CardInfoWidget extends StatefulWidget {
 }
 
 class _InfoWidgetState extends State<CardInfoWidget> {
-
   final TextEditingController _memoController = TextEditingController();
 
   Uri get _telUrl => Uri.parse('tel:${widget.businessCards.phone}');
@@ -30,7 +31,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   void initState() {
     super.initState();
     if (widget.businessCards != null) {
-      _memoController.text = widget.businessCards.description?? '';
+      _memoController.text = widget.businessCards.description ?? '';
       _loadMemo();
     }
   }
@@ -51,24 +52,25 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     } else if (await canLaunchUrl(webUrl)) {
       await launchUrl(webUrl, mode: LaunchMode.externalApplication);
     } else {
-      _showSnackBar('맵을 열 수 없습니다.', isError: true);
+      _showSnackBar(AppLocalizations.of(context)!.cannotOpenMap, isError: true);
     }
   }
+
   Future<void> _loadMemo() async {
     try {
       final card = {
         'cardNo': widget.businessCards.cardNo,
-        'myEmail': _loginEmail,
+        'myEmail': widget.loginEmail,
         'userEmail': widget.businessCards.userEmail,
       };
 
-      final memo = await CardModel().loadMemo(card);
+      final memo = await NfcModel().loadMemo(card);
       setState(() {
         _memoController.text = memo ?? '';
         widget.businessCards.description = memo;
       });
     } catch (e) {
-      _showSnackBar("메모를 불러오는데 실패했습니다.", isError: true);
+      _showSnackBar(AppLocalizations.of(context)!.failedToLoadMemo, isError: true);
     }
   }
 
@@ -77,30 +79,27 @@ class _InfoWidgetState extends State<CardInfoWidget> {
       content: Text(message),
       backgroundColor: isError ? Colors.red : Colors.green,
       action: SnackBarAction(
-        label: '확인',
+        label: AppLocalizations.of(context)!.confirm,
         onPressed: () {},
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  // 메모 저장
   void _saveMemo(memo) async {
-
-    print("memo: $memo");
     final card = {
       'cardNo': widget.businessCards.cardNo,
       'description': memo,
       'myEmail': widget.loginEmail,
-      'userEmail': _memoController.text,
+      'userEmail':  widget.businessCards.userEmail,
     };
 
     try {
-      await CardModel().saveMemo(card);
-      _showSnackBar("메모가 저장 되었습니다.");
+      await NfcModel().saveMemo(card);
+      _showSnackBar(AppLocalizations.of(context)!.memoSaved);
       Navigator.pop(context);
     } catch (e) {
-      _showSnackBar("메모 저장 실패. 다시 시도해주세요.", isError: true);
+      _showSnackBar(AppLocalizations.of(context)!.failedToSaveMemo, isError: true);
     }
   }
 
@@ -112,7 +111,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
         children: [
           ListTile(
             title: Text('${widget.businessCards.phone}', style: TextStyle(fontWeight: FontWeight.w600),),
-            subtitle: Text("휴대전화", style: TextStyle(color: Colors.grey),),
+            subtitle: Text(AppLocalizations.of(context)!.mobilePhone, style: TextStyle(color: Colors.grey),),
             trailing: Wrap(
               spacing: 1.0,
               children: [
@@ -121,7 +120,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
                     if (await canLaunchUrl(_telUrl)) {
                       await launchUrl(_telUrl);
                     } else {
-                      _showSnackBar("전화를 걸 수 없습니다. 다시 시도해주세요.", isError: true);
+                      _showSnackBar(AppLocalizations.of(context)!.cannotMakeCall, isError: true);
                     }
                   },
                   icon: Image.asset('assets/icons/call.png', height: 30, width: 30),
@@ -131,7 +130,7 @@ class _InfoWidgetState extends State<CardInfoWidget> {
                     if (await canLaunchUrl(_smsUrl)) {
                       await launchUrl(_smsUrl);
                     } else {
-                      _showSnackBar("문자를 보낼 수 없습니다. 다시 시도해주세요.", isError: true);
+                      _showSnackBar(AppLocalizations.of(context)!.cannotSendSMS, isError: true);
                     }
                   },
                   icon: Image.asset('assets/icons/sms.png', height: 30, width: 30),
@@ -141,13 +140,13 @@ class _InfoWidgetState extends State<CardInfoWidget> {
           ),
           ListTile(
             title: Text('${widget.businessCards.email}', style: TextStyle(fontWeight: FontWeight.w600),),
-            subtitle: Text("이메일", style: TextStyle(color: Colors.grey),),
+            subtitle: Text(AppLocalizations.of(context)!.email, style: TextStyle(color: Colors.grey),),
             trailing: IconButton(
               onPressed: () async {
                 if (await canLaunchUrl(_emailUrl)) {
                   await launchUrl(_emailUrl);
                 } else {
-                  _showSnackBar("이메일을 실행할 수 없습니다. 다시 시도해주세요.", isError: true);
+                  _showSnackBar(AppLocalizations.of(context)!.cannotOpenEmail, isError: true);
                 }
               },
               icon: Image.asset('assets/icons/mail.png', height: 30, width: 30),
@@ -155,69 +154,63 @@ class _InfoWidgetState extends State<CardInfoWidget> {
           ),
           ListTile(
             title: Text('${widget.businessCards.companyAddress}', style: TextStyle(fontWeight: FontWeight.w600),),
-            subtitle: Text("주소", style: TextStyle(color: Colors.grey),),
+            subtitle: Text(AppLocalizations.of(context)!.address, style: TextStyle(color: Colors.grey),),
             trailing: IconButton(
-              onPressed: (){
-                // _showMapSelectionBottomSheet();
-                _openMaps();
-              },
+              onPressed: _openMaps,
               icon: Image.asset('assets/icons/location.png', height: 30, width: 30),
             ),
           ),
           widget.businessCards.userEmail != widget.loginEmail
               ? ListTile(
             title: Text('${widget.businessCards.description}', style: TextStyle(fontWeight: FontWeight.w600),),
-            subtitle: Text("메모", style: TextStyle(color: Colors.grey),),
+            subtitle: Text(AppLocalizations.of(context)!.memo, style: TextStyle(color: Colors.grey),),
             trailing: IconButton(
-              onPressed: (){
-                GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  child: Dialog(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        width: 350,
-                        padding: EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text('메모',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                            SizedBox(height: 10),
-                            TextField(
-                              controller: _memoController,
-                              decoration: const InputDecoration(labelText: '메모'),
-                            ),
-                            SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text('취소'),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      child: SingleChildScrollView(
+                        child: Container(
+                          width: 350,
+                          padding: EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                AppLocalizations.of(context)!.memo,
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 16),
+                              TextField(
+                                controller: _memoController,
+                                maxLines: 5,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: AppLocalizations.of(context)!.enterMemo,
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    _saveMemo(_memoController.text);
-                                  },
-                                  child: widget.businessCards.description == null ? const Text('저장') : const Text('수정'),
-                                ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              SizedBox(height: 16),
+                              ElevatedButton(
+                                child: Text(AppLocalizations.of(context)!.save),
+                                onPressed: () {
+                                  _saveMemo(_memoController.text);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
               icon: Image.asset('assets/icons/memo.png', height: 30, width: 30),
             ),
           )
-              : SizedBox.shrink()
+              : SizedBox.shrink(),
         ],
       ),
-
     );
   }
 }

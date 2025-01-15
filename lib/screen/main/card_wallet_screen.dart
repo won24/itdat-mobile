@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:itdat/models/mywallet_model.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/providers/auth_provider.dart';
 import '../../widget/mycard/folder_detail_screen.dart';
+import '../../widget/setting/waitwidget.dart';
 import '../card/card_wallet_card_detail_screen.dart';
 import '../card/template/no_1.dart';
 import '../card/template/no_2.dart';
@@ -39,7 +40,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
   }
 
   Future<void> refreshAllCards() async {
-   final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+    final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
 
     if (userEmail != null) {
       try {
@@ -61,7 +62,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
     final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
 
     if (userEmail == null) {
-      _showErrorSnackBar("로그인이 필요합니다.");
+      _showErrorSnackBar(AppLocalizations.of(context)!.loginRequired);
       return;
     }
 
@@ -105,7 +106,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
       }
     } catch (e) {
       debugPrint("데이터 로드 중 오류: $e");
-      _showErrorSnackBar("데이터를 가져오는 중 오류가 발생했습니다.");
+      _showErrorSnackBar(AppLocalizations.of(context)!.dataLoadError);
     } finally {
       setState(() {
         _isLoading = false;
@@ -120,7 +121,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         _folders = folders;
       });
     } catch (e) {
-      _showErrorSnackBar("폴더 목록을 가져오는 중 오류가 발생했습니다.");
+      _showErrorSnackBar(AppLocalizations.of(context)!.fetchFoldersError);
     }
   }
 
@@ -146,22 +147,22 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("폴더 생성"),
+          title: Text(AppLocalizations.of(context)!.createFolderTitle),
           content: TextField(
             controller: folderNameController,
-            decoration: InputDecoration(hintText: "폴더 이름 입력"),
+            decoration: InputDecoration(hintText: AppLocalizations.of(context)!.createFolderTitle),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("취소"),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () {
                 final folderName = folderNameController.text.trim();
                 Navigator.pop(context, folderName);
               },
-              child: Text("생성"),
+              child: Text(AppLocalizations.of(context)!.create),
             ),
           ],
         );
@@ -172,13 +173,13 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
       try {
         final success = await _walletModel.createFolder(userEmail, folderName);
         if (success) {
-          _showErrorSnackBar("폴더가 성공적으로 생성되었습니다.");
+          _showErrorSnackBar(AppLocalizations.of(context)!.folderCreatedSuccess);
           await _fetchFolders(userEmail);
         } else {
-          _showErrorSnackBar("폴더 생성에 실패했습니다.");
+          _showErrorSnackBar(AppLocalizations.of(context)!.folderCreationFailed);
         }
       } catch (e) {
-        _showErrorSnackBar("폴더 생성 중 오류가 발생했습니다.");
+        _showErrorSnackBar(AppLocalizations.of(context)!.folderCreationError);
       }
     }
   }
@@ -191,22 +192,22 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("폴더 이름 수정"),
+          title: Text(AppLocalizations.of(context)!.editFolderTitle),
           content: TextField(
             controller: folderNameController,
-            decoration: InputDecoration(hintText: "새로운 폴더 이름 입력"),
+            decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterNewFolderNameHint),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("취소"),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () {
                 final newName = folderNameController.text.trim();
                 Navigator.pop(context, newName);
               },
-              child: Text("수정"),
+              child: Text(AppLocalizations.of(context)!.edit),
             ),
           ],
         );
@@ -228,12 +229,12 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
             _folders[folderIndex]['folderName'] = newFolderName;
           }
         });
-        _showErrorSnackBar("폴더 이름이 성공적으로 수정되었습니다.");
+        _showErrorSnackBar(AppLocalizations.of(context)!.folderEditSuccess);
       } else {
-        _showErrorSnackBar("폴더 이름 수정에 실패했습니다.");
+        _showErrorSnackBar(AppLocalizations.of(context)!.folderEditFailed);
       }
     } catch (e) {
-      _showErrorSnackBar("폴더 이름 수정 중 오류가 발생했습니다.");
+      _showErrorSnackBar(AppLocalizations.of(context)!.folderEditError);
     }
   }
 
@@ -243,16 +244,16 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("폴더 삭제"),
-            content: Text("폴더를 삭제하시겠습니까?"),
+            title: Text(AppLocalizations.of(context)!.deleteFolderTitle),
+            content: Text(AppLocalizations.of(context)!.deleteFolderConfirmation),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: Text("취소"),
+                child: Text(AppLocalizations.of(context)!.cancel),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: Text("삭제"),
+                child: Text(AppLocalizations.of(context)!.delete),
               ),
             ],
           );
@@ -265,13 +266,13 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
           setState(() {
             _folders.removeWhere((folder) => folder['folderName'] == folderName);
           });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("폴더가 삭제되었습니다.")));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.folderDeleteSuccess)));
         } else {
-          _showErrorSnackBar("폴더 삭제에 실패했습니다.");
+          _showErrorSnackBar(AppLocalizations.of(context)!.folderDeleteFailed);
         }
       }
     } catch (e) {
-      _showErrorSnackBar("폴더 삭제 중 오류가 발생했습니다.");
+      _showErrorSnackBar(AppLocalizations.of(context)!.folderDeleteError);
     }
   }
 
@@ -292,7 +293,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         });
       }
     } catch (e) {
-      _showErrorSnackBar("명함 이동 중 오류가 발생했습니다.");
+      _showErrorSnackBar(AppLocalizations.of(context)!.dragerror);
     }
   }
 
@@ -316,7 +317,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("내 명함첩"),
+        title: Text(AppLocalizations.of(context)!.cardcase),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -333,7 +334,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: WaitAnimationWidget())
           : Column(
         children: [
           // 폴더 섹션
@@ -342,7 +343,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
             child: _folders.isEmpty
                 ? Center(
               child: Text(
-                "폴더 없음",
+                  AppLocalizations.of(context)!.noFolder,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             )
@@ -438,7 +439,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
             child: _allCards.isEmpty
                 ? Center(
               child: Text(
-                "명함 없음",
+                AppLocalizations.of(context)!.noCards,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             )

@@ -5,6 +5,7 @@ import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/widget/card/card_info_widget.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/widget/card/history/history_widget.dart';
 import 'package:itdat/widget/reportUser/reportUserWidget.dart';
 
@@ -38,7 +39,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("명함 세부 정보"),
+        title:  Text(AppLocalizations.of(context)!.carddetailinfo),
         centerTitle: true,
         actions: [
           PopupMenuButton(
@@ -56,9 +57,9 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
+               PopupMenuItem(
                 value: 'report',
-                child: Text("신고"),
+                child: Text(AppLocalizations.of(context)!.report),
               ),
             ],
           ),
@@ -86,7 +87,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
                     _selectedIndex = 0;
                   });
                 },
-                child: const Text("연락처"),
+                child:  Text(AppLocalizations.of(context)!.contact),
               ),
               const Text("|"),
               TextButton(
@@ -95,7 +96,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
                     _selectedIndex = 1;
                   });
                 },
-                child: const Text("포트폴리오"),
+                child:  Text(AppLocalizations.of(context)!.portfolio),
               ),
               const Text("|"),
               TextButton(
@@ -104,7 +105,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
                     _selectedIndex = 2;
                   });
                 },
-                child: const Text("히스토리"),
+                child:  Text(AppLocalizations.of(context)!.history),
               ),
             ],
           ),

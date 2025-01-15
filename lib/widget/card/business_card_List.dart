@@ -3,6 +3,7 @@ import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:itdat/widget/nfc/nfcWrite.dart'; // NfcWritePage import 추가
 
@@ -49,9 +50,9 @@ class _BusinessCardWidgetState extends State<BusinessCardList> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return const Center(child: Text('명함을 가져오는 중 오류가 발생했습니다.'));
+          return  Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
         } else if (!snapshot.hasData || snapshot.data.isEmpty) {
-          return const Center(child: Text('저장된 명함이 없습니다.'));
+          return  Center(child: Text(AppLocalizations.of(context)!.noCards));
         } else {
           var businessCards = snapshot.data;
 

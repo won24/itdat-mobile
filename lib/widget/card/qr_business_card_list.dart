@@ -69,9 +69,10 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
                         size: 300.0,
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
+                      IconButton(
+                        icon: Icon(Icons.download_sharp),
                         onPressed: () => _saveQrCodeWithCanvas(qrData, context),
-                        child: Text(AppLocalizations.of(context)!.qrsave),
+                        tooltip: AppLocalizations.of(context)!.qrsave,
                       ),
                     ],
                   ),

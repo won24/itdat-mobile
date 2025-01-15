@@ -12,6 +12,7 @@ import 'package:itdat/screen/mainLayout.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FormScreen extends StatefulWidget {
   final BusinessCard cardInfo;
@@ -36,7 +37,7 @@ class _FormScreenState extends State<FormScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('색상 선택'),
+          title:  Text(AppLocalizations.of(context)!.selectcolor),
           content: ColorPicker(
             pickerColor: currentColor,
             onColorChanged: (color) {
@@ -54,13 +55,13 @@ class _FormScreenState extends State<FormScreen> {
           ),
           actions: [
             TextButton(
-              child: const Text('취소'),
+              child:  Text(AppLocalizations.of(context)!.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('확인'),
+              child:  Text(AppLocalizations.of(context)!.confirm),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -97,7 +98,7 @@ class _FormScreenState extends State<FormScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('글씨체 선택'),
+          title:  Text(AppLocalizations.of(context)!.font),
           content: SizedBox(
             width: double.maxFinite,
             child: ListView.builder(
@@ -124,7 +125,7 @@ class _FormScreenState extends State<FormScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('취소'),
+              child:  Text(AppLocalizations.of(context)!.cancel),
             ),
           ],
         );
