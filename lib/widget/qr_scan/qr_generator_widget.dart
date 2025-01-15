@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../card/qr_business_card_list.dart';
+import '../setting/waitwidget.dart';
 
 class QRGeneratorWidget extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _QRGeneratorWidgetState extends State<QRGeneratorWidget> {
         future: _emailFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: WaitAnimationWidget());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.data == null) {

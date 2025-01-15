@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../models/nfc_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../setting/waitwidget.dart';
+
 class QRScannerWidget extends StatefulWidget {
   @override
   _QRScannerWidgetState createState() => _QRScannerWidgetState();
@@ -186,14 +188,17 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
           ),
         ),
         if (_isProcessing)
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 16),
-                Text("처리중..."),
-              ],
+          Container(
+            color: Colors.black.withOpacity(0.5), // 배경 투명도를 조절합니다
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: WaitAnimationWidget()
+                  ),
+                ],
+              ),
             ),
           ),
       ],
@@ -201,61 +206,80 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
   }
 }
 
+
+
 class ScannerOverlay extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final double scanAreaSize = size.width * 0.7;
+    final double scanAreaSize = size.width * 0.15; // 스캔 영역의 크기 설정
     final double left = (size.width - scanAreaSize) / 2;
     final double top = (size.height - scanAreaSize) / 2;
     final double right = left + scanAreaSize;
     final double bottom = top + scanAreaSize;
 
-    final Paint backgroundPaint = Paint()
-      ..color = Colors.black.withOpacity(0.5);
+    final Paint cornerPaint = Paint()
+      ..color = Colors.yellow
+      ..strokeWidth = 2.5
+      ..style = PaintingStyle.stroke;
 
-    final Paint borderPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
+    final double cornerLength = scanAreaSize * 0.2; // 모서리 선의 길이를 스캔 영역 크기의 20%로 설정
+    final double radius = 5; // 둥근 모서리의 반지름을 작게 설정
+
+    // 약간 부드러운 모서리 그리기
+    final Path path = Path();
+
+    // 좌상단 모서리
+    path.moveTo(left + cornerLength, top);
+    path.lineTo(left + radius, top);
+    path.quadraticBezierTo(left, top, left, top + radius);
+    path.lineTo(left, top + cornerLength);
+
+    // 우상단 모서리
+    path.moveTo(right - cornerLength, top);
+    path.lineTo(right - radius, top);
+    path.quadraticBezierTo(right, top, right, top + radius);
+    path.lineTo(right, top + cornerLength);
+
+    // 좌하단 모서리
+    path.moveTo(left, bottom - cornerLength);
+    path.lineTo(left, bottom - radius);
+    path.quadraticBezierTo(left, bottom, left + radius, bottom);
+    path.lineTo(left + cornerLength, bottom);
+
+    // 우하단 모서리
+    path.moveTo(right, bottom - cornerLength);
+    path.lineTo(right, bottom - radius);
+    path.quadraticBezierTo(right, bottom, right - radius, bottom);
+    path.lineTo(right - cornerLength, bottom);
+
+    // 경로 그리기
+    canvas.drawPath(path, cornerPaint);
+
+    // 십자선 그리기를 위한 Paint 객체
+    final Paint crossPaint = Paint()
+      ..color = Colors.yellow
       ..strokeWidth = 2.0;
 
-    // 배경 그리기
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
+    // 스캔 영역 중앙에 십자선 그리기
+    final double centerX = (left + right) / 2;
+    final double centerY = (top + bottom) / 2;
+    final double crossSize = scanAreaSize / 5; // 십자선 크기를 스캔 영역의 1/5로 설정
 
-    // 스캔 영역 그리기
-    canvas.drawRect(Rect.fromLTRB(left, top, right, bottom), borderPaint);
-
-    // 스캔 영역 내부를 투명하게 만들기
-    canvas.drawRect(
-      Rect.fromLTRB(left, top, right, bottom),
-      Paint()..blendMode = BlendMode.clear,
+    // 가로선 그리기
+    canvas.drawLine(
+      Offset(centerX - crossSize / 2, centerY),
+      Offset(centerX + crossSize / 2, centerY),
+      crossPaint,
     );
 
-    // 모서리 그리기
-    final double cornerSize = 20;
-    final Paint cornerPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4;
-
-    // 왼쪽 상단 모서리
-    canvas.drawLine(Offset(left, top + cornerSize), Offset(left, top), cornerPaint);
-    canvas.drawLine(Offset(left, top), Offset(left + cornerSize, top), cornerPaint);
-
-    // 오른쪽 상단 모서리
-    canvas.drawLine(Offset(right - cornerSize, top), Offset(right, top), cornerPaint);
-    canvas.drawLine(Offset(right, top), Offset(right, top + cornerSize), cornerPaint);
-
-    // 왼쪽 하단 모서리
-    canvas.drawLine(Offset(left, bottom - cornerSize), Offset(left, bottom), cornerPaint);
-    canvas.drawLine(Offset(left, bottom), Offset(left + cornerSize, bottom), cornerPaint);
-
-    // 오른쪽 하단 모서리
-    canvas.drawLine(Offset(right - cornerSize, bottom), Offset(right, bottom), cornerPaint);
-    canvas.drawLine(Offset(right, bottom - cornerSize), Offset(right, bottom), cornerPaint);
+    // 세로선 그리기
+    canvas.drawLine(
+      Offset(centerX, centerY - crossSize / 2),
+      Offset(centerX, centerY + crossSize / 2),
+      crossPaint,
+    );
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

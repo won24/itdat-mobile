@@ -210,19 +210,20 @@ class CardModel{
      }
    }
 
-   Future<bool> deleteCard(int cardNo) async {
+   Future<bool> deleteCard(int cardId) async {
      try {
        // 저장된 이메일 가져오기
-       String? userEmail = await storage.read(key: 'email');
+       String? userEmail = await storage.read(key: 'user_email');
        if (userEmail == null) {
          throw Exception('사용자 이메일을 찾을 수 없습니다.');
        }
 
        // 요청 바디 생성
        Map<String, dynamic> requestBody = {
-         'cardNo': cardNo,
+         'cardNo': cardId,
          'userEmail': userEmail,
        };
+       print(requestBody);
 
        final response = await http.post(
          Uri.parse('$baseUrl/delete'),
