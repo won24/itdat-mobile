@@ -143,7 +143,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                 )
               );
             },
-      ),
+          ),
     );
   }
 }

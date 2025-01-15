@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:ui';
-
 class BusinessCard {
   String? appTemplate;
   String? userName;
@@ -24,7 +21,7 @@ class BusinessCard {
   String? textColor;
   String? fontFamily;
   String? customText;
-  Bool? isTextEnabled;
+  bool? isTextEnabled;
   String? textPosition;
 
   BusinessCard({
@@ -108,9 +105,9 @@ class BusinessCard {
       'backgroundColor': backgroundColor,
       'textColor': textColor,
       'fontFamily': fontFamily,
-      'customText ': customText,
-      'isTextEnabled ': isTextEnabled,
-      'textPosition ' :textPosition
+      'customText': customText,
+      'isTextEnabled': isTextEnabled,
+      'textPosition' :textPosition
     };
   }
 

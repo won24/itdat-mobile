@@ -52,7 +52,9 @@ class No2 extends StatelessWidget {
 
   // 색 코드 변경
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
-    if (hex == null || hex.isEmpty) return fallback;
+    if (hex == null || hex.isEmpty) {
+      return fallback;
+    }
     try {
       return Color(int.parse(hex.replaceFirst('#', '0xFF')));
     } catch (_) {
@@ -62,9 +64,8 @@ class No2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    Color backgroundColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
-    Color textColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.white);
+    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.white);
+    Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
 
     return Container(
       width: 420,

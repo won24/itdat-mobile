@@ -53,7 +53,9 @@ class No1 extends StatelessWidget {
 
   // 색 코드 변경
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
-    if (hex == null || hex.isEmpty) return fallback;
+    if (hex == null || hex.isEmpty) {
+      return fallback;
+    }
     try {
       return Color(int.parse(hex.replaceFirst('#', '0xFF')));
     } catch (_) {

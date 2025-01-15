@@ -114,6 +114,7 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
     }
 
     return Scaffold(
+      appBar: AppBar(title: const Text("명함 상세 정보")),
       body: Column(
         children: [
           Card(

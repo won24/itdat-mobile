@@ -47,8 +47,8 @@ class BackTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = hexToColor(cardInfo.backgroundColor);
-    Color textColor = hexToColor(cardInfo.textColor);
+    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.white);
+    Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
 
     return Container(
       width: 420,
@@ -59,8 +59,21 @@ class BackTemplate extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+
+          // 텍스트 렌더링 (위)
+          if (cardInfo.isTextEnabled == true && cardInfo.textPosition == 'above') ...[
+            Text(
+              cardInfo.customText ?? "",
+              style: TextStyle(
+                fontSize: 18,
+                color: textColor,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+
           // 로고 이미지 렌더링
           cardInfo.logoUrl != null
               ? FutureBuilder<bool>(
@@ -101,30 +114,16 @@ class BackTemplate extends StatelessWidget {
             ),
           ),
 
-          // 텍스트가 활성화 되어 있으면 텍스트 렌더링
-          if (cardInfo.isTextEnabled != null) ...[
-            if (cardInfo.textPosition == 'above')
-              Text(
-                cardInfo.customText ?? "",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: textColor,
-                  fontWeight: FontWeight.w400,
-                ),
+          // 텍스트 렌더링 (아래)
+          if (cardInfo.isTextEnabled == true && cardInfo.textPosition == 'below') ...[
+            Text(
+              cardInfo.customText ?? "",
+              style: TextStyle(
+                fontSize: 18,
+                color: textColor,
+                fontWeight: FontWeight.w400,
               ),
-          ],
-
-          // 텍스트가 활성화 되어 있으면 텍스트 렌더링 (아래)
-          if (cardInfo.isTextEnabled != null) ...[
-            if (cardInfo.textPosition == 'below')
-              Text(
-                cardInfo.customText ?? "",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: textColor,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+            ),
           ],
         ],
       ),

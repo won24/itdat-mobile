@@ -27,7 +27,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
   File? _image;
   String? _customText;
   bool _isTextEnabled = false;
-  String _textPosition = 'above';
+  String _textPosition = '';
 
 
   // 갤러리 사진 선택
@@ -66,7 +66,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
     widget.cardInfo.logoUrl = _image?.path;
     widget.cardInfo.appTemplate = 'BackTemplate';
     widget.cardInfo.customText = _customText;
-    widget.cardInfo.isTextEnabled = _isTextEnabled as Bool?;
+    widget.cardInfo.isTextEnabled = _isTextEnabled;
     widget.cardInfo.textPosition = _textPosition;
 
     if (_image == null) {
@@ -101,7 +101,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("명함 미리보기")),
+      appBar: AppBar(title: Text("명함 뒷장")),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -184,6 +184,8 @@ class _BackFormScreenState extends State<BackFormScreen> {
                 onChanged: (bool value) {
                   setState(() {
                     _isTextEnabled = value;
+                    widget.cardInfo.isTextEnabled = _isTextEnabled;
+                    print(widget.cardInfo.isTextEnabled);
                   });
                 },
               ),
@@ -193,6 +195,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
                   onChanged: (value) {
                     setState(() {
                       _customText = value;
+                      widget.cardInfo.customText = _customText;
                     });
                   },
                 ),
@@ -206,20 +209,22 @@ class _BackFormScreenState extends State<BackFormScreen> {
                       onChanged: (String? value) {
                         setState(() {
                           _textPosition = value!;
+                          widget.cardInfo.textPosition = _textPosition;
                         });
                       },
                     ),
-                    Text("위"),
+                    Text("로고 위"),
                     Radio<String>(
                       value: 'below',
                       groupValue: _textPosition,
                       onChanged: (String? value) {
                         setState(() {
                           _textPosition = value!;
+                          widget.cardInfo.textPosition = _textPosition;
                         });
                       },
                     ),
-                    Text("아래"),
+                    Text("로고 아래"),
                   ],
                 ),
               ],
