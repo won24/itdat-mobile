@@ -65,4 +65,5 @@ flutter:
     - assets/nfc.png
     - assets/qr.png
     - assets/waitAnime.json
+    - .env
     - assets/ca_bundle.crt

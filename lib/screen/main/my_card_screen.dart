@@ -143,8 +143,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+      body: Column(
         children: [
           Expanded(
             child: FutureBuilder<List<dynamic>>(
@@ -324,7 +323,6 @@ class _MyCardWidgetState extends State<MyCardScreen> {
             ),
           ],
         ),
-      )
-    );
+      );
   }
 }
