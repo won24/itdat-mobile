@@ -39,7 +39,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
-  // 색 코드 변경
+  // Hex -> Color
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
     if (hex == null || hex.isEmpty) return fallback;
     try {
@@ -50,6 +50,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
+  // Color -> Hex
   String colorToHex(Color color) {
     int r = (color.r * 255).toInt();
     int g = (color.g * 255).toInt();
@@ -387,24 +388,26 @@ class _FormScreenState extends State<FormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("명함 제작"),
         actions: [
           IconButton(
-            icon: const Icon(Icons.color_lens),
+            icon: Image.asset('assets/icons/background.png', height: 25, width: 25,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
             onPressed: () {
               _changeColor(backgroundColor, true);
             },
           ),
           IconButton(
-            icon: const Icon(Icons.text_fields),
+            icon: Image.asset('assets/icons/text.png', height: 25, width: 25,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
             onPressed: () {
               _changeColor(backgroundColor, false);
             },
           ),
           IconButton(
-            icon: const Icon(Icons.font_download),
+            icon: Image.asset('assets/icons/font.png', height: 25, width: 25,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
             onPressed: _changeFontFamily,
           ),
         ],
