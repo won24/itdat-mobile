@@ -25,10 +25,6 @@ class AuthProvider with ChangeNotifier {
     String? email = await _storage.read(key: 'user_email');
     String? id = await _storage.read(key: 'user_id');
 
-    print("토큰 확인: $token");
-    print("저장된 이메일: $email");
-    print("저장된 ID: $id");
-
     if (token != null && token.isNotEmpty) {
       _isLoggedIn = true;
       _userEmail = email;
@@ -51,7 +47,6 @@ class AuthProvider with ChangeNotifier {
     await _storage.delete(key: 'auth_token');
     await _storage.delete(key: 'user_email');
     await _storage.delete(key: 'user_id');
-    print("로그아웃: 토큰, 이메일, ID 삭제 완료");
     _isLoggedIn = false;
     _userEmail = null;
     _userId = null;

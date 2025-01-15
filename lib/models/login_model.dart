@@ -6,38 +6,16 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/io_client.dart';
 
+import '../utils/HttpClientManager.dart';
+
 class LoginModel extends ChangeNotifier{
   final baseUrl = dotenv.env['BASE_URL'];
-   // final String baseUrl = 'http://112.221.66.174:8001'; // 원
-  // final String baseUrl = 'http://10.0.2.2:8082';     // 김
-  // final String baseUrl = 'http://112.221.66.174:8000'; // son
-  // final String baseUrl = 'http://112.221.66.174:8002'; // seo
+  final HttpClientManager _httpClientManager;
 
-  IOClient? _httpClient;
-
-  Future<IOClient> createHttpClient() async {
-    if (_httpClient != null) return _httpClient!; // 이미 HttpClient 객체가 생성된 경우 재사용
-
-    // 인증서 파일 로드 (res/raw/ca_bundle.crt)
-    final ByteData data = await rootBundle.load('res/raw/ca_bundle.crt');
-    final List<int> bytes = data.buffer.asUint8List();
-
-    // 인증서 파일을 SecurityContext에 추가
-    final SecurityContext context = SecurityContext(withTrustedRoots: false);
-    context.setTrustedCertificatesBytes(bytes);
-
-    // dart:io HttpClient 생성 및 인증서 적용
-    final HttpClient httpClient = HttpClient(context: context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-
-    // IOClient 생성
-    _httpClient = IOClient(httpClient);
-
-    return _httpClient!;
-  }
+  LoginModel(this._httpClientManager);
 
   Future<Map<String, dynamic>> login(Map<String, String> requestLogin) async {
-    final client = await createHttpClient();
+    final IOClient client = await _httpClientManager.createHttpClient();
     try {
 
       final response = await client.post(
