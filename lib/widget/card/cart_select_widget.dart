@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/widget/card/qr_business_card_list.dart';
 import 'business_card_List.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CardSelect extends StatefulWidget {
   final String source; // 'qr' 또는 'nfc'
@@ -35,7 +36,7 @@ class _CardSelectState extends State<CardSelect> {
       appBar: widget.source == 'qr'
           ? null  // QR 스캔인 경우 AppBar를 표시하지 않음
           : AppBar(
-        title: Text('NFC 스캔 명함'),
+        title: Text(AppLocalizations.of(context)!.scannercard),
       ),
       body: widget.source == 'qr' ? QrBusinessCardList(userEmail: userEmail!):BusinessCardList(userEmail: userEmail!),
     );

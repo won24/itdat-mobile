@@ -5,6 +5,7 @@ import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import '../../models/BusinessCard.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OpenCardScreen extends StatefulWidget {
   const OpenCardScreen({super.key});
@@ -39,13 +40,14 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
             .toList();
       });
     } catch (e) {
-      _showErrorSnackBar("공개 명함을 불러오는 중 오류가 발생했습니다.");
+      _showErrorSnackBar(AppLocalizations.of(context)!.errorLoadingPublicCards);
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
   }
+
   // 에러 메시지 표시
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -67,53 +69,51 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
     }
   }
 
-  // commit test
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("공개 명함"),
+        title: Text(AppLocalizations.of(context)!.publicCards),
         centerTitle: true,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _publicCards.isEmpty
-          ? const Center(child: Text("공개된 명함이 없습니다."))
-          : ListView.builder(
-        itemCount: _publicCards.length,
-        itemBuilder: (context, index) {
-          final cardInfo = _publicCards[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  // commit test
-                  builder: (context) => PublicCardDetailScreen(cardInfo: cardInfo),
+              ? Center(child: Text(AppLocalizations.of(context)!.noPublicCards))
+              : ListView.builder(
+                  itemCount: _publicCards.length,
+                  itemBuilder: (context, index) {
+                    final cardInfo = _publicCards[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PublicCardDetailScreen(cardInfo: cardInfo),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 16.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // 명함 템플릿
+                              buildBusinessCard(cardInfo),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-            child: Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              margin: const EdgeInsets.symmetric(
-                  vertical: 8.0, horizontal: 16.0),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 명함 템플릿
-                    buildBusinessCard(cardInfo),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 }

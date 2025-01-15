@@ -210,8 +210,8 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
                         ),
                         if (_isEditMode)
                           Positioned(
-                            top: 10,
-                            right: 10,
+                            top: 15,
+                            right: 20,
                             child: Icon(
                               _selectedCards.contains(cardInfo)
                                   ? Icons.check_circle
@@ -224,8 +224,8 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
                           )
                         else
                           Positioned(
-                            top: 10,
-                            right: 10,
+                            top: 15,
+                            right: 20,
                             child: Icon(
                               cardInfo.isPublic == true ? Icons.public : Icons.public_off,
                               color: cardInfo.isPublic == true ? Colors.green : Colors.red,
