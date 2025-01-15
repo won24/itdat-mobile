@@ -20,7 +20,8 @@ class MyCardScreen extends StatefulWidget {
 }
 
 class _MyCardWidgetState extends State<MyCardScreen> {
-  late String _loginEmail;
+
+  late String _loginEmail = "";
   late Future<List<dynamic>>? _businessCards;
   BusinessCard? selectedCardInfo;
   final PageController _pageController = PageController();

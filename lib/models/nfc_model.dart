@@ -3,7 +3,13 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class NfcModel {
-  final String baseUrl = "http://112.221.66.174:8000";
+  
+  // final String baseUrl = "http://112.221.66.174:8000";
+  // final String baseUrl = "http://112.221.66.174:8002"; // seo
+  final String baseUrl = "http://112.221.66.174:8001";
+  // final String baseUrl = "http://112.221.66.174:8000"; // seo
+  
+  final Dio _dio = Dio();
   final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   Future<void> processCardInfo(Map<String, dynamic> cardInfo) async {
