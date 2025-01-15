@@ -42,7 +42,6 @@ class ExpandedCardScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              // TODO: 수정 기능 구현
             },
           ),
           IconButton(
