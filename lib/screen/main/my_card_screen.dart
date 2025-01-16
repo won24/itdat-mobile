@@ -147,118 +147,121 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder<List<dynamic>>(
-              future: _businessCards,
-              builder: (context, snapshot) {
-                if (_businessCards == null) {
-                  return const Center(child: WaitAnimationWidget());
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: WaitAnimationWidget());
-                } else if (snapshot.hasError) {
-                  return  Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
-                          ),
-                        ).then((_) => _reloadBusinessCards());
-                      },
-                      icon: const Icon(Icons.add, size: 64),
-                    ),
-                  );
-                } else {
-                  var businessCards = snapshot.data!
-                      .map((data) => BusinessCard.fromJson(data)).toList()
-                    ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
-
-                  var filteredCards = businessCards
-                      .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
-                      .toList();
-
-                  _setInitialCard(filteredCards);
-
-                  return Column(
-                    children: [
-                      Flexible(
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: filteredCards.length + 1,
-                          onPageChanged: (index) {
-                            setState(() {
-                              _cardIndex = index;
-                              if (index < filteredCards.length) {
-                                selectedCardInfo = filteredCards[index];
-                              }
-                            });
-                          },
-                          itemBuilder: (context, index) {
-                            if (index == filteredCards.length) {
-                              return Center(
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            TemplateSelectionScreen(userEmail: _loginEmail),
-                                      ),
-                                    ).then((_) => _reloadBusinessCards());
-                                  },
-                                  icon: const Icon(Icons.add, size: 64),
-                                ),
-                              );
-                            } else {
-                              var cardInfo = filteredCards[index];
-
-                              return GestureDetector(
-                                onTap: (){
-                                  BusinessCard? backCard;
-                                  for (var businessCard in businessCards) {
-                                    if (businessCard.cardNo == cardInfo.cardNo && businessCard.cardSide == 'BACK') {
-                                      backCard = businessCard;
-                                      break;
-                                    }
-                                  }
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ExpandedCardScreen(
-                                        cardInfo: cardInfo,
-                                        backCard: backCard,
-                                      ),
-                                    ),
-                                  ).then((value) {
-                                    if (value == true) {
-                                      _reloadBusinessCards();
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  child: buildBusinessCard(cardInfo, context),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      renderCardSlideIcon(filteredCards),
-                    ],
-                  );
-                }
-              },
-            ),
-          ),
-          Expanded(
-            child: Column(
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              child:Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    height: 300,
+                    child: FutureBuilder<List<dynamic>>(
+                      future: _businessCards,
+                      builder: (context, snapshot) {
+                        if (_businessCards == null) {
+                          return const Center(child: WaitAnimationWidget());
+                        }
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: WaitAnimationWidget());
+                        } else if (snapshot.hasError) {
+                          return  Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
+                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
+                                  ),
+                                ).then((_) => _reloadBusinessCards());
+                              },
+                              icon: const Icon(Icons.add, size: 64),
+                            ),
+                          );
+                        } else {
+                          var businessCards = snapshot.data!
+                              .map((data) => BusinessCard.fromJson(data)).toList()
+                            ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
+
+                          var filteredCards = businessCards
+                              .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
+                              .toList();
+
+                          _setInitialCard(filteredCards);
+
+                          return Column(
+                            children: [
+                              Flexible(
+                                child: PageView.builder(
+                                  controller: _pageController,
+                                  itemCount: filteredCards.length + 1,
+                                  onPageChanged: (index) {
+                                    setState(() {
+                                      _cardIndex = index;
+                                      if (index < filteredCards.length) {
+                                        selectedCardInfo = filteredCards[index];
+                                      }
+                                    });
+                                  },
+                                  itemBuilder: (context, index) {
+                                    if (index == filteredCards.length) {
+                                      return Center(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TemplateSelectionScreen(userEmail: _loginEmail),
+                                              ),
+                                            ).then((_) => _reloadBusinessCards());
+                                          },
+                                          icon: const Icon(Icons.add, size: 64),
+                                        ),
+                                      );
+                                    } else {
+                                      var cardInfo = filteredCards[index];
+
+                                      return GestureDetector(
+                                        onTap: (){
+                                          BusinessCard? backCard;
+                                          for (var businessCard in businessCards) {
+                                            if (businessCard.cardNo == cardInfo.cardNo && businessCard.cardSide == 'BACK') {
+                                              backCard = businessCard;
+                                              break;
+                                            }
+                                          }
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ExpandedCardScreen(
+                                                cardInfo: cardInfo,
+                                                backCard: backCard,
+                                              ),
+                                            ),
+                                          ).then((value) {
+                                            if (value == true) {
+                                              _reloadBusinessCards();
+                                            }
+                                          });
+                                        },
+                                        child: Container(
+                                          child: buildBusinessCard(cardInfo, context),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                              renderCardSlideIcon(filteredCards),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -271,17 +274,12 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.contact,
                           style: TextStyle(
-                            fontWeight: _selectedIndex == 0? FontWeight.w900: null,
-                            color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                              fontWeight: _selectedIndex == 0 ? FontWeight.bold : null,
+                              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                           ),
                         ),
                       ),
-                      Text(
-                        "|",
-                        style: TextStyle(
-                          color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
-                        ),
-                      ),
+                      Text("|"),
                       TextButton(
                         onPressed: () {
                           setState(() {
@@ -291,17 +289,12 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.portfolio,
                           style: TextStyle(
-                            fontWeight: _selectedIndex == 1? FontWeight.w900: null,
-                            color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                              fontWeight: _selectedIndex == 1 ? FontWeight.bold : null,
+                              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                           ),
                         ),
                       ),
-                      Text(
-                        "|",
-                        style: TextStyle(
-                          color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
-                        ),
-                      ),
+                      Text("|"),
                       TextButton(
                         onPressed: () {
                           setState(() {
@@ -311,25 +304,36 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.history,
                           style: TextStyle(
-                            fontWeight: _selectedIndex == 2? FontWeight.w900: null,
-                            color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                              fontWeight: _selectedIndex == 2 ? FontWeight.bold : null,
+                              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                           ),
                         ),
                       ),
                     ],
                   ),
-                  Expanded(
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
                     child: _selectedIndex == 0
-                        ? CardInfoWidget(businessCards: selectedCardInfo?? emptyCardInfo, loginEmail: _loginEmail,)
+                        ? CardInfoWidget(
+                      businessCards: selectedCardInfo ?? emptyCardInfo,
+                      loginEmail: _loginEmail,
+                    )
                         : _selectedIndex == 1
-                        ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail)
-                        : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
+                        ? PortfolioWidget(
+                      loginUserEmail: _loginEmail,
+                      cardUserEmail: _loginEmail,
+                    )
+                        : HistoryWidget(
+                      loginUserEmail: _loginEmail,
+                      cardUserEmail: _loginEmail,
+                    ),
                   ),
-                ]
+                ],
               ),
             ),
-          ],
-        ),
-      );
+          )
+        ],
+      )
+    );
   }
 }

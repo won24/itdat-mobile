@@ -208,7 +208,7 @@ class CardModel{
        };
        print(requestBody);
 
-       final response = await http.post(
+       final response = await client.post(
          Uri.parse('$baseUrl/delete'),
          headers: {"Content-Type": "application/json"},
          body: json.encode(requestBody),
