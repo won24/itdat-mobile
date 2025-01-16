@@ -72,8 +72,7 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               splashColor: Colors.transparent,
-              focusElevation: 0,
-              hoverElevation: 0,
+              highlightElevation: 0,
               child: Image.asset('assets/icons/addBoard.png', height: 30, width: 30, color: isDarkMode ? Colors.grey[200] : Colors.black,),
             )
           : null,
