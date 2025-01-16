@@ -93,16 +93,30 @@ class _WritePostDialogState extends State<WritePostDialog> {
               children: <Widget>[
                 Text(
                   widget.post == null ? '히스토리 추가' : '히스토리 수정: ${widget.post!['title']}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
                 ),
                 SizedBox(height: 10),
                 TextField(
                   controller: _titleController,
-                  decoration: InputDecoration(labelText: '제목'),
+                  decoration: InputDecoration(
+                    hintText: '제목',
+                    labelStyle: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(202, 202, 202, 1.0)),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(202, 202, 202, 1.0)),
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
                 TextField(
                   controller: _contentController,
-                  decoration: InputDecoration(labelText: '내용'),
+                  decoration: InputDecoration(
+                    hintText: '내용',
+                    labelStyle: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                    border: InputBorder.none,
+                  ),
                   maxLines: 3,
                 ),
                 SizedBox(height: 20),
@@ -111,7 +125,7 @@ class _WritePostDialogState extends State<WritePostDialog> {
                   children: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('취소'),
+                      child: Text('취소', style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
                     ),
                     TextButton(
                       onPressed: () {
@@ -124,7 +138,9 @@ class _WritePostDialogState extends State<WritePostDialog> {
                             ? _savePost(context, postData)
                             : _editPost(context, postData);
                       },
-                      child: widget.post == null ? Text('저장') : Text('수정'),
+                      child: widget.post == null
+                          ? Text('저장', style: TextStyle(color: Color.fromRGBO(0, 202, 145, 1), fontWeight: FontWeight.bold),)
+                          : Text('수정', style: TextStyle(color: Color.fromRGBO(0, 202, 145, 1), fontWeight: FontWeight.bold),),
                     ),
                   ],
                 ),

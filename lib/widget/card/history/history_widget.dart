@@ -124,18 +124,21 @@ class _HistoryWidgetState extends State<HistoryWidget> {
       ),
       floatingActionButton: widget.cardUserEmail == widget.loginUserEmail
           ? FloatingActionButton(
-        onPressed: (){
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return WritePostDialog(userEmail: widget.loginUserEmail, onPostModified: _fetchPosts);
-            },
-          );
-        },
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
-      )
+              onPressed: (){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return WritePostDialog(userEmail: widget.loginUserEmail, onPostModified: _fetchPosts);
+                  },
+                );
+              },
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              splashColor: Colors.transparent,
+              focusElevation: 0,
+              hoverElevation: 0,
+              child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
+            )
           : null,
     );
   }
