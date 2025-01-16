@@ -7,6 +7,8 @@ import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../setting/waitwidget.dart';
+
 class OpenBusinessCardList extends StatefulWidget {
   OpenBusinessCardList({Key? key}) : super(key: key);
 
@@ -154,12 +156,12 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
         ],
       ),
       body: _businessCards == null
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: WaitAnimationWidget())
           : FutureBuilder<dynamic>(
         future: _businessCards,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: WaitAnimationWidget());
           } else if (snapshot.hasError) {
             return Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
           } else if (!snapshot.hasData || snapshot.data.isEmpty) {

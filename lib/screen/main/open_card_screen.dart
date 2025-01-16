@@ -7,6 +7,8 @@ import 'package:itdat/screen/card/template/no_3.dart';
 import '../../models/BusinessCard.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../widget/setting/waitwidget.dart';
+
 class OpenCardScreen extends StatefulWidget {
   const OpenCardScreen({super.key});
 
@@ -77,7 +79,7 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
         centerTitle: true,
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: WaitAnimationWidget())
           : _publicCards.isEmpty
               ? Center(child: Text(AppLocalizations.of(context)!.noPublicCards))
               : ListView.builder(

@@ -15,6 +15,7 @@ class PublicCardModel {
       final response = await client.get(Uri.parse("$baseUrl/card/public/all"));
 
       if (response.statusCode == 200) {
+        // print("응답 성공: ${response.body}");
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
         print("응답 실패: ${response.statusCode}");
