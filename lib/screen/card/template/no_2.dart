@@ -38,7 +38,7 @@ class No2 extends StatelessWidget {
         (cardInfo.logoUrl!.startsWith('http://') || cardInfo.logoUrl!.startsWith('https://'))) {
       return cardInfo.logoUrl!;
     } else {
-      return '$baseUrl${cardInfo.logoUrl ?? ""}';
+      return '$baseUrl/${cardInfo.logoUrl ?? ""}';
     }
   }
 

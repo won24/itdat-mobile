@@ -118,8 +118,6 @@ class _MainLayoutState extends State<MainLayout> {
           selectedFontSize: 14,
           unselectedFontSize: 12,
           selectedItemColor: isDarkMode ? Colors.white : Colors.black,
-          //
-
           items: [
             BottomNavigationBarItem(
               icon: _buildIcon(Icons.credit_card_sharp, 0),
