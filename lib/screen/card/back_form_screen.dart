@@ -42,11 +42,11 @@ class _BackFormScreenState extends State<BackFormScreen> {
 
 
   Future<bool> requestStoragePermission() async {
-    var status = await Permission.storage.status;
+    var status = await Permission.manageExternalStorage.status;
     if (status.isGranted) {
       return true;
     } else {
-      var result = await Permission.storage.request();
+      var result = await Permission.manageExternalStorage.request();
       if (result.isGranted) {
         return true;
       } else {

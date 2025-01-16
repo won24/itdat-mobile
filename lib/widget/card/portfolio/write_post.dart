@@ -85,17 +85,18 @@ class _WritePostState extends State<WritePost> {
   }
 
   Future<bool> requestStoragePermission() async {
-    var status = await Permission.storage.status;
-    if (status.isGranted) {
-      return true;
-    } else {
-      var result = await Permission.storage.request();
-      if (result.isGranted) {
+      if (await Permission.manageExternalStorage.isGranted) {
         return true;
       } else {
-        return false;
+        var status = await Permission.manageExternalStorage.request();
+        if (status.isGranted) {
+          return true;
+        } else {
+          print('권한 거부됨: ${status.toString()}');
+          return false;
+        }
       }
-    }
+    return false;
   }
 
   void _showSnackBar(String message, {bool isError = false}) {

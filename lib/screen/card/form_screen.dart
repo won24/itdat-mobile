@@ -169,11 +169,11 @@ class _FormScreenState extends State<FormScreen> {
 
 
   Future<bool> requestStoragePermission() async {
-    var status = await Permission.storage.status;
+    var status = await Permission.manageExternalStorage.status;
     if (status.isGranted) {
       return true;
     } else {
-      var result = await Permission.storage.request();
+      var result = await Permission.manageExternalStorage.request();
       if (result.isGranted) {
         return true;
       } else {
@@ -184,6 +184,7 @@ class _FormScreenState extends State<FormScreen> {
 
 
   Future<void> _selectCompanyImage() async {
+    print("회사로고");
     if (await requestStoragePermission()) {
       File? image = await getImageFromGallery();
       if (image != null) {

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ThemeProvider with ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.light;
+  //ThemeMode _themeMode = ThemeMode.system;
   final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   ThemeMode get themeMode => _themeMode;
