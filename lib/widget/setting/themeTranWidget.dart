@@ -25,7 +25,6 @@ class ThemeDialog {
                   ),
                 ),
                 SizedBox(height: 9),
-                _buildThemeOption(context, ThemeMode.system, AppLocalizations.of(context)!.defaultTheme),
                 _buildThemeOption(context, ThemeMode.light, AppLocalizations.of(context)!.light),
                 _buildThemeOption(context, ThemeMode.dark, AppLocalizations.of(context)!.dark),
               ],

@@ -24,7 +24,7 @@ class _CardSelectState extends State<CardSelect> {
 
   Future<void> _loadUserEmail() async {
     final storage = FlutterSecureStorage();
-    String? email = await storage.read(key: 'email');
+    String? email = await storage.read(key: 'user_email');
     setState(() {
       userEmail = email;
     });
