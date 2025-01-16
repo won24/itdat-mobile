@@ -51,13 +51,13 @@ class _FormScreenState extends State<FormScreen> {
 
 
   // Color -> Hex
-  String colorToHex(Color color) {
-    int r = (color.r * 255).toInt();
-    int g = (color.g * 255).toInt();
-    int b = (color.b * 255).toInt();
-
-    return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}';
-  }
+  // String colorToHex(Color color) {
+  //   int r = (color.r * 255).toInt();
+  //   int g = (color.g * 255).toInt();
+  //   int b = (color.b * 255).toInt();
+  //
+  //   return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}';
+  // }
 
 
   // 색 선택
