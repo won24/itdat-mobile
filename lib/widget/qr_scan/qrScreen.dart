@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../card/cart_select_widget.dart';
+import '../card/card_select_widget.dart';
 import 'qr_scanner_widget.dart';
 import 'qr_generator_widget.dart';
 

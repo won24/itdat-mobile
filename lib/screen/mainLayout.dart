@@ -32,6 +32,23 @@ class _MainLayoutState extends State<MainLayout> {
     });
   }
 
+  Widget _buildIcon(IconData iconData, int index) {
+    bool isSelected = index == _selectedIndex;  // 선택된 인덱스인지 확인
+    return Column(
+      children: [
+        if (isSelected)
+         const Icon(
+            Icons.circle,
+            size: 8,
+            color: Color.fromRGBO(0, 202, 145, 1)
+            ),
+        Icon(
+          iconData, size: 30,
+        ),
+      ],
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +110,7 @@ class _MainLayoutState extends State<MainLayout> {
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
-        height: 62,
+        height: 72,
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,
@@ -101,22 +118,23 @@ class _MainLayoutState extends State<MainLayout> {
           selectedFontSize: 14,
           unselectedFontSize: 12,
           selectedItemColor: isDarkMode ? Colors.white : Colors.black,
-          unselectedItemColor: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+          //
+
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.credit_card_sharp),
+              icon: _buildIcon(Icons.credit_card_sharp, 0),
               label: AppLocalizations.of(context)!.myCard,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.wallet_sharp),
+              icon: _buildIcon(Icons.wallet_sharp, 1),
               label: AppLocalizations.of(context)!.cardWallet,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.people_sharp),
+              icon: _buildIcon(Icons.people_sharp, 2),
               label: AppLocalizations.of(context)!.openCard,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_sharp),
+              icon: _buildIcon(Icons.account_circle_sharp, 3),
               label: AppLocalizations.of(context)!.myInfo,
             ),
           ],

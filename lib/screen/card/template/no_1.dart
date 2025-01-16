@@ -18,7 +18,6 @@ class No1 extends StatelessWidget {
     this.image,
   });
 
-  // 명함 텍스트 스타일
   TextStyle _buildTextStyle({
     required Color? textColor,
     required String? fontFamily,
@@ -33,29 +32,29 @@ class No1 extends StatelessWidget {
     );
   }
 
-  // 이미지 가져오기
   String getFullImageUrl() {
     final baseUrl = "${dotenv.env['BASE_URL']}";
     if (cardInfo.logoUrl != null &&
         (cardInfo.logoUrl!.startsWith('http://') || cardInfo.logoUrl!.startsWith('https://'))) {
+      print("getFullImageUrl: ${cardInfo.logoUrl}");
       return cardInfo.logoUrl!;
     } else {
+      print("getFullImageUrl: ${cardInfo.logoUrl}");
       return '$baseUrl${cardInfo.logoUrl ?? ""}';
     }
   }
 
-  // 이미지 있는 지 확인
   Future<bool> checkFileExists(String url) async {
     final client = await HttpClientModel().createHttpClient();
     try {
       final response = await client.head(Uri.parse(url));
+      print(response.statusCode);
       return response.statusCode == 200;
     } catch (e) {
       return false;
     }
   }
 
-  // 색 코드 변경
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
     if (hex == null || hex.isEmpty) {
       return fallback;
@@ -72,7 +71,6 @@ class No1 extends StatelessWidget {
 
     Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.white);
     Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
-
 
     return Container(
       width: 420,

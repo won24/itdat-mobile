@@ -28,47 +28,44 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
   bool _isFlipped = false;
   BusinessCard? cardInfo;
   late BusinessCard frontCard;
-  BusinessCard? backCard; // 있을 수도 없을 수도
+  BusinessCard? backCard;
 
   @override
   void initState() {
     super.initState();
 
-    // 명함 데이터가 없는 경우 예외 처리
     if (widget.cardInfo.isEmpty) {
       throw Exception("명함 데이터가 비어 있습니다.");
     }
 
-    // 앞면/뒷면 정보 초기화
     for (var card in widget.cardInfo) {
       if (card.cardSide == 'FRONT' || card.cardSide == null) {
-        frontCard = card; // `null`일 경우 기본적으로 `frontCard`로 설정
+        frontCard = card;
       } else if (card.cardSide == 'BACK') {
         backCard = card;
       }
     }
-
-    // 기본값 설정 (frontCard가 없을 경우)
-    frontCard ??= BusinessCard(
-      appTemplate: 'Default',
-      userName: '이름 없음',
-      phone: '전화번호 없음',
-      email: '이메일 없음',
-      companyName: '회사 없음',
-      companyNumber: '사업자 번호 없음',
-      companyAddress: '주소 없음',
-      companyFax: '팩스 없음',
-      department: '부서 없음',
-      position: '직급 없음',
-      userEmail: widget.loginUserEmail,
-      cardNo: 0,
-      cardSide: 'FRONT',
-      logoUrl: '',
-      isPublic: false,
-    );
+    //
+    // frontCard ??= BusinessCard(
+    //   appTemplate: 'Default',
+    //   userName: '이름 없음',
+    //   phone: '전화번호 없음',
+    //   email: '이메일 없음',
+    //   companyName: '회사 없음',
+    //   companyNumber: '사업자 번호 없음',
+    //   companyAddress: '주소 없음',
+    //   companyFax: '팩스 없음',
+    //   department: '부서 없음',
+    //   position: '직급 없음',
+    //   userEmail: widget.loginUserEmail,
+    //   cardNo: 0,
+    //   cardSide: 'FRONT',
+    //   logoUrl: '',
+    //   isPublic: false,
+    // );
   }
 
-  // 명함 템플릿
+
   Widget buildBusinessCard(BusinessCard cardInfo) {
     switch (cardInfo.appTemplate) {
       case 'No1':
@@ -78,12 +75,11 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No1(cardInfo: cardInfo); // 기본값
+        return No1(cardInfo: cardInfo);
     }
   }
 
 
-  // 명함이 뒷면이 있다면 버튼을 눌러서 보기
   Widget renderFlipButton() {
     return IconButton(
       icon: Icon(Icons.change_circle_rounded, size: 32, color: Theme.of(context).iconTheme.color),
@@ -127,9 +123,8 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
                 final screenWidth = MediaQuery.of(context).size.width;
                 final screenHeight = MediaQuery.of(context).size.height;
 
-                final cardWidth = screenWidth * 0.9; // 화면 너비의 90%
-                final cardHeight = screenHeight * 0.3; // 화면 높이의 30%
-
+                final cardWidth = screenWidth * 0.9;
+                final cardHeight = screenHeight * 0.3;
                 return Container(
                   width: cardWidth,
                   height: cardHeight,
@@ -198,15 +193,15 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
           ),
           Expanded(
             child: _selectedIndex == 0
-                ? CardInfoWidget(businessCards: frontCard!, loginEmail: widget.loginUserEmail,)
+                ? CardInfoWidget(businessCards: frontCard, loginEmail: widget.loginUserEmail,)
                 : _selectedIndex == 1
                 ? PortfolioWidget(
               loginUserEmail: widget.loginUserEmail,
-              cardUserEmail: frontCard!.userEmail,
+              cardUserEmail: frontCard.userEmail,
             )
                 : HistoryWidget(
               loginUserEmail: widget.loginUserEmail,
-              cardUserEmail: frontCard!.userEmail,
+              cardUserEmail: frontCard.userEmail,
             ),
           ),
         ],

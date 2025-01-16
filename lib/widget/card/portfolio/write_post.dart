@@ -39,7 +39,6 @@ class _WritePostState extends State<WritePost> {
     if (widget.post != null) {
       _titleController.text = widget.post!['title'] ?? '';
       _contentController.text = widget.post!['content'] ?? '';
-      _fileUrlController.text = '';
     }
   }
 
@@ -54,7 +53,6 @@ class _WritePostState extends State<WritePost> {
 
 
   Future<void> _pickMedia({required bool isVideo}) async {
-    // 갤러리 권한 확인 및 요청
     final hasPermission = await requestStoragePermission();
     if (!hasPermission) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -63,7 +61,6 @@ class _WritePostState extends State<WritePost> {
       return;
     }
 
-    // 미디어 선택 로직
     final picker = ImagePicker();
     final pickedFile = isVideo
         ? await picker.pickVideo(source: ImageSource.gallery)
@@ -87,19 +84,15 @@ class _WritePostState extends State<WritePost> {
     }
   }
 
-
-  // 갤러리 권한 받기
   Future<bool> requestStoragePermission() async {
-    var status = await Permission.storage.status; // 권한 상태 확인
+    var status = await Permission.storage.status;
     if (status.isGranted) {
-      return true; // 이미 권한이 허용된 경우
+      return true;
     } else {
-      var result = await Permission.storage.request(); // 권한 요청
+      var result = await Permission.storage.request();
       if (result.isGranted) {
-        return true; // 권한 허용된 경우
+        return true;
       } else {
-        // 권한 거부된 경우 처리
-        print('갤러리 권한이 거부되었습니다.');
         return false;
       }
     }
@@ -118,7 +111,7 @@ class _WritePostState extends State<WritePost> {
   }
 
 
-  // 저장
+
   void _savePost(BuildContext context, postData) async {
     try {
       await BoardModel().savePost(postData);
@@ -130,7 +123,7 @@ class _WritePostState extends State<WritePost> {
     }
   }
 
-  // 수정
+
   void _editPost(BuildContext context, postData) async {
     try {
       await BoardModel().editPost(postData, widget.post?['id']);
@@ -147,6 +140,24 @@ class _WritePostState extends State<WritePost> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.post == null ? '새 글 작성' : '포트폴리오 수정: ${widget.post!['title']}'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              final postData = {
+                'userEmail': widget.userEmail,
+                'title': _titleController.text,
+                'content': _contentController.text,
+                'fileUrl': _fileUrlController.text,
+              };
+              widget.post == null
+                  ? _savePost(context, postData)
+                  : _editPost(context, postData);
+            },
+            child: widget.post == null
+                ? Text('저장', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(0, 202, 145, 1)))
+                : Text('수정', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(0, 202, 145, 1))),
+          )
+        ],
       ),
       body: GestureDetector(
         onTap: () {
@@ -160,16 +171,29 @@ class _WritePostState extends State<WritePost> {
               children: [
                 TextField(
                   controller: _titleController,
-                  decoration: const InputDecoration(labelText: '제목'),
+                  decoration: InputDecoration(
+                    hintText: '제목',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(202, 202, 202, 1.0)),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(0, 202, 145, 1)),
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
                 TextField(
                   controller: _contentController,
-                  decoration: const InputDecoration(labelText: '내용'),
-                  maxLines: 10,
-                ),
-                TextField(
-                  controller: _fileUrlController,
-                  decoration: const InputDecoration(labelText: '파일 URL (선택)'),
+                  decoration: InputDecoration(
+                    hintText: "내용을 입력하세요.",
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(202, 202, 202, 1.0)),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(0, 202, 145, 1)),
+                    ),
+                  ),
+                  maxLines: 15,
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -177,13 +201,13 @@ class _WritePostState extends State<WritePost> {
                   children: [
                     ElevatedButton.icon(
                       onPressed: () => _pickMedia(isVideo: false),
-                      icon: const Icon(Icons.photo),
-                      label: const Text('이미지 선택'),
+                      icon: Icon(Icons.photo, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,),
+                      label: Text('이미지', style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
                     ),
                     ElevatedButton.icon(
                       onPressed: () => _pickMedia(isVideo: true),
-                      icon: const Icon(Icons.videocam),
-                      label: const Text('동영상 선택'),
+                      icon: Icon(Icons.videocam, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,),
+                      label: Text('동영상' ,style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
                     ),
                   ],
                 ),
@@ -202,21 +226,6 @@ class _WritePostState extends State<WritePost> {
                     width: 100,
                     fit: BoxFit.cover,
                   ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    final postData = {
-                      'userEmail': widget.userEmail,
-                      'title': _titleController.text,
-                      'content': _contentController.text,
-                      'fileUrl': _fileUrlController.text,
-                    };
-                    widget.post == null
-                        ? _savePost(context, postData)
-                        : _editPost(context, postData);
-                  },
-                  child: widget.post == null ? const Text('저장') : const Text('수정'),
-                ),
               ],
             ),
           ),

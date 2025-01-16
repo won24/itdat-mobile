@@ -38,7 +38,6 @@ class _PostBoxState extends State<PostBox> {
   }
 
 
-  // 파일이 있는 지 확인
   Future<bool> checkFileExists(String url) async {
     final client = await HttpClientModel().createHttpClient();
     try {
@@ -50,7 +49,6 @@ class _PostBoxState extends State<PostBox> {
   }
 
 
-  // 이미지 가져오기
   String getFullImageUrl(String fileUrl) {
     final baseUrl = "${dotenv.env['BASE_URL']}";
     if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
@@ -60,9 +58,9 @@ class _PostBoxState extends State<PostBox> {
     }
   }
 
-  // 동영상 가져오기
+
   String getFullVideoUrl(String fileUrl) {
-    const baseUrl = 'http://112.221.66.174:8001';
+    final baseUrl = "${dotenv.env['BASE_URL']}";
     if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
       return fileUrl;
     } else {
@@ -70,7 +68,7 @@ class _PostBoxState extends State<PostBox> {
     }
   }
 
-  // 동영상 컨트롤러 초기화
+
   void _initializeVideoPlayer(String videoUrl) {
     final fullUrl = getFullVideoUrl(videoUrl);
     _videoController = VideoPlayerController.networkUrl(Uri.parse(fullUrl))
@@ -80,7 +78,7 @@ class _PostBoxState extends State<PostBox> {
       });
   }
 
-  // 동영상 재생/일시정지
+
   void _togglePlayPause() {
     setState(() {
       if (_isPlaying) {
@@ -94,14 +92,12 @@ class _PostBoxState extends State<PostBox> {
 
   @override
   void dispose() {
-    _videoController?.dispose(); // 컨트롤러 해제
+    _videoController?.dispose();
     super.dispose();
   }
 
 
-  // 파일 렌더링
   Widget _buildMediaContent(String fileUrl) {
-    // 동영상
     if (fileUrl.endsWith('.mp4')) {
       return FutureBuilder<bool>(
         future: checkFileExists(getFullVideoUrl(fileUrl)),
@@ -135,7 +131,6 @@ class _PostBoxState extends State<PostBox> {
         },
       );
     } else {
-      // 이미지
       return FutureBuilder<bool>(
         future: checkFileExists(getFullImageUrl(fileUrl)),
         builder: (context, snapshot) {
@@ -158,7 +153,7 @@ class _PostBoxState extends State<PostBox> {
     }
   }
 
-  // 스낵바
+
   void _showSnackBar(BuildContext context, String message,
       {bool isError = false}) {
     final snackBar = SnackBar(
@@ -172,7 +167,7 @@ class _PostBoxState extends State<PostBox> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  // 수정
+
   void _editPost(BuildContext context) {
     Navigator.push(
       context,
@@ -187,7 +182,7 @@ class _PostBoxState extends State<PostBox> {
     );
   }
 
-  // 삭제
+
   void _deletePost(BuildContext context) async {
     try {
       await BoardModel().deletePost(widget.post['id']);

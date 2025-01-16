@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -30,7 +28,6 @@ class _BackFormScreenState extends State<BackFormScreen> {
   String _textPosition = '';
 
 
-  // 갤러리 사진 선택
   Future<File?> getImageFromGallery() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -43,24 +40,22 @@ class _BackFormScreenState extends State<BackFormScreen> {
     }
   }
 
-  // 갤러리 권한 받기
+
   Future<bool> requestStoragePermission() async {
-    var status = await Permission.storage.status; // 권한 상태 확인
+    var status = await Permission.storage.status;
     if (status.isGranted) {
-      return true; // 이미 권한이 허용된 경우
+      return true;
     } else {
-      var result = await Permission.storage.request(); // 권한 요청
+      var result = await Permission.storage.request();
       if (result.isGranted) {
-        return true; // 권한 허용된 경우
+        return true;
       } else {
-        // 권한 거부된 경우 처리
-        print('갤러리 권한이 거부되었습니다.');
         return false;
       }
     }
   }
 
-  // 명함 저장
+
   void _saveCard() async {
     widget.cardInfo.cardSide = 'BACK';
     widget.cardInfo.logoUrl = _image?.path;
@@ -242,9 +237,9 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         textStyle: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      child: const Text("저장"),
+                      child: Text("저장"),
                     ),
-                    const SizedBox(width: 10), // 버튼 간 간격
+                    const SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.pushAndRemoveUntil(
@@ -260,7 +255,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         textStyle: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      child: const Text("취소"),
+                      child: Text("취소"),
                     ),
                   ],
                 ),

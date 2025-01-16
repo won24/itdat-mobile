@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
@@ -29,23 +28,19 @@ class CardModel{
     }
   }
 
-
-  // 유저 정보로 명함 기본 정보 가져오기
   Future<Map<String, dynamic>> getUserById(String userEmail) async {
     final client = await HttpClientModel().createHttpClient();
 
     try {
       final response = await client.get(Uri.parse("$baseUrl/userinfo/$userEmail"));
-      handleResponse(response, "getUserById");
       return jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
     } catch (e) {
-      logError("getUserById", e);
       throw Exception("getUserById Error: $e");
     }
   }
 
-  // 로고 없는 명함 저장
-  Future<BusinessCard> createBusinessCard(BusinessCard card) async {
+
+  Future<BusinessCard> saveBusinessCard(BusinessCard card) async {
     final client = await HttpClientModel().createHttpClient();
 
     try {
@@ -54,17 +49,13 @@ class CardModel{
         headers: {"Content-Type": "application/json; charset=UTF-8"},
         body: json.encode(card.toJson()),
       );
-      handleResponse(response, "createBusinessCard");
       return BusinessCard.fromJson(json.decode(response.body));
     } catch (e) {
-      logError("createBusinessCard", e);
       throw Exception("createBusinessCard Error: $e");
     }
   }
 
 
-
-  // 로고있는 명함 저장
   Future<void> saveBusinessCardWithLogo(BusinessCard cardInfo) async {
     final client = await HttpClientModel().createHttpClient();
 
@@ -73,7 +64,6 @@ class CardModel{
       var request = http.MultipartRequest('POST', url);
 
       request.fields['cardInfo'] = jsonEncode(cardInfo.toJson()).trim();
-      print("저장 할 카드정보 : ${request.fields['cardInfo']}");
 
       if (cardInfo.logoUrl != null && cardInfo.logoUrl!.isNotEmpty) {
         final logoFile = File(cardInfo.logoUrl!);
@@ -89,29 +79,21 @@ class CardModel{
       }
 
       final response = await client.send(request);
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("saveBusinessCardWithLogo 성공");
-      } else {
-        final responseBody = await response.stream.bytesToString();
-        print("saveBusinessCardWithLogo 실패: ${response.statusCode} - $responseBody");
-        throw Exception("saveBusinessCardWithLogo Error: ${response.statusCode}");
-      }
+      print(response);
+
     } catch (e) {
-      logError("saveBusinessCardWithLogo", e);
       throw Exception("saveBusinessCardWithLogo Error: $e");
     }
   }
 
-  // 명함 가져오기
+
   Future<List<dynamic>> getBusinessCard(String userEmail) async {
     final client = await HttpClientModel().createHttpClient();
 
     try {
       final response = await client.get(Uri.parse("$baseUrl/$userEmail"));
-      handleResponse(response, "getBusinessCard");
       return jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
     } catch (e) {
-      logError("getBusinessCard", e);
       throw Exception("getBusinessCard Error: $e");
     }
   }
@@ -257,7 +239,7 @@ class CardModel{
      }
    }
 
-   // 명함첩 - 메모 추가
+
   Future<void> saveMemo(Map<String, dynamic> card) async {
     final client = await HttpClientModel().createHttpClient();
 
@@ -267,9 +249,8 @@ class CardModel{
           headers: {"Content-Type": "application/json; charset=UTF-8"},
           body: json.encode(card).trim()
       );
-      handleResponse(response, "saveMemo");
+      print(response);
     } catch (e) {
-      logError("saveMemo", e);
       throw Exception("saveMemo Error: $e");
     }
   }

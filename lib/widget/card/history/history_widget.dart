@@ -27,7 +27,6 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   }
 
 
-  // 히스토리 가져오기
   Future<void> _fetchPosts() async {
     final fetchedPosts = await BoardModel().getHistories(widget.cardUserEmail);
     fetchedPosts.sort((a, b) => b['id'].compareTo(a['id']));
@@ -49,7 +48,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  // 수정
+
   void _editPost(BuildContext context, Map<String, dynamic> post) {
     Navigator.push(
       context,
@@ -64,7 +63,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     );
   }
 
-  // 삭제
+
   void _deletePost(BuildContext context, Map<String, dynamic> post) async {
     try {
       await BoardModel().deleteHistory(post['id']);
@@ -125,18 +124,21 @@ class _HistoryWidgetState extends State<HistoryWidget> {
       ),
       floatingActionButton: widget.cardUserEmail == widget.loginUserEmail
           ? FloatingActionButton(
-        onPressed: (){
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return WritePostDialog(userEmail: widget.loginUserEmail, onPostModified: _fetchPosts);
-            },
-          );
-        },
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
-      )
+              onPressed: (){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return WritePostDialog(userEmail: widget.loginUserEmail, onPostModified: _fetchPosts);
+                  },
+                );
+              },
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              splashColor: Colors.transparent,
+              focusElevation: 0,
+              hoverElevation: 0,
+              child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
+            )
           : null,
     );
   }

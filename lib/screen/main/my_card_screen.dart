@@ -29,6 +29,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   final PageController _pageController = PageController();
   int _selectedIndex = 0;
   int _cardIndex = 0;
+  late BusinessCard emptyCardInfo = BusinessCard(appTemplate: "", userName: "", phone: "", email: "", companyName: "", companyNumber: "", companyAddress: "", companyFax: "", department: "", position: "", userEmail: "", cardNo: 0, cardSide: "");
 
   @override
   void initState() {
@@ -55,6 +56,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
       setState(() {
         _loginEmail = userEmail;
         _businessCards = CardModel().getBusinessCard(_loginEmail);
+        emptyCardInfo.userEmail = _loginEmail;
       });
     } else {
       Navigator.pushReplacementNamed(context, '/');
@@ -269,6 +271,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.contact,
                           style: TextStyle(
+                            fontWeight: _selectedIndex == 0? FontWeight.w900: null,
                             color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                           ),
                         ),
@@ -288,6 +291,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.portfolio,
                           style: TextStyle(
+                            fontWeight: _selectedIndex == 1? FontWeight.w900: null,
                             color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                           ),
                         ),
@@ -307,6 +311,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.history,
                           style: TextStyle(
+                            fontWeight: _selectedIndex == 2? FontWeight.w900: null,
                             color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                           ),
                         ),
@@ -314,8 +319,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                     ],
                   ),
                   Expanded(
-                    child: _selectedIndex == 0 && selectedCardInfo != null
-                        ? CardInfoWidget(businessCards: selectedCardInfo!, loginEmail: _loginEmail,)
+                    child: _selectedIndex == 0
+                        ? CardInfoWidget(businessCards: selectedCardInfo?? emptyCardInfo, loginEmail: _loginEmail,)
                         : _selectedIndex == 1
                         ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail)
                         : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
