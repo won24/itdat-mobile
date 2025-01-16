@@ -1,4 +1,4 @@
-package com.example.itdat;
+package com.itdat.store.itdat;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,8 +10,8 @@ import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
 
 public class MainActivity extends FlutterActivity {
-    private static final String NFC_CHANNEL = "com.example.itdat/nfc";
-    private static final String META_CHANNEL = "com.example.itdat/meta_data";
+    private static final String NFC_CHANNEL = "com.itdat.store.itdat/nfc";
+    private static final String META_CHANNEL = "com.itdat.store.itdat/meta_data";
     private static final String REDIRECT_URI_CHANNEL = "redirect_uri_channel";
 
     private MethodChannel nfcChannel;
