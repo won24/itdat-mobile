@@ -12,7 +12,7 @@ class UserModel {
 
   Future<Map<String, dynamic>> getUserInfo() async {
     final client = await HttpClientModel().createHttpClient();
-    String? email = await storage.read(key: 'email');
+    String? email = await storage.read(key: 'user_email');
     print('email: $email');
     if (email == null) {
       throw Exception('email not found');
@@ -35,7 +35,7 @@ class UserModel {
 
   Future<bool> updateUserInfo(Map<String, dynamic> map) async {
     final client = await HttpClientModel().createHttpClient();
-    String? email = await storage.read(key: 'email');
+    String? email = await storage.read(key: 'user_email');
     if (email == null) {
       throw Exception('email not found');
     }
@@ -89,7 +89,7 @@ class UserModel {
   }
   Future<bool> changePassword(String newPassword) async {
     final client = await HttpClientModel().createHttpClient();
-    String? email = await storage.read(key: 'email');
+    String? email = await storage.read(key: 'user_email');
     print("오긴하나");
     print(newPassword);
     if (email == null) {
