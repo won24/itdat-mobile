@@ -14,6 +14,19 @@ class CardModel{
    final baseUrl = "${dotenv.env['BASE_URL']}/card";
 
 
+  void logError(String functionName, dynamic error) {
+    print("[$functionName] Error: $error");
+  }
+
+  void handleResponse(http.Response response, String functionName) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      print("[$functionName] 성공");
+    } else {
+      var errorBody = utf8.decode(response.bodyBytes);
+      print("[$functionName] 실패: ${response.statusCode} - $errorBody");
+      throw Exception("[$functionName] Error: ${response.statusCode}");
+    }
+  }
 
   Future<Map<String, dynamic>> getUserById(String userEmail) async {
     final client = await HttpClientModel().createHttpClient();

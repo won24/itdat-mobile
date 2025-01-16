@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/login_model.dart';
-import 'package:itdat/utils/HttpClientManager.dart';
-import 'package:itdat/widget/login/login_screen.dart';
+import 'package:itdat/screen/splash_widget.dart';
+import 'package:itdat/widget/setting/waitwidget.dart';
 import 'package:provider/provider.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:itdat/screen/mainLayout.dart';
 import 'package:itdat/widget/register/register_screen.dart';
 import 'package:itdat/providers/theme_provider.dart';
 import 'package:itdat/providers/auth_provider.dart';
@@ -17,7 +16,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() async{
+void main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
@@ -91,13 +90,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const MaterialApp(
-        home: Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
-      );
-    }
+    // if (_isLoading) {
+    //   return const MaterialApp(
+    //     home: Scaffold(
+    //       body: Center(child: WaitAnimationWidget()),
+    //     ),
+    //   );
+    // }
 
     return Consumer4<LocaleProvider, ThemeProvider, AuthProvider, FontProvider>(
       builder: (context, localeProvider, themeProvider, authProvider, fontProvider, child) {
@@ -123,9 +122,7 @@ class _MyAppState extends State<MyApp> {
             Locale('ko', ''),
             Locale('ja', ''),
           ],
-          home: _isLoggedIn
-              ? const MainLayout()
-              : LoginScreen(),
+          home: SplashScreen(isLoggedIn: _isLoggedIn),
           onGenerateRoute: (settings) {
             if (settings.name == '/register') {
               final args = settings.arguments as Map<String, dynamic>?;

@@ -12,6 +12,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
 import 'package:itdat/widget/card/history/history_widget.dart';
 
+import '../../widget/setting/waitwidget.dart';
+
 class MyCardScreen extends StatefulWidget {
   const MyCardScreen({super.key});
 
@@ -152,10 +154,10 @@ class _MyCardWidgetState extends State<MyCardScreen> {
               future: _businessCards,
               builder: (context, snapshot) {
                 if (_businessCards == null) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: WaitAnimationWidget());
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: WaitAnimationWidget());
                 } else if (snapshot.hasError) {
                   return  Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

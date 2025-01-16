@@ -8,6 +8,7 @@ import '../../screen/card/card_wallet_card_detail_screen.dart';
 import '../../screen/card/template/no_1.dart';
 import '../../screen/card/template/no_2.dart';
 import '../../screen/card/template/no_3.dart';
+import '../setting/waitwidget.dart';
 
 class FolderDetailScreen extends StatefulWidget {
   final String folderName;
@@ -136,7 +137,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: WaitAnimationWidget())
           : _cards.isEmpty
           ? Center(child: Text(AppLocalizations.of(context)!.folderinnotcard))
           : GridView.builder(

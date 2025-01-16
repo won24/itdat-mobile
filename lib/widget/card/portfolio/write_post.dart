@@ -5,6 +5,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../setting/waitwidget.dart';
+
 class WritePost extends StatefulWidget {
   final Function onPostSaved;
   final Map<String, dynamic>? post;
@@ -217,7 +219,7 @@ class _WritePostState extends State<WritePost> {
                     aspectRatio: _videoController!.value.aspectRatio,
                     child: VideoPlayer(_videoController!),
                   )
-                      : const CircularProgressIndicator()
+                      : const WaitAnimationWidget()
                       : Image.file(
                     _selectedFile!,
                     height: 100,

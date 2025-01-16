@@ -11,6 +11,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:ui' as ui;
 
+import '../setting/waitwidget.dart';
+
 class QrBusinessCardList extends StatefulWidget {
   final String userEmail;
 
@@ -165,7 +167,7 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
       future: _businessCards,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: WaitAnimationWidget());
         } else if (snapshot.hasError) {
           return  Center(child: Text(AppLocalizations.of(context)!.fetchCardsError));
         } else if (!snapshot.hasData || snapshot.data.isEmpty) {

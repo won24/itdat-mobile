@@ -5,7 +5,9 @@ import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
-import 'package:itdat/widget/nfc/nfcWrite.dart'; // NfcWritePage import 추가
+import 'package:itdat/widget/nfc/nfcWrite.dart';
+
+import '../setting/waitwidget.dart'; // NfcWritePage import 추가
 
 class BusinessCardList extends StatefulWidget {
   final String userEmail;
@@ -48,7 +50,7 @@ class _BusinessCardWidgetState extends State<BusinessCardList> {
       future: _businessCards,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: WaitAnimationWidget());
         } else if (snapshot.hasError) {
           return  Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
         } else if (!snapshot.hasData || snapshot.data.isEmpty) {

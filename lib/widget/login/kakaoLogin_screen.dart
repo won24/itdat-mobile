@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:itdat/models/social_model.dart';
 
+
+
+import '../setting/waitwidget.dart';import '../setting/waitwidget.dart';
+
 class KakaoLoginScreen extends StatelessWidget {
   final SocialsModel socialsModel = SocialsModel();
 
@@ -43,7 +47,7 @@ class KakaoLoginScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text('Kakao 로그인 중...')),
-      body: Center(child: CircularProgressIndicator()),
+      body: Center(child: WaitAnimationWidget()),
     );
   }
 

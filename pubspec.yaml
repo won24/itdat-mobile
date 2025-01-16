@@ -67,3 +67,4 @@ flutter:
     - assets/waitAnime.json
     - .env
     - assets/ca_bundle.crt
+    - assets/Thumbnail.json

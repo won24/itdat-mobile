@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/social_model.dart';
+import '../setting/waitwidget.dart';
 
 class NaverLoginScreen extends StatefulWidget {
   @override
@@ -118,7 +119,7 @@ class _NaverLoginScreenState extends State<NaverLoginScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Naver Logining...')),
-      body: const Center(child: CircularProgressIndicator()),
+      body: const Center(child: WaitAnimationWidget()),
     );
   }
 }
