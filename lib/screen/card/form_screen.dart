@@ -288,7 +288,11 @@ class _FormScreenState extends State<FormScreen> {
 
 
   void moveToBackFormScreen() async {
-    await CardModel().saveBusinessCard(widget.cardInfo);
+    if (_selectedCompanyImage == null) {
+      await CardModel().saveBusinessCard(widget.cardInfo);
+    } else {
+      await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
+    }
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -511,7 +515,7 @@ class _FormScreenState extends State<FormScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(0, 202, 145, 1),
                           foregroundColor: Colors.white,
-                          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         child: Text("저장"),
                       ),

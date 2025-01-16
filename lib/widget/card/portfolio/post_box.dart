@@ -58,7 +58,7 @@ class _PostBoxState extends State<PostBox> {
 
 
   String getFullVideoUrl(String fileUrl) {
-    const baseUrl = 'http://112.221.66.174:8001';
+    final baseUrl = "${dotenv.env['BASE_URL']}";
     if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
       return fileUrl;
     } else {

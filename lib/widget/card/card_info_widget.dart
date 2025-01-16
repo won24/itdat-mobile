@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
-import 'package:itdat/models/card_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -108,7 +107,8 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: ListView(
+      body: widget.businessCards != null ?
+      ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: [
           ListTile(
@@ -212,7 +212,8 @@ class _InfoWidgetState extends State<CardInfoWidget> {
           )
               : SizedBox.shrink(),
         ],
-      ),
+      )
+      : Text("명함이 없습니다.")
     );
   }
 }

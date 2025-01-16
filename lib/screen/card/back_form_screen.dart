@@ -237,7 +237,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         textStyle: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      child: const Text("저장"),
+                      child: Text("저장"),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
@@ -255,7 +255,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         textStyle: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      child: const Text("취소"),
+                      child: Text("취소"),
                     ),
                   ],
                 ),

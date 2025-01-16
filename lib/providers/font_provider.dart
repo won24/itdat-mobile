@@ -65,7 +65,6 @@ class FontProvider with ChangeNotifier {
       'Nanum Pen Script',
       'Gamja Flower',
       'Do Hyeon',
-      'Gowun Dodum',
       'Gowun Batang',
       'Song Myung',
       'Stylish',
