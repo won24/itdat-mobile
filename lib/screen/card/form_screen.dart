@@ -48,7 +48,6 @@ class _FormScreenState extends State<FormScreen> {
     }
   }
 
-
   String colorToHex(Color color) {
     int r = (color.r * 255).toInt();
     int g = (color.g * 255).toInt();
