@@ -159,7 +159,6 @@ class _FormScreenState extends State<FormScreen> {
   Future<File?> getImageFromGallery() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
     if (image != null) {
       return File(image.path);
     } else {

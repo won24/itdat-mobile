@@ -34,11 +34,9 @@ class No1 extends StatelessWidget {
     final baseUrl = "${dotenv.env['BASE_URL']}";
     if (cardInfo.logoUrl != null &&
         (cardInfo.logoUrl!.startsWith('http://') || cardInfo.logoUrl!.startsWith('https://'))) {
-      print("getFullImageUrl: ${cardInfo.logoUrl}");
       return cardInfo.logoUrl!;
     } else {
-      print("getFullImageUrl: ${cardInfo.logoUrl}");
-      return '$baseUrl${cardInfo.logoUrl ?? ""}';
+      return '$baseUrl/${cardInfo.logoUrl ?? ""}';
     }
   }
 
@@ -46,7 +44,6 @@ class No1 extends StatelessWidget {
     final client = await HttpClientModel().createHttpClient();
     try {
       final response = await client.head(Uri.parse(url));
-      print(response.statusCode);
       return response.statusCode == 200;
     } catch (e) {
       return false;

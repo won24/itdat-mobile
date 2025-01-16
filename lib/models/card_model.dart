@@ -66,7 +66,7 @@ class CardModel{
       }
 
       final response = await client.send(request);
-      print(response);
+      print("response $response");
 
     } catch (e) {
       throw Exception("saveBusinessCardWithLogo Error: $e");
