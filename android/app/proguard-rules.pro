@@ -17,3 +17,33 @@
 -keepattributes *Annotation*
 -keep class javax.inject.** { *; }
 -dontwarn javax.annotation.**
+
+# Google Play Core 라이브러리 유지
+-keep class com.google.android.play.** { *; }
+-keep class com.google.android.play.core.splitinstall.** { *; }
+-keep class com.google.android.play.core.tasks.** { *; }
+
+# Conscrypt 관련 클래스 유지
+-keep class org.conscrypt.** { *; }
+
+# OpenJSSE 관련 클래스 유지
+-keep class org.openjsse.** { *; }
+
+# Flutter 관련 유지 규칙
+-keep class io.flutter.** { *; }
+-keep class io.flutter.embedding.** { *; }
+
+# 의존성 관련 유지 규칙 (vibration, uni_links 등)
+-keep class com.benjaminabel.vibration.** { *; }
+-keep class name.avioli.unilinks.** { *; }
+
+# 기본적으로 모든 Firebase 클래스 유지
+-keep class com.google.firebase.** { *; }
+
+# OkHttp 관련 클래스 유지
+-keep class okhttp3.** { *; }
+-keepclassmembers class okhttp3.** { *; }
+-dontwarn okhttp3.**
+
+# javax.net.ssl 관련 클래스 유지
+-keep class javax.net.ssl.** { *; }

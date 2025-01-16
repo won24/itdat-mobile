@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:257214395762:android:b41d66861155d7d22259eb",
         "android_client_info": {
-          "package_name": "com.example.itdat"
+          "package_name": "com.itdat.store.itdat"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "257214395762-qi53gm28rdugp5ddahavfn73r22rcnoq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.itdat",
+            "package_name": "com.itdat.store.itdat",
             "certificate_hash": "8d15ba39eec9d956caf0ca8dd05e54b667b62dba"
           }
         },

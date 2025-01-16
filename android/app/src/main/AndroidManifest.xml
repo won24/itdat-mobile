@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.itdat">
+    package="com.itdat.store.itdat">
     <application
         android:label="ITDAT"
         android:name="${applicationName}"
