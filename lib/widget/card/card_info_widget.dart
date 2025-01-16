@@ -105,10 +105,8 @@ class _InfoWidgetState extends State<CardInfoWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: widget.businessCards != null ?
-      ListView(
+      body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: [
           ListTile(
@@ -213,7 +211,6 @@ class _InfoWidgetState extends State<CardInfoWidget> {
               : SizedBox.shrink(),
         ],
       )
-      : Text("명함이 없습니다.")
     );
   }
 }

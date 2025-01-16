@@ -54,7 +54,8 @@ class _PostBoxState extends State<PostBox> {
     if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
       return fileUrl;
     } else {
-      return '$baseUrl/$fileUrl';
+      print('$baseUrl$fileUrl');
+      return '$baseUrl$fileUrl';
     }
   }
 
@@ -64,7 +65,7 @@ class _PostBoxState extends State<PostBox> {
     if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
       return fileUrl;
     } else {
-      return '$baseUrl/$fileUrl';
+      return '$baseUrl$fileUrl';
     }
   }
 
