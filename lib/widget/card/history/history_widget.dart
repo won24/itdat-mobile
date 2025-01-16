@@ -27,7 +27,6 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   }
 
 
-  // 히스토리 가져오기
   Future<void> _fetchPosts() async {
     final fetchedPosts = await BoardModel().getHistories(widget.cardUserEmail);
     fetchedPosts.sort((a, b) => b['id'].compareTo(a['id']));
@@ -49,7 +48,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  // 수정
+
   void _editPost(BuildContext context, Map<String, dynamic> post) {
     Navigator.push(
       context,
@@ -64,7 +63,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     );
   }
 
-  // 삭제
+
   void _deletePost(BuildContext context, Map<String, dynamic> post) async {
     try {
       await BoardModel().deleteHistory(post['id']);

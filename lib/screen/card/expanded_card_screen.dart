@@ -28,7 +28,7 @@ class ExpandedCardScreen extends StatelessWidget {
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No1(cardInfo: cardInfo); // 기본값
+        return No1(cardInfo: cardInfo);
     }
   }
 
@@ -100,8 +100,8 @@ class ExpandedCardScreen extends StatelessWidget {
     try {
       bool result = await cardModel.deleteCard(cardInfo.cardNo!);
       if (result) {
-        Navigator.of(context).pop(); // 다이얼로그 닫기
-        Navigator.of(context).pop(true); // 명함 상세 화면 닫기 및 리로딩 트리거
+        Navigator.of(context).pop();
+        Navigator.of(context).pop(true);
       } else {
         _showErrorSnackBar(context, AppLocalizations.of(context)!.failedToDeleteBusinessCard);
       }

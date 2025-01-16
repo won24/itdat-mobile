@@ -30,7 +30,6 @@ class No2 extends StatelessWidget {
     );
   }
 
-  // 이미지 가져오기
   String getFullImageUrl() {
     final baseUrl = "${dotenv.env['BASE_URL']}";
     if (cardInfo.logoUrl != null &&
@@ -42,7 +41,6 @@ class No2 extends StatelessWidget {
   }
 
 
-  // 이미지 있는 지 확인
   Future<bool> checkFileExists(String url) async {
     final client = await HttpClientModel().createHttpClient();
     try {
@@ -54,7 +52,6 @@ class No2 extends StatelessWidget {
   }
 
 
-  // 색 코드 변경
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
     if (hex == null || hex.isEmpty) {
       return fallback;

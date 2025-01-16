@@ -54,7 +54,6 @@ class _WritePostDialogState extends State<WritePostDialog> {
   }
 
 
-  // 저장
   void _savePost(BuildContext context, postData) async {
     try {
       await BoardModel().saveHistory(postData);
@@ -67,7 +66,6 @@ class _WritePostDialogState extends State<WritePostDialog> {
   }
 
 
-  // 수정
   void _editPost(BuildContext context, postData) async {
     try {
       await BoardModel().editHistory(postData, widget.post?['id']);
@@ -100,11 +98,11 @@ class _WritePostDialogState extends State<WritePostDialog> {
                 SizedBox(height: 10),
                 TextField(
                   controller: _titleController,
-                  decoration: const InputDecoration(labelText: '제목'),
+                  decoration: InputDecoration(labelText: '제목'),
                 ),
                 TextField(
                   controller: _contentController,
-                  decoration: const InputDecoration(labelText: '내용'),
+                  decoration: InputDecoration(labelText: '내용'),
                   maxLines: 3,
                 ),
                 SizedBox(height: 20),
@@ -126,7 +124,7 @@ class _WritePostDialogState extends State<WritePostDialog> {
                             ? _savePost(context, postData)
                             : _editPost(context, postData);
                       },
-                      child: widget.post == null ? const Text('저장') : const Text('수정'),
+                      child: widget.post == null ? Text('저장') : Text('수정'),
                     ),
                   ],
                 ),

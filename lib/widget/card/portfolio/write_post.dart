@@ -37,7 +37,6 @@ class _WritePostState extends State<WritePost> {
     if (widget.post != null) {
       _titleController.text = widget.post!['title'] ?? '';
       _contentController.text = widget.post!['content'] ?? '';
-      _fileUrlController.text = '';
     }
   }
 
@@ -52,7 +51,6 @@ class _WritePostState extends State<WritePost> {
 
 
   Future<void> _pickMedia({required bool isVideo}) async {
-    // 갤러리 권한 확인 및 요청
     final hasPermission = await requestStoragePermission();
     if (!hasPermission) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,7 +59,6 @@ class _WritePostState extends State<WritePost> {
       return;
     }
 
-    // 미디어 선택 로직
     final picker = ImagePicker();
     final pickedFile = isVideo
         ? await picker.pickVideo(source: ImageSource.gallery)
@@ -85,19 +82,15 @@ class _WritePostState extends State<WritePost> {
     }
   }
 
-
-  // 갤러리 권한 받기
   Future<bool> requestStoragePermission() async {
-    var status = await Permission.storage.status; // 권한 상태 확인
+    var status = await Permission.storage.status;
     if (status.isGranted) {
-      return true; // 이미 권한이 허용된 경우
+      return true;
     } else {
-      var result = await Permission.storage.request(); // 권한 요청
+      var result = await Permission.storage.request();
       if (result.isGranted) {
-        return true; // 권한 허용된 경우
+        return true;
       } else {
-        // 권한 거부된 경우 처리
-        print('갤러리 권한이 거부되었습니다.');
         return false;
       }
     }
@@ -116,7 +109,7 @@ class _WritePostState extends State<WritePost> {
   }
 
 
-  // 저장
+
   void _savePost(BuildContext context, postData) async {
     try {
       await BoardModel().savePost(postData);
@@ -128,7 +121,7 @@ class _WritePostState extends State<WritePost> {
     }
   }
 
-  // 수정
+
   void _editPost(BuildContext context, postData) async {
     try {
       await BoardModel().editPost(postData, widget.post?['id']);
@@ -165,23 +158,19 @@ class _WritePostState extends State<WritePost> {
                   decoration: const InputDecoration(labelText: '내용'),
                   maxLines: 10,
                 ),
-                TextField(
-                  controller: _fileUrlController,
-                  decoration: const InputDecoration(labelText: '파일 URL (선택)'),
-                ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton.icon(
                       onPressed: () => _pickMedia(isVideo: false),
-                      icon: const Icon(Icons.photo),
-                      label: const Text('이미지 선택'),
+                      icon: Icon(Icons.photo),
+                      label: Text('이미지 선택'),
                     ),
                     ElevatedButton.icon(
                       onPressed: () => _pickMedia(isVideo: true),
-                      icon: const Icon(Icons.videocam),
-                      label: const Text('동영상 선택'),
+                      icon: Icon(Icons.videocam),
+                      label: Text('동영상 선택'),
                     ),
                   ],
                 ),
