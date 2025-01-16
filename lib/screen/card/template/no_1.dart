@@ -6,6 +6,8 @@ import 'package:itdat/models/BusinessCard.dart';
 import 'package:http/http.dart' as http;
 import 'package:itdat/models/http_client_model.dart';
 
+import '../../../widget/setting/waitwidget.dart';
+
 class No1 extends StatelessWidget {
   final BusinessCard cardInfo;
   final File? image;
@@ -146,7 +148,7 @@ class No1 extends StatelessWidget {
                 future: checkFileExists(getFullImageUrl()),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return WaitAnimationWidget();
                   } else if (snapshot.hasData && snapshot.data == true) {
                     return Image.network(
                       getFullImageUrl(),

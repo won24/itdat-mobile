@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:itdat/models/http_client_model.dart';
 
+import '../../setting/waitwidget.dart';
+
 class PostBox extends StatefulWidget {
   final Map<String, dynamic> post;
   final String currentUserEmail;
@@ -105,7 +107,7 @@ class _PostBoxState extends State<PostBox> {
         future: checkFileExists(getFullVideoUrl(fileUrl)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: WaitAnimationWidget());
           } else if (snapshot.hasData && snapshot.data == true) {
             return Column(
               children: [
@@ -138,7 +140,7 @@ class _PostBoxState extends State<PostBox> {
         future: checkFileExists(getFullImageUrl(fileUrl)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: WaitAnimationWidget());
           } else if (snapshot.hasData && snapshot.data == true) {
             return Container(
               width: double.infinity,

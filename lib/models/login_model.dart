@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:itdat/models/http_client_model.dart';
 
 class LoginModel extends ChangeNotifier{
   final baseUrl = dotenv.env['BASE_URL'];
 
 
   Future<Map<String, dynamic>> login(Map<String, String> requestLogin) async {
-    final client = await createHttpClient();
+    final client = await HttpClientModel().createHttpClient();
+
     try {
 
       final response = await client.post(
@@ -52,9 +53,10 @@ class LoginModel extends ChangeNotifier{
 
   Future<bool> register(Map<String, dynamic> formData) async {
     final String registerUrl = '$baseUrl/api/auth/register';
+    final client = await HttpClientModel().createHttpClient();
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         Uri.parse(registerUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -77,9 +79,9 @@ class LoginModel extends ChangeNotifier{
 
   Future<bool> checkAvailability(String type, String value) async {
     final String url = '$baseUrl/api/auth/check-availability?type=$type&value=$value';
-
+    final client = await HttpClientModel().createHttpClient();
     try {
-      final response = await http.get(
+      final response = await client.get(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
       );

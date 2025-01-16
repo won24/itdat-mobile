@@ -7,6 +7,8 @@ import 'package:itdat/screen/card/template/no_1.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 
+import '../../widget/setting/waitwidget.dart';
+
 
 class TemplateSelectionScreen extends StatefulWidget {
 
@@ -114,7 +116,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.templateselect)),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: WaitAnimationWidget())
           : ListView.builder(
             itemCount: templates.length,
             itemBuilder: (context, i) {
