@@ -59,11 +59,8 @@ flutter:
 
   assets:
     - assets/icons/
-    - assets/logowhite.png
-    - assets/logoblack.png
+    - assets/logo.png
     - assets/nfcAnime.json
-    - assets/nfc.png
-    - assets/qr.png
     - assets/waitAnime.json
     - .env
     - assets/ca_bundle.crt
