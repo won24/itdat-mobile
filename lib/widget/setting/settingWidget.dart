@@ -59,6 +59,9 @@ class _SettingsState extends State<Settings> {
                 MaterialPageRoute(builder: (context) => OpenBusinessCardList()),
               );
             }),
+            _buildSettingItem(Icons.logout, AppLocalizations.of(context)!.logout, () {
+              LogoutWidget.show(context);
+            }),
           ],
         ),
       ],
