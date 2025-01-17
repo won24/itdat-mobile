@@ -49,9 +49,9 @@ class _FormScreenState extends State<FormScreen> {
   }
 
   String colorToHex(Color color) {
-    int r = (color.red * 255).toInt();
-    int g = (color.green * 255).toInt();
-    int b = (color.blue * 255).toInt();
+    int r = (color.r * 255).toInt();
+    int g = (color.g * 255).toInt();
+    int b = (color.b * 255).toInt();
 
     return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}';
   }
