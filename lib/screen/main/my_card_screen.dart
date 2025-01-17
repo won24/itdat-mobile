@@ -64,19 +64,15 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   }
 
   Widget buildBusinessCard(BusinessCard cardInfo, BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    final cardWidth = screenWidth * 0.9;
-    final cardHeight = screenHeight * 0.3;
     return SizedBox(
-      width: cardWidth,
-      height: cardHeight,
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: _getTemplateWidget(cardInfo),
-      ),
+      child: Transform.scale(
+        scale: 0.9,
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          child: _getTemplateWidget(cardInfo),
+        ),
+      )
     );
   }
 
@@ -89,7 +85,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No2(cardInfo: cardInfo);
+        return No1(cardInfo: cardInfo);
     }
   }
 
@@ -147,9 +143,10 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: ListView(
         children: [
-          Expanded(
+          Container(
+            height: MediaQuery.of(context).size.height * 0.4,
             child: FutureBuilder<List<dynamic>>(
               future: _businessCards,
               builder: (context, snapshot) {
@@ -212,7 +209,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                       ),
                                     ).then((_) => _reloadBusinessCards());
                                   },
-                                  icon: const Icon(Icons.add, size: 64),
+                                  icon: Icon(Icons.add, size: 64, color: Theme.of(context).iconTheme.color),
                                 ),
                               );
                             } else {
@@ -256,78 +253,93 @@ class _MyCardWidgetState extends State<MyCardScreen> {
               },
             ),
           ),
-          Expanded(
-            child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _selectedIndex = 0;
-                          });
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!.contact,
-                          style: TextStyle(
-                              fontWeight: _selectedIndex == 0? FontWeight.w900: null,
-                              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "|",
-                        style: TextStyle(
-                            color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _selectedIndex = 1;
-                          });
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!.portfolio,
-                          style: TextStyle(
-                              fontWeight: _selectedIndex == 1? FontWeight.w900: null,
-                              color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "|",
-                        style: TextStyle(
-                            color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _selectedIndex = 2;
-                          });
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!.history,
-                          style: TextStyle(
-                              fontWeight: _selectedIndex == 2? FontWeight.w900: null,
-                              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
-                          ),
-                        ),
-                      ),
-                    ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 0;
+                  });
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.contact,
+                  style: TextStyle(
+                    fontWeight:
+                    _selectedIndex == 0 ? FontWeight.w900 : null,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
                   ),
-                  Expanded(
-                    child: _selectedIndex == 0
-                        ? CardInfoWidget(businessCards: selectedCardInfo?? emptyCardInfo, loginEmail: _loginEmail,)
-                        : _selectedIndex == 1
-                        ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail)
-                        : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
+                ),
+              ),
+              Text(
+                "|",
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.portfolio,
+                  style: TextStyle(
+                    fontWeight:
+                    _selectedIndex == 1 ? FontWeight.w900 : null,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
                   ),
-                ]
-            ),
+                ),
+              ),
+              Text(
+                "|",
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 2;
+                  });
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.history,
+                  style: TextStyle(
+                    fontWeight:
+                    _selectedIndex == 2 ? FontWeight.w900 : null,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+                ),
+              ),
+            ],
           ),
+          if (_selectedIndex == 0)
+            CardInfoWidget(
+              businessCards: selectedCardInfo ?? emptyCardInfo,
+              loginEmail: _loginEmail,
+            ),
+          if (_selectedIndex == 1)
+            PortfolioWidget(
+              loginUserEmail: _loginEmail,
+              cardUserEmail: _loginEmail,
+            ),
+          if (_selectedIndex == 2)
+            HistoryWidget(
+              loginUserEmail: _loginEmail,
+              cardUserEmail: _loginEmail,
+            ),
         ],
       ),
     );
