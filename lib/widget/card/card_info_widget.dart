@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../models/nfc_model.dart';
 
 class CardInfoWidget extends StatefulWidget {
@@ -45,12 +44,12 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   Future<void> _openMaps() async {
     final String address = "${widget.businessCards.companyAddress}";
     final Uri appUrl = Uri.parse("geo:0,0?q=${Uri.encodeComponent(address)}");
-    final Uri webUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(address)}");
+   // final Uri webUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(address)}");
 
     if (await canLaunchUrl(appUrl)) {
       await launchUrl(appUrl, mode: LaunchMode.externalApplication);
-    } else if (await canLaunchUrl(webUrl)) {
-      await launchUrl(webUrl, mode: LaunchMode.externalApplication);
+    // } else if (await canLaunchUrl(webUrl)) {
+    //   await launchUrl(webUrl, mode: LaunchMode.externalApplication);
     } else {
       _showSnackBar(AppLocalizations.of(context)!.cannotOpenMap, isError: true);
     }

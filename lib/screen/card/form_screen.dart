@@ -49,9 +49,9 @@ class _FormScreenState extends State<FormScreen> {
   }
 
   String colorToHex(Color color) {
-    int r = (color.red * 255).toInt();
-    int g = (color.green * 255).toInt();
-    int b = (color.blue * 255).toInt();
+    int r = (color.r * 255).toInt();
+    int g = (color.g * 255).toInt();
+    int b = (color.b * 255).toInt();
 
     return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}';
   }
@@ -207,7 +207,8 @@ class _FormScreenState extends State<FormScreen> {
 
   Widget _buildCompanyNameInput() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text("회사 로고 이미지", style: TextStyle(fontSize: 16)),
         Text("회사 이름 대신 사용", style: TextStyle(color: Colors.grey.shade400),),
@@ -232,7 +233,7 @@ class _FormScreenState extends State<FormScreen> {
             : Container(
               width: 100,
               height: 100,
-              color: Colors.grey[300],
+              color: Colors.grey[200],
               child: const Icon(Icons.add_a_photo, color: Colors.grey),
             ),
         ),
@@ -513,11 +514,35 @@ class _FormScreenState extends State<FormScreen> {
                       child: ElevatedButton(
                         onPressed: _saveCard,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromRGBO(0, 202, 145, 1),
-                          foregroundColor: Colors.white,
-                          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black87,
+                          side: BorderSide(
+                            color: Color.fromRGBO(0, 202, 145, 1),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ).copyWith(
+                          backgroundColor: WidgetStateProperty.resolveWith((states) {
+                            if (states.contains(WidgetState.pressed)) {
+                              return Color.fromRGBO(0, 202, 145, 1);
+                            }
+                            if (states.contains(WidgetState.hovered)) {
+                              return Color.fromRGBO(0, 202, 145, 1);
+                            }
+                            return Colors.white;
+                          }),
+                          foregroundColor: WidgetStateProperty.resolveWith((states) {
+                            if (states.contains(WidgetState.pressed)) {
+                              return Colors.white;
+                            }
+                            return Colors.black87;
+                          }),
                         ),
-                        child: Text("저장"),
+                        child: Text(
+                          "저장",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ],
