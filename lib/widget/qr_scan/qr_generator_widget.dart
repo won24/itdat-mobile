@@ -26,8 +26,6 @@ class _QRGeneratorWidgetState extends State<QRGeneratorWidget> {
             return Center(child: WaitAnimationWidget());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.data == null) {
-            return Center(child: Text('No email found'));
           } else {
             return QrBusinessCardList(userEmail: snapshot.data!);
           }
