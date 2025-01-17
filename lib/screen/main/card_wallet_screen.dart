@@ -150,19 +150,31 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
           title: Text(AppLocalizations.of(context)!.createFolderTitle),
           content: TextField(
             controller: folderNameController,
-            decoration: InputDecoration(hintText: AppLocalizations.of(context)!.createFolderTitle),
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.createFolderTitle,
+              hintStyle: TextStyle(color: Colors.grey[400]),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color.fromRGBO(202, 202, 202, 1.0)),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color.fromRGBO(0, 202, 145, 1)),
+              ),
+            ),
+
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel),
+              child: Text(AppLocalizations.of(context)!.cancel,
+                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)),
             ),
             TextButton(
               onPressed: () {
                 final folderName = folderNameController.text.trim();
                 Navigator.pop(context, folderName);
               },
-              child: Text(AppLocalizations.of(context)!.create),
+              child: Text(AppLocalizations.of(context)!.create,
+                style: TextStyle(color: Color.fromRGBO(0, 202, 145, 1), fontWeight: FontWeight.bold)),
             ),
           ],
         );
@@ -306,7 +318,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
       case 'No3':
         return No3(cardInfo: cardInfo);
       default:
-        return No2(cardInfo: cardInfo); // 기본값
+        return No1(cardInfo: cardInfo); // 기본값
     }
   }
 

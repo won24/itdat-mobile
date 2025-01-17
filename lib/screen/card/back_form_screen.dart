@@ -232,12 +232,32 @@ class _BackFormScreenState extends State<BackFormScreen> {
                     ElevatedButton(
                       onPressed: _saveCard,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(0, 202, 145, 1),
-                        foregroundColor: Colors.white,
-                        textStyle: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black87,
+                        side: BorderSide(
+                          color: Color.fromRGBO(0, 202, 145, 1),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ).copyWith(
+                        backgroundColor: WidgetStateProperty.resolveWith((states) {
+                          if (states.contains(WidgetState.pressed)) {
+                            return Color.fromRGBO(0, 202, 145, 1);
+                          }
+                          if (states.contains(WidgetState.hovered)) {
+                            return Color.fromRGBO(0, 202, 145, 1);
+                          }
+                          return Colors.white;
+                        }),
+                        foregroundColor: WidgetStateProperty.resolveWith((states) {
+                          if (states.contains(WidgetState.pressed)) {
+                            return Colors.white;
+                          }
+                          return Colors.black87;
+                        }),
                       ),
-                      child: Text("저장"),
+                      child: Text("저장", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
@@ -250,12 +270,17 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade400,
-                        foregroundColor: Colors.white,
-                        textStyle: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black87,
+                        side: BorderSide(
+                          color: Colors.grey.shade400,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
                       ),
-                      child: Text("취소"),
+                      child: Text("취소",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                     ),
                   ],
                 ),

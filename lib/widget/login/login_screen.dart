@@ -51,15 +51,29 @@ class LoginScreen extends StatelessWidget {
                   controller: _identifierController,
                   decoration: InputDecoration(
                     labelText: '아이디 또는 이메일',
+                    labelStyle: TextStyle(color: Colors.grey[600]),
                     prefixIcon: Icon(Icons.email),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(202, 202, 202, 1.0)),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(0, 202, 145, 1), width: 2),
+                    ),
                   ),
                 ),
                 SizedBox(height: 10),
                 TextField(
                   controller: _passwordController,
                   decoration: InputDecoration(
-                    labelText: 'Password',
+                    labelText: '비밀번호',
+                    labelStyle: TextStyle(color: Colors.grey[600]),
                     prefixIcon: Icon(Icons.lock),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(202, 202, 202, 1.0)),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color.fromRGBO(0, 202, 145, 1), width: 2),
+                    ),
                   ),
                   obscureText: true,
                 ),
@@ -86,10 +100,11 @@ class LoginScreen extends StatelessWidget {
                     },
                     child: Text(AppLocalizations.of(context)!.login),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.teal),
+                      side: BorderSide(color: Color.fromRGBO(0, 202, 145, 1)),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.0),
                       ),
+                        foregroundColor : Colors.black87
                     ),
                   ),
                 ),
@@ -105,12 +120,13 @@ class LoginScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Text(AppLocalizations.of(context)!.register),
+                    child: Text(AppLocalizations.of(context)!.register,),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.teal),
+                      side: BorderSide(color:Color.fromRGBO(0, 202, 145, 1)),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.0),
                       ),
+                        foregroundColor : Colors.black87
                     ),
                   ),
                 ),
