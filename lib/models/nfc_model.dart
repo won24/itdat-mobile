@@ -10,7 +10,6 @@ class NfcModel {
 
   Future<void> processCardInfo(Map<String, dynamic> cardInfo) async {
     final client = await HttpClientModel().createHttpClient();
-
     try {
       String? userEmail = await _storage.read(key: 'user_email');
       if (userEmail == null) {

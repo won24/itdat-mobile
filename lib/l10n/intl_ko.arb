@@ -194,7 +194,6 @@
   "userBusinessCard": "{userName}님의 명함",
   "deleteBusinessCard": "명함 삭제",
   "confirmDeleteBusinessCard": "이 명함을 정말로 삭제하시겠습니까?",
-  "failedToDeleteBusinessCard": "명함 삭제에 실패했습니다.",
-  "errorOccurred": "오류가 발생했습니다: {error}"
+  "failedToDeleteBusinessCard": "명함 삭제에 실패했습니다."
 
 }
