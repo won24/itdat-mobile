@@ -32,7 +32,7 @@ class _MainLayoutState extends State<MainLayout> {
     });
   }
 
-  Widget _buildIcon(IconData iconData, int index) {
+  Widget _buildIcon(String iconName, int index) {
     bool isSelected = index == _selectedIndex;  // 선택된 인덱스인지 확인
     return Column(
       children: [
@@ -42,9 +42,7 @@ class _MainLayoutState extends State<MainLayout> {
             size: 8,
             color: Color.fromRGBO(0, 202, 145, 1)
             ),
-        Icon(
-          iconData, size: 30,
-        ),
+        Image.asset('assets/icons/$iconName.png', height: 30, width: 30,)
       ],
     );
   }
@@ -58,7 +56,7 @@ class _MainLayoutState extends State<MainLayout> {
         preferredSize: Size.fromHeight(65),
         child: AppBar(
           title: Image.asset(
-            isDarkMode ? 'assets/logowhite.png' : 'assets/logoblack.png',
+            'assets/logo.png',
             fit: BoxFit.contain,
             height: 50, // 원하는 높이로 조정
           ),
@@ -67,7 +65,7 @@ class _MainLayoutState extends State<MainLayout> {
           actions: [
             IconButton(
               icon: Image.asset(
-                'assets/nfc.png',
+                'assets/icons/nfc.png',
                 width: 25,
                 height: 25,
                 color: isDarkMode ? Colors.grey[200] : Colors.black,
@@ -82,7 +80,7 @@ class _MainLayoutState extends State<MainLayout> {
             ),
             IconButton(
               icon: Image.asset(
-                'assets/qr.png',
+                'assets/icons/qr.png',
                 width: 26,
                 height: 26,
                 color: isDarkMode ? Colors.grey[200] : Colors.black,
@@ -120,19 +118,19 @@ class _MainLayoutState extends State<MainLayout> {
           selectedItemColor: isDarkMode ? Colors.white : Colors.black,
           items: [
             BottomNavigationBarItem(
-              icon: _buildIcon(Icons.credit_card_sharp, 0),
+              icon: _buildIcon('my_card', 0),
               label: AppLocalizations.of(context)!.myCard,
             ),
             BottomNavigationBarItem(
-              icon: _buildIcon(Icons.wallet_sharp, 1),
+              icon: _buildIcon('card_wallet', 1),
               label: AppLocalizations.of(context)!.cardWallet,
             ),
             BottomNavigationBarItem(
-              icon: _buildIcon(Icons.people_sharp, 2),
+              icon: _buildIcon('public_card', 2),
               label: AppLocalizations.of(context)!.openCard,
             ),
             BottomNavigationBarItem(
-              icon: _buildIcon(Icons.account_circle_sharp, 3),
+              icon: _buildIcon('profile', 3),
               label: AppLocalizations.of(context)!.myInfo,
             ),
           ],
