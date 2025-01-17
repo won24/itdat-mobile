@@ -136,7 +136,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
               elevation: 0,
               splashColor: Colors.transparent,
               highlightElevation: 0,
-              child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30,  color: isDarkMode ? Colors.grey[200] : Colors.black,),
+              child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30, color: isDarkMode ? Colors.grey[200] : Colors.black,),
             )
           : null,
     );

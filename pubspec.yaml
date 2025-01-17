@@ -59,7 +59,8 @@ flutter:
 
   assets:
     - assets/icons/
-    - assets/logo.png
+    - assets/
+    - assets/logo_black.png
     - assets/nfcAnime.json
     - assets/waitAnime.json
     - .env

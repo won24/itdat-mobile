@@ -33,7 +33,8 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   Widget _buildIcon(String iconName, int index) {
-    bool isSelected = index == _selectedIndex;  // 선택된 인덱스인지 확인
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    bool isSelected = index == _selectedIndex;
     return Column(
       children: [
         if (isSelected)
@@ -42,7 +43,7 @@ class _MainLayoutState extends State<MainLayout> {
             size: 8,
             color: Color.fromRGBO(0, 202, 145, 1)
             ),
-        Image.asset('assets/icons/$iconName.png', height: 30, width: 30,)
+        Image.asset('assets/icons/$iconName.png', height: 30, width: 30,  color: isDarkMode ? Colors.grey[200] : Colors.black,)
       ],
     );
   }
@@ -56,7 +57,7 @@ class _MainLayoutState extends State<MainLayout> {
         preferredSize: Size.fromHeight(65),
         child: AppBar(
           title: Image.asset(
-            'assets/logo.png',
+            isDarkMode ? 'assets/logo_white.png' : 'assets/logo_black.png',
             fit: BoxFit.contain,
             height: 50, // 원하는 높이로 조정
           ),

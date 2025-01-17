@@ -37,12 +37,12 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Theme.of(context).brightness == Brightness.dark
                     ? Image.asset(
-                  'assets/logowhite.png',
+                  'assets/logo_white.png',
                   width: 80,
                   height: 100,
                 )
                     : Image.asset(
-                  'assets/logoblack.png',
+                  'assets/logo_black.png',
                   width: 80,
                   height: 100,
                 ),
