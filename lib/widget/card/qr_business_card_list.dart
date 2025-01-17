@@ -71,10 +71,38 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
                         size: 300.0,
                       ),
                       SizedBox(height: 20),
-                      IconButton(
-                        icon: Icon(Icons.download_sharp),
-                        onPressed: () => _saveQrCodeWithCanvas(qrData, context),
-                        tooltip: AppLocalizations.of(context)!.qrsave,
+                      ElevatedButton(
+                        onPressed: ()=>_saveQrCodeWithCanvas(qrData, context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black87,
+                          side: BorderSide(
+                            color: Color.fromRGBO(0, 202, 145, 1),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ).copyWith(
+                          backgroundColor: WidgetStateProperty.resolveWith((states) {
+                            if (states.contains(WidgetState.pressed)) {
+                              return Color.fromRGBO(0, 202, 145, 1);
+                            }
+                            if (states.contains(WidgetState.hovered)) {
+                              return Color.fromRGBO(0, 202, 145, 1);
+                            }
+                            return Colors.white;
+                          }),
+                          foregroundColor: WidgetStateProperty.resolveWith((states) {
+                            if (states.contains(WidgetState.pressed)) {
+                              return Colors.white;
+                            }
+                            return Colors.black87;
+                          }),
+                        ),
+                        child: Text(
+                            AppLocalizations.of(context)!.qrsave,
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),

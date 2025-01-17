@@ -122,7 +122,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
           return;
         }
         final storage = FlutterSecureStorage();
-        String? myEmail = await storage.read(key: 'email');
+        String? myEmail = await storage.read(key: 'user_email');
         if (myEmail == null || myEmail.isEmpty) {
           throw Exception(AppLocalizations.of(context)!.noStoredEmail);
         }
@@ -194,6 +194,7 @@ class _NfcWritePageState extends State<NfcWritePage> {
               child: Text(AppLocalizations.of(context)!.confirm),
               onPressed: () {
                 _stopNfcWrite();
+                _stopVibration();
                 Navigator.of(context).pop(); // 다이얼로그 닫기
                 Navigator.of(context).pop(); // NfcWritePage 닫기
                 Navigator.of(context).pop();
