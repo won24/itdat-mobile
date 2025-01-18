@@ -38,15 +38,22 @@ class _MyCardWidgetState extends State<MyCardScreen> {
     _loadEmail();
   }
 
+  // void _setInitialCard(List<dynamic> filteredCards) {
+  //   if (filteredCards.isNotEmpty && selectedCardInfo == null) {
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       setState(() {
+  //         selectedCardInfo = filteredCards[0];
+  //       });
+  //     });
+  //   }
+  // }
+
   void _setInitialCard(List<dynamic> filteredCards) {
     if (filteredCards.isNotEmpty && selectedCardInfo == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          selectedCardInfo = filteredCards[0];
-        });
-      });
+      selectedCardInfo = filteredCards[0];
     }
   }
+
 
   Future<void> _loadEmail() async {
     final storage = FlutterSecureStorage();
