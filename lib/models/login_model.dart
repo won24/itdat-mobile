@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:itdat/models/http_client_model.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
+
 
 class LoginModel extends ChangeNotifier{
   final baseUrl = dotenv.env['BASE_URL'];
 
 
   Future<Map<String, dynamic>> login(Map<String, String> requestLogin) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
 
@@ -53,7 +54,7 @@ class LoginModel extends ChangeNotifier{
 
   Future<bool> register(Map<String, dynamic> formData) async {
     final String registerUrl = '$baseUrl/api/auth/register';
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.post(
@@ -79,7 +80,7 @@ class LoginModel extends ChangeNotifier{
 
   Future<bool> checkAvailability(String type, String value) async {
     final String url = '$baseUrl/api/auth/check-availability?type=$type&value=$value';
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       final response = await client.get(
         Uri.parse(url),

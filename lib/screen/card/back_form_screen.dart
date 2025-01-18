@@ -240,6 +240,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
+                        elevation: 3,
                       ).copyWith(
                         backgroundColor: WidgetStateProperty.resolveWith((states) {
                           if (states.contains(WidgetState.pressed)) {
@@ -278,6 +279,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
+                        elevation: 3,
                       ),
                       child: Text("취소",
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),

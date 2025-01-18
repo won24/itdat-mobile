@@ -33,6 +33,16 @@ class ThemeProvider with ChangeNotifier {
   ThemeData get lightTheme => ThemeData(
     primarySwatch: Colors.blue,
     brightness: Brightness.light,
+    hintColor: Color.fromRGBO(0, 202, 145, 1),
+    scaffoldBackgroundColor: Colors.white,
+    canvasColor: Colors.white,
+    cardColor: Colors.white,
+    dividerColor: Colors.grey[300],
+    appBarTheme: AppBarTheme(
+      backgroundColor:Colors.white
+    ),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+
     // 여기에 라이트 테마에 대한 추가 설정을 넣을 수 있습니다.
   );
 

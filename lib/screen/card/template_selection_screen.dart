@@ -7,7 +7,7 @@ import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 
 import '../../widget/setting/waitwidget.dart';
-import '../form_screen.dart';
+import 'form_screen.dart';
 
 
 class TemplateSelectionScreen extends StatefulWidget {
@@ -27,10 +27,12 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
 
   Map<String, dynamic>? userData;
   late BusinessCard _card;
-  late List<Widget> templates;
+  late List<Widget> businessTemplates;
+  late List<Widget> personalTemplates;
   bool isLoading = true;
   int cardNo = 1;
   String selectedTemplate = "";
+  String selectedCategory = "Business";
 
   @override
   void initState() {
@@ -96,9 +98,13 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
     );
 
 
-    templates = [
+    businessTemplates = [
       No1(cardInfo: _card),
       No2(cardInfo: _card),
+    ];
+
+
+    personalTemplates = [
       No3(cardInfo: _card),
     ];
   }
@@ -107,39 +113,103 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.templateselect)),
+      appBar: AppBar(title: Text("템플릿 선택")),
       body: isLoading
           ? const Center(child: WaitAnimationWidget())
-          : ListView.builder(
-            itemCount: templates.length,
-            itemBuilder: (context, i) {
-              final template = templates[i];
-              return GestureDetector(
-                onTap: () {
+          : Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
                   setState(() {
-                    selectedTemplate = "No${i + 1}";
-                    _card = _card.copyWith(appTemplate: selectedTemplate);
+                    selectedCategory = "Business";
                   });
-                  Navigator.push(
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: selectedCategory == "Business"
+                      ? Color.fromRGBO(0, 202, 145, 1)
+                      : Colors.white,
+                  foregroundColor: selectedCategory == "Business"
+                      ? Colors.white
+                      : Colors.black87,
+                  side: BorderSide(
+                    color: Color.fromRGBO(0, 202, 145, 1),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  elevation: 3,
+                ),
+                child: Text("For Business", style: TextStyle(fontWeight: FontWeight.bold),),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    selectedCategory = "Personal";
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: selectedCategory == "Personal"
+                      ? Color.fromRGBO(0, 202, 145, 1)
+                      : Colors.white,
+                  foregroundColor: selectedCategory == "Personal"
+                      ? Colors.white
+                      : Colors.black87,
+                  side: BorderSide(
+                    color: Color.fromRGBO(0, 202, 145, 1),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  elevation: 3,
+                ),
+                child: Text("For Personal", style: TextStyle(fontWeight: FontWeight.bold),),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Expanded(
+            child: ListView.builder(
+              itemCount: selectedCategory == "Business"
+                  ? businessTemplates.length
+                  : personalTemplates.length,
+              itemBuilder: (context, i) {
+                final template = selectedCategory == "Business"
+                    ? businessTemplates[i]
+                    : personalTemplates[i];
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedTemplate = "No${i + 1}";
+                      _card = _card.copyWith(appTemplate: selectedTemplate);
+                    });
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => FormScreen(cardInfo: _card),
-                      )
-                  );
-                },
-                child: Transform.scale(
-                  scale: 0.9,
-                  child: Card(
+                      ),
+                    );
+                  },
+                  child: Transform.scale(
+                    scale: 0.9,
+                    child: Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: template
+                      child: template,
+                    ),
                   ),
-                )
-              );
-            },
+                );
+              },
+            ),
           ),
+        ],
+      ),
     );
   }
 }

@@ -85,60 +85,62 @@ class _HistoryWidgetState extends State<HistoryWidget> {
             ? Center(child: Text('간단한 이력사항, 기술 등을 작성할 수 있습니다.'))
             : Center(child: Text('히스토리가 없습니다.'))
           : ListView.builder(
-        padding: EdgeInsets.all(8.0),
-        itemCount: posts.length,
-        itemBuilder: (context, index) {
-          final post = posts[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(post['title'], style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold, color:Color.fromRGBO(0, 202, 145, 1)),),
-                    if (post['userEmail'] == widget.loginUserEmail)
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == 'edit') _editPost(context, post);
-                            if (value == 'delete') _deletePost(context, post);
-                          },
-                          itemBuilder: (context) =>
-                          [
-                            PopupMenuItem(value: 'edit', child: Text('수정')),
-                            PopupMenuItem(value: 'delete', child: Text('삭제')),
-                          ],
-                        ),
+              physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+              shrinkWrap: true, // 부모 컨테이너 크기에 맞춤
+              padding: EdgeInsets.all(8.0),
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final post = posts[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(post['title'], style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold, color:Color.fromRGBO(0, 202, 145, 1)),),
+                          if (post['userEmail'] == widget.loginUserEmail)
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: PopupMenuButton<String>(
+                                onSelected: (value) {
+                                  if (value == 'edit') _editPost(context, post);
+                                  if (value == 'delete') _deletePost(context, post);
+                                },
+                                itemBuilder: (context) =>
+                                [
+                                  PopupMenuItem(value: 'edit', child: Text('수정')),
+                                  PopupMenuItem(value: 'delete', child: Text('삭제')),
+                                ],
+                              ),
+                            ),
+                        ],
                       ),
-                  ],
-                ),
-                Text(post['content'])
-              ],
-            )
-            );
-        },
-      ),
-      floatingActionButton: widget.cardUserEmail == widget.loginUserEmail
-          ? FloatingActionButton(
-              onPressed: (){
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return WritePostDialog(userEmail: widget.loginUserEmail, onPostModified: _fetchPosts);
-                  },
-                );
+                      Text(post['content'])
+                    ],
+                  )
+                  );
               },
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              splashColor: Colors.transparent,
-              highlightElevation: 0,
-              child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30, color: isDarkMode ? Colors.grey[200] : Colors.black,),
-            )
-          : null,
+            ),
+          floatingActionButton: widget.cardUserEmail == widget.loginUserEmail
+              ? FloatingActionButton(
+                  onPressed: (){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return WritePostDialog(userEmail: widget.loginUserEmail, onPostModified: _fetchPosts);
+                      },
+                    );
+                  },
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  splashColor: Colors.transparent,
+                  highlightElevation: 0,
+                  child: Image.asset('assets/icons/addHistory.png', height: 30, width: 30, color: isDarkMode ? Colors.grey[200] : Colors.black,),
+                )
+              : null,
     );
   }
 }

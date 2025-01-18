@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:itdat/models/http_client_model.dart';
+
+import 'package:itdat/utils/HttpClientManager.dart';
 import 'package:mime/mime.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
@@ -13,7 +14,7 @@ class BoardModel{
 
 
   Future<List<Map<String,dynamic>>> getPosts(String userEmail) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.get(Uri.parse("$baseUrl/$userEmail"));
@@ -25,7 +26,7 @@ class BoardModel{
 
 
   Future<void> savePost(Map<String, dynamic> postData) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final url = Uri.parse("$baseUrl/save");
@@ -59,7 +60,7 @@ class BoardModel{
 
 
   Future<void> editPost(Map<String, dynamic> postData, int postId) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final url = Uri.parse("$baseUrl/edit/$postId");
@@ -92,7 +93,7 @@ class BoardModel{
 
 
   Future<void> deletePost(int postId) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try{
       await client.delete(Uri.parse("$baseUrl/delete/$postId"));
@@ -105,7 +106,7 @@ class BoardModel{
 
 
   Future<List<Map<String,dynamic>>> getHistories(String userEmail) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.get(Uri.parse("$historyBaseUrl/$userEmail"));
@@ -118,7 +119,7 @@ class BoardModel{
 
 
   Future<void> saveHistory(Map<String, dynamic> postData) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       await client.post(
@@ -134,7 +135,7 @@ class BoardModel{
 
 
   Future<void> editHistory(Map<String, dynamic> postData, int postId) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       await client.put(
@@ -149,7 +150,7 @@ class BoardModel{
 
 
   Future<void> deleteHistory(int postId) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try{
       await client.delete(Uri.parse("$historyBaseUrl/delete/$postId"));

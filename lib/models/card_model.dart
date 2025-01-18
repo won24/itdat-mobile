@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:itdat/models/http_client_model.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
@@ -16,7 +16,7 @@ class CardModel{
 
 
   Future<Map<String, dynamic>> getUserById(String userEmail) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.get(Uri.parse("$baseUrl/userinfo/$userEmail"));
@@ -28,7 +28,7 @@ class CardModel{
 
 
   Future<BusinessCard> saveBusinessCard(BusinessCard card) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.post(
@@ -44,7 +44,7 @@ class CardModel{
 
 
   Future<void> saveBusinessCardWithLogo(BusinessCard cardInfo) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final url = Uri.parse('$baseUrl/save/logo');
@@ -75,7 +75,7 @@ class CardModel{
 
 
   Future<List<dynamic>> getBusinessCard(String userEmail) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.get(Uri.parse("$baseUrl/$userEmail"));
@@ -131,7 +131,7 @@ class CardModel{
    // }
 
    Future<void> updateCardsPublicStatus(List<Map<String, dynamic>> cardData) async {
-     final client = await HttpClientModel().createHttpClient();
+     final client = await HttpClientManager().createHttpClient();
 
      try {
        final response = await client.post(
@@ -169,7 +169,7 @@ class CardModel{
 
 
    Future<bool> updateBusinessCard(BusinessCard card) async {
-     final client = await HttpClientModel().createHttpClient();
+     final client = await HttpClientManager().createHttpClient();
 
      try {
        print("updateBusinessCard: $card");
@@ -192,7 +192,7 @@ class CardModel{
    }
 
    Future<bool> deleteCard(int cardId) async {
-     final client = await HttpClientModel().createHttpClient();
+     final client = await HttpClientManager().createHttpClient();
 
      try {
        // 저장된 이메일 가져오기
@@ -228,7 +228,7 @@ class CardModel{
 
 
   Future<void> saveMemo(Map<String, dynamic> card) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.post(
@@ -243,7 +243,7 @@ class CardModel{
   }
 
    Future<String?> loadMemo(Map<String, dynamic> card) async {
-     final client = await HttpClientModel().createHttpClient();
+     final client = await HttpClientManager().createHttpClient();
 
      try {
        final response = await client.post(

@@ -1,17 +1,15 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
 
-
-import 'package:itdat/models/http_client_model.dart';
 
 class UserModel {
   final storage = FlutterSecureStorage();
   final baseUrl = dotenv.env['BASE_URL'];
 
   Future<Map<String, dynamic>> getUserInfo() async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     String? email = await storage.read(key: 'user_email');
     print('email: $email');
     if (email == null) {
@@ -34,7 +32,7 @@ class UserModel {
   }
 
   Future<bool> updateUserInfo(Map<String, dynamic> map) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     String? email = await storage.read(key: 'user_email');
     if (email == null) {
       throw Exception('email not found');
@@ -59,7 +57,7 @@ class UserModel {
   }
 
   Future<bool> verifyPassword(String password, String email) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     final String url = '$baseUrl/nfc/password';
 
     try {
@@ -88,7 +86,7 @@ class UserModel {
     }
   }
   Future<bool> changePassword(String newPassword) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     String? email = await storage.read(key: 'user_email');
     print("오긴하나");
     print(newPassword);
@@ -122,7 +120,7 @@ class UserModel {
   }
 
   Future<bool> deleteAccount(String userEmail) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     final String url = '$baseUrl/nfc/deleteaccount';
     try {
       final Map<String, dynamic> requestBody = {

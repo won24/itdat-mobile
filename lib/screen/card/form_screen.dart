@@ -146,7 +146,7 @@ class _FormScreenState extends State<FormScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child:  Text(AppLocalizations.of(context)!.cancel),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ],
         );
@@ -184,7 +184,6 @@ class _FormScreenState extends State<FormScreen> {
 
 
   Future<void> _selectCompanyImage() async {
-    print("회사로고");
     if (await requestStoragePermission()) {
       File? image = await getImageFromGallery();
       if (image != null) {
@@ -193,7 +192,7 @@ class _FormScreenState extends State<FormScreen> {
           widget.cardInfo.logoUrl = image.path;
         });
       }
-    }
+   }
   }
 
 
@@ -522,6 +521,7 @@ class _FormScreenState extends State<FormScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
+                          elevation: 3,
                         ).copyWith(
                           backgroundColor: WidgetStateProperty.resolveWith((states) {
                             if (states.contains(WidgetState.pressed)) {

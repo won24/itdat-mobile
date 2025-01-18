@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:itdat/models/http_client_model.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
 
 class SocialsModel {
   final baseUrl = dotenv.env['BASE_URL'];
 
   // Google 로그인
   Future<Map<String, dynamic>> googleLogin(String idToken) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final String googleUrl = '$baseUrl/api/oauth/google';
 
@@ -39,7 +38,7 @@ class SocialsModel {
 
   // Kakao OAuth 인증 코드 전달 및 처리
   Future<Map<String, dynamic>> handleKakaoAuthCode(String code) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     final String kakaoUrl = '$baseUrl/api/oauth/callback/kakao';
 
     try {
@@ -73,7 +72,7 @@ class SocialsModel {
 
   // Kakao 로그인
   Future<Map<String, dynamic>> kakaoLogin(String accessToken) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     final String kakaoUrl = '$baseUrl/api/oauth/kakao';
 
     try {
@@ -106,7 +105,7 @@ class SocialsModel {
   }
 
   Future<void> sendAuthorizationCode(String code) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       final response = await client.post(
         Uri.parse('http://10.0.2.2:8082/api/oauth/callback/kakao'),
@@ -138,7 +137,7 @@ class SocialsModel {
 
   // 네이버 로그인 백엔드 호출
   Future<Map<String, dynamic>> naverLogin(String code, String state) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     final String naverUrl = '$baseUrl/api/oauth/callback/naver';
     print('Naver API 호출 시작: $naverUrl');
     print('naver 전송 데이터 - code: $code, state: $state');
@@ -172,7 +171,7 @@ class SocialsModel {
   }
 
   Future<void> sendCodeAndState(String code, String state) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     final String backendUrl = '$baseUrl/api/oauth/callback/naver?code=$code&state=$state';
 
     try {
@@ -189,7 +188,7 @@ class SocialsModel {
 
   // 백엔드에서 로그인 결과 가져오기 (추가적인 별도 호출용)
   Future<Map<String, dynamic>> fetchBackendLoginResult() async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     final String backendUrl = '$baseUrl/api/oauth/callback/naver';
     try {
       final response = await client.get(Uri.parse(backendUrl));
