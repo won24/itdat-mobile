@@ -38,19 +38,13 @@ class _MyCardWidgetState extends State<MyCardScreen> {
     _loadEmail();
   }
 
-  // void _setInitialCard(List<dynamic> filteredCards) {
-  //   if (filteredCards.isNotEmpty && selectedCardInfo == null) {
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       setState(() {
-  //         selectedCardInfo = filteredCards[0];
-  //       });
-  //     });
-  //   }
-  // }
-
   void _setInitialCard(List<dynamic> filteredCards) {
     if (filteredCards.isNotEmpty && selectedCardInfo == null) {
-      selectedCardInfo = filteredCards[0];
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          selectedCardInfo = filteredCards[0];
+        });
+      });
     }
   }
 
@@ -71,7 +65,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   }
 
   Widget buildBusinessCard(BusinessCard cardInfo, BuildContext context) {
-    return SizedBox(
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.3,
       child: Transform.scale(
         scale: 0.9,
         child: Card(
@@ -150,231 +145,187 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            child: FutureBuilder<List<dynamic>>(
-              future: _businessCards,
-              builder: (context, snapshot) {
-                if (_businessCards == null) {
-                  return const Center(child: WaitAnimationWidget());
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: WaitAnimationWidget());
-                } else if (snapshot.hasError) {
-                  return  Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
-                          ),
-                        );
-                      } else {
-                        var businessCards = snapshot.data!
-                            .map((data) => BusinessCard.fromJson(data)).toList()
-                          ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
-
-                        var filteredCards = businessCards
-                            .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
-                            .toList();
-
-                        _setInitialCard(filteredCards);
-
-                        return Column(
-                          children: [
-                            Flexible(
-                              child: PageView.builder(
-                                controller: _pageController,
-                                itemCount: filteredCards.length + 1,
-                                onPageChanged: (index) {
-                                  setState(() {
-                                    _cardIndex = index;
-                                    if (index < filteredCards.length) {
-                                      selectedCardInfo = filteredCards[index];
-                                    }
-                                  });
-                                },
-                                itemBuilder: (context, index) {
-                                  if (index == filteredCards.length) {
-                                    return Center(
-                                      child: IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  TemplateSelectionScreen(userEmail: _loginEmail),
-                                            ),
-                                          ).then((_) => _reloadBusinessCards());
-                                        },
-                                        icon: const Icon(Icons.add, size: 64),
-                                      ),
-                                    ).then((_) => _reloadBusinessCards());
-                                  },
-                                  icon: Icon(Icons.add, size: 64, color: Theme.of(context).iconTheme.color),
-                                ),
-                              );
-                            } else {
-                              var cardInfo = filteredCards[index];
-
-                                    return GestureDetector(
-                                      onTap: (){
-                                        BusinessCard? backCard;
-                                        for (var businessCard in businessCards) {
-                                          if (businessCard.cardNo == cardInfo.cardNo && businessCard.cardSide == 'BACK') {
-                                            backCard = businessCard;
-                                            break;
-                                          }
-                                        }
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ExpandedCardScreen(
-                                              cardInfo: cardInfo,
-                                              backCard: backCard,
-                                            ),
-                                          ),
-                                        ).then((value) {
-                                          if (value == true) {
-                                            _reloadBusinessCards();
-                                          }
-                                        });
-                                      },
-                                      child: Container(
-                                        child: buildBusinessCard(cardInfo, context),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+      body: NestedScrollView(
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          SliverToBoxAdapter(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: FutureBuilder<List<dynamic>>(
+                future: _businessCards,
+                builder: (context, snapshot) {
+                  if (_businessCards == null) {
+                    return const Center(child: WaitAnimationWidget());
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: WaitAnimationWidget());
+                  } else if (snapshot.hasError) {
+                    return  Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
                             ),
-                            renderCardSlideIcon(filteredCards),
-                          ],
-                        );
-                      }
-                    },
-                  ),
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          ).then((_) => _reloadBusinessCards());
+                        },
+                        icon: const Icon(Icons.add, size: 64),
+                      ),
+                    );
+                  } else {
+                    var businessCards = snapshot.data!
+                        .map((data) => BusinessCard.fromJson(data)).toList()
+                      ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
+
+                    var filteredCards = businessCards
+                        .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
+                        .toList();
+
+                    _setInitialCard(filteredCards);
+
+                    return Column(
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              _selectedIndex = 0;
-                            });
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.contact,
-                            style: TextStyle(
-                                fontWeight: _selectedIndex == 0? FontWeight.w900: null,
-                                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
-                            ),
+                        Flexible(
+                          child: PageView.builder(
+                            controller: _pageController,
+                            itemCount: filteredCards.length + 1,
+                            onPageChanged: (index) {
+                              setState(() {
+                                _cardIndex = index;
+                                if (index < filteredCards.length) {
+                                  selectedCardInfo = filteredCards[index];
+                                }
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              if (index == filteredCards.length) {
+                                return Center(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              TemplateSelectionScreen(userEmail: _loginEmail),
+                                        ),
+                                      ).then((_) => _reloadBusinessCards());
+                                    },
+                                    icon: const Icon(Icons.add, size: 64),
+                                  ),
+                                );
+                              } else {
+                                var cardInfo = filteredCards[index];
+
+                                  return GestureDetector(
+                                    onTap: (){
+                                      BusinessCard? backCard;
+                                      for (var businessCard in businessCards) {
+                                        if (businessCard.cardNo == cardInfo.cardNo && businessCard.cardSide == 'BACK') {
+                                          backCard = businessCard;
+                                          break;
+                                        }
+                                      }
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ExpandedCardScreen(
+                                            cardInfo: cardInfo,
+                                            backCard: backCard,
+                                          ),
+                                        ),
+                                      ).then((value) {
+                                        if (value == true) {
+                                          _reloadBusinessCards();
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      child: buildBusinessCard(cardInfo, context),
+                                    ),
+                                  );
+                              }
+                            },
                           ),
                         ),
+                        renderCardSlideIcon(filteredCards),
+                      ],
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+        ];
+      },
+        body: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 0;
+                    });
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.contact,
+                      style: TextStyle(
+                        fontWeight: _selectedIndex == 0? FontWeight.w900: null,
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                       ),
-                      renderCardSlideIcon(filteredCards),
-                    ],
-                  );
-                }
-              },
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 0;
-                  });
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.contact,
-                  style: TextStyle(
-                    fontWeight:
-                    _selectedIndex == 0 ? FontWeight.w900 : null,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black,
                   ),
                 ),
-              ),
-              Text(
-                "|",
-                style: TextStyle(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black,
+                Text(
+                  "|",
+                  style: TextStyle(color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.portfolio,
-                  style: TextStyle(
-                    fontWeight:
-                    _selectedIndex == 1 ? FontWeight.w900 : null,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black,
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 1;
+                    });
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.portfolio,
+                    style: TextStyle(
+                      fontWeight: _selectedIndex == 1? FontWeight.w900: null,
+                      color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                    ),
                   ),
                 ),
-              ),
-              Text(
-                "|",
-                style: TextStyle(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black,
+                Text(
+                  "|",
+                  style: TextStyle(color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.history,
-                  style: TextStyle(
-                    fontWeight:
-                    _selectedIndex == 2 ? FontWeight.w900 : null,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black,
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 2;
+                    });
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.history,
+                    style: TextStyle(
+                      fontWeight: _selectedIndex == 2? FontWeight.w900: null,
+                      color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          if (_selectedIndex == 0)
-            CardInfoWidget(
-              businessCards: selectedCardInfo ?? emptyCardInfo,
-              loginEmail: _loginEmail,
+              ],
             ),
-          if (_selectedIndex == 1)
-            PortfolioWidget(
-              loginUserEmail: _loginEmail,
-              cardUserEmail: _loginEmail,
-            ),
-          if (_selectedIndex == 2)
-            HistoryWidget(
-              loginUserEmail: _loginEmail,
-              cardUserEmail: _loginEmail,
-            ),
-        ],
+            Expanded(
+              child: _selectedIndex == 0
+                  ? CardInfoWidget(businessCards: selectedCardInfo ?? emptyCardInfo, loginEmail: _loginEmail)
+                  : _selectedIndex == 1
+                  ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail)
+                  : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
+            )
+          ],
+        ),
       ),
     );
   }

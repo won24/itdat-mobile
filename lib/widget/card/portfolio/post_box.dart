@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/models/board_model.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
 import 'package:itdat/widget/card/portfolio/write_post.dart';
 import 'package:video_player/video_player.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:itdat/models/http_client_model.dart';
-
 import '../../setting/waitwidget.dart';
+
 
 class PostBox extends StatefulWidget {
   final Map<String, dynamic> post;
@@ -39,7 +38,7 @@ class _PostBoxState extends State<PostBox> {
 
 
   Future<bool> checkFileExists(String url) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       final response = await client.head(Uri.parse(url));
       return response.statusCode == 200;
@@ -48,13 +47,11 @@ class _PostBoxState extends State<PostBox> {
     }
   }
 
-
   String getFullImageUrl(String fileUrl) {
     final baseUrl = "${dotenv.env['BASE_URL']}";
     if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
       return fileUrl;
     } else {
-      print('$baseUrl$fileUrl');
       return '$baseUrl$fileUrl';
     }
   }
@@ -65,18 +62,26 @@ class _PostBoxState extends State<PostBox> {
     if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
       return fileUrl;
     } else {
+      print('$baseUrl$fileUrl');
       return '$baseUrl$fileUrl';
     }
   }
 
 
-  void _initializeVideoPlayer(String videoUrl) {
+  void _initializeVideoPlayer(String videoUrl) async{
     final fullUrl = getFullVideoUrl(videoUrl);
-    _videoController = VideoPlayerController.networkUrl(Uri.parse(fullUrl))
-      ..initialize().then((_) {
-      }).catchError((e) {
-        print('Error loading video: $e');
-      });
+
+    try {
+      _videoController = VideoPlayerController.networkUrl(Uri.parse(fullUrl))
+        ..initialize().then((_) {
+          setState(() {});
+          _videoController?.play();
+        }).catchError((e) {
+          print('Error loading video: $e');
+        });
+    }catch (e){
+      print('동영상 로딩 에러 : $e');
+    }
   }
 
 

@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/login_model.dart';
 import 'package:itdat/screen/splash_widget.dart';
-import 'package:itdat/widget/setting/waitwidget.dart';
+import 'package:itdat/utils/MyHttpOverrieds.dart';
 import 'package:provider/provider.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:itdat/widget/register/register_screen.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -24,6 +26,10 @@ void main() async {
     javaScriptAppKey: '159e7d3d7b574fff05fa693174bfa8a8',
     loggingEnabled: true,
   );
+
+
+  // HttpOverrides 전역 설정
+  HttpOverrides.global = MyHttpOverrides();  // 인증서 검증 적용
 
   runApp(
     MultiProvider(

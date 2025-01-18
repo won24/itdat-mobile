@@ -106,6 +106,8 @@ class _InfoWidgetState extends State<CardInfoWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
+        physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+        shrinkWrap: true, // 부모 컨테이너 크기에 맞춤
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: [
           ListTile(

@@ -33,20 +33,20 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   Widget _buildIcon(String iconName, int index) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     bool isSelected = index == _selectedIndex;
     return Column(
       children: [
         if (isSelected)
-         const Icon(
-            Icons.circle,
-            size: 8,
-            color: Color.fromRGBO(0, 202, 145, 1)
-            ),
-        Image.asset('assets/icons/$iconName.png', height: 30, width: 30,  color: isDarkMode ? Colors.grey[200] : Colors.black,)
+          const Icon(
+              Icons.circle,
+              size: 8,
+              color: Color.fromRGBO(0, 202, 145, 1)
+          ),
+        Image.asset('assets/icons/$iconName.png', height: 30, width: 30,)
       ],
     );
   }
+
 
 
   @override

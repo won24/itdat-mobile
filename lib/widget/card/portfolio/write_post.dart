@@ -96,7 +96,6 @@ class _WritePostState extends State<WritePost> {
           return false;
         }
       }
-    return false;
   }
 
   void _showSnackBar(String message, {bool isError = false}) {
@@ -194,39 +193,39 @@ class _WritePostState extends State<WritePost> {
                       borderSide: BorderSide(color: Color.fromRGBO(0, 202, 145, 1)),
                     ),
                   ),
-                  maxLines: 15,
+                  maxLines: 20,
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () => _pickMedia(isVideo: false),
-                      icon: Icon(Icons.photo, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,),
-                      label: Text('이미지', style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () => _pickMedia(isVideo: true),
-                      icon: Icon(Icons.videocam, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,),
-                      label: Text('동영상' ,style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
-                    ),
-                  ],
-                ),
+                  ElevatedButton.icon(
+                    onPressed: () => _pickMedia(isVideo: false),
+                    icon: Icon(Icons.photo, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black87,),
+                    label: Text('이미지 추가', style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black87)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: BorderSide(
+                        color: Colors.black87,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    )
+                  ),
+
                 const SizedBox(height: 16),
                 if (_selectedFile != null)
                   _isVideo
-                      ? _videoController != null && _videoController!.value.isInitialized
+                    ? _videoController != null && _videoController!.value.isInitialized
                       ? AspectRatio(
-                    aspectRatio: _videoController!.value.aspectRatio,
-                    child: VideoPlayer(_videoController!),
-                  )
+                          aspectRatio: _videoController!.value.aspectRatio,
+                          child: VideoPlayer(_videoController!),
+                      )
                       : const WaitAnimationWidget()
-                      : Image.file(
-                    _selectedFile!,
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
-                  ),
+                    : Image.file(
+                        _selectedFile!,
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
+                   ),
               ],
             ),
           ),

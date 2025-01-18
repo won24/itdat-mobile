@@ -52,6 +52,8 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
       body: posts.isEmpty
           ? widget.cardUserEmail == widget.loginUserEmail? Center(child: Text('포트폴리오를 작성해주세요.')) : Center(child: Text('포트폴리오가 없습니다.'))
           : ListView.builder(
+        physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+        shrinkWrap: true, // 부모 컨테이너 크기에 맞춤
         padding: EdgeInsets.all(8.0),
         itemCount: posts.length,
         itemBuilder: (context, index) {

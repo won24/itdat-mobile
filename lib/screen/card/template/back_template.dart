@@ -2,9 +2,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
-import 'package:http/http.dart' as http;
-import 'package:itdat/models/http_client_model.dart';
-
+import 'package:itdat/utils/HttpClientManager.dart';
 import '../../../widget/setting/waitwidget.dart';
 
 class BackTemplate extends StatelessWidget {
@@ -40,7 +38,7 @@ class BackTemplate extends StatelessWidget {
 
 
   Future<bool> checkFileExists(String url) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       final response = await client.head(Uri.parse(url));
       return response.statusCode == 200;
