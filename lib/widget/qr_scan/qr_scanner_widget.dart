@@ -74,7 +74,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       };
 
       final storage = FlutterSecureStorage();
-      String? myEmail = await storage.read(key: 'email');
+      String? myEmail = await storage.read(key: 'user_email');
       print('저장된 이메일: $myEmail');
 
       Map<String, dynamic> formData = {
@@ -182,11 +182,34 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                // 여기에 추가적인 스타일 설정을 할 수 있습니다.
+    backgroundColor: Colors.white,
+    foregroundColor: Colors.black87,
+    side: BorderSide(
+    color: Color.fromRGBO(0, 202, 145, 1),
+    ),
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(25),
+    ),
+    ).copyWith(
+    backgroundColor: WidgetStateProperty.resolveWith((states) {
+    if (states.contains(WidgetState.pressed)) {
+    return Color.fromRGBO(0, 202, 145, 1);
+    }
+    if (states.contains(WidgetState.hovered)) {
+    return Color.fromRGBO(0, 202, 145, 1);
+    }
+    return Colors.white;
+    }),
+    foregroundColor: WidgetStateProperty.resolveWith((states) {
+    if (states.contains(WidgetState.pressed)) {
+    return Colors.white;
+    }
+    return Colors.black87;
+    }),
+    ),
               ),
             ),
           ),
-        ),
         if (_isProcessing)
           Container(
             color: Colors.black.withOpacity(0.5), // 배경 투명도를 조절합니다

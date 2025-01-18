@@ -68,7 +68,7 @@ class _AccountDeletionScreenState extends State<AccountDeletionScreen> {
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.newpasswordMismatch)),
+          SnackBar(content: Text(AppLocalizations.of(context)!.passwordMismatch)),
         );
       }
     }
@@ -117,6 +117,33 @@ class _AccountDeletionScreenState extends State<AccountDeletionScreen> {
               ElevatedButton(
                 onPressed: _deleteAccount,
                 child: Text(AppLocalizations.of(context)!.accountDeletion),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black87,
+                  side: BorderSide(
+                    color: Color.fromRGBO(255, 0, 0, 1.0),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ).copyWith(
+                  backgroundColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.pressed)) {
+                      return Color.fromRGBO(248, 85, 85, 1.0);
+                    }
+                    if (states.contains(WidgetState.hovered)) {
+                      return Color.fromRGBO(248, 85, 85, 1.0);
+                    }
+                    return Colors.white;
+                  }),
+                  foregroundColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.pressed)) {
+                      return Colors.white;
+                    }
+                    return Colors.black87;
+                  }),
+                ),
+
               ),
             ],
           ),

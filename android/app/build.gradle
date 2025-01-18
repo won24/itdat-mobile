@@ -24,8 +24,8 @@ android {
         applicationId = "com.itdat.store.itdat"
         minSdkVersion 24
         targetSdk = flutter.targetSdkVersion
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 4
+        versionName = "1.0.3"
     }
 
     signingConfigs {

@@ -173,46 +173,46 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                           MaterialPageRoute(
                             builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
                           ),
-                        ).then((_) => _reloadBusinessCards());
-                      },
-                      icon: const Icon(Icons.add, size: 64),
-                    ),
-                  );
-                } else {
-                  var businessCards = snapshot.data!
-                      .map((data) => BusinessCard.fromJson(data)).toList()
-                    ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
+                        );
+                      } else {
+                        var businessCards = snapshot.data!
+                            .map((data) => BusinessCard.fromJson(data)).toList()
+                          ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
 
-                  var filteredCards = businessCards
-                      .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
-                      .toList();
+                        var filteredCards = businessCards
+                            .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
+                            .toList();
 
-                  _setInitialCard(filteredCards);
+                        _setInitialCard(filteredCards);
 
-                  return Column(
-                    children: [
-                      Flexible(
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: filteredCards.length + 1,
-                          onPageChanged: (index) {
-                            setState(() {
-                              _cardIndex = index;
-                              if (index < filteredCards.length) {
-                                selectedCardInfo = filteredCards[index];
-                              }
-                            });
-                          },
-                          itemBuilder: (context, index) {
-                            if (index == filteredCards.length) {
-                              return Center(
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            TemplateSelectionScreen(userEmail: _loginEmail),
+                        return Column(
+                          children: [
+                            Flexible(
+                              child: PageView.builder(
+                                controller: _pageController,
+                                itemCount: filteredCards.length + 1,
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    _cardIndex = index;
+                                    if (index < filteredCards.length) {
+                                      selectedCardInfo = filteredCards[index];
+                                    }
+                                  });
+                                },
+                                itemBuilder: (context, index) {
+                                  if (index == filteredCards.length) {
+                                    return Center(
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TemplateSelectionScreen(userEmail: _loginEmail),
+                                            ),
+                                          ).then((_) => _reloadBusinessCards());
+                                        },
+                                        icon: const Icon(Icons.add, size: 64),
                                       ),
                                     ).then((_) => _reloadBusinessCards());
                                   },
@@ -222,35 +222,62 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                             } else {
                               var cardInfo = filteredCards[index];
 
-                              return GestureDetector(
-                                onTap: (){
-                                  BusinessCard? backCard;
-                                  for (var businessCard in businessCards) {
-                                    if (businessCard.cardNo == cardInfo.cardNo && businessCard.cardSide == 'BACK') {
-                                      backCard = businessCard;
-                                      break;
-                                    }
-                                  }
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ExpandedCardScreen(
-                                        cardInfo: cardInfo,
-                                        backCard: backCard,
+                                    return GestureDetector(
+                                      onTap: (){
+                                        BusinessCard? backCard;
+                                        for (var businessCard in businessCards) {
+                                          if (businessCard.cardNo == cardInfo.cardNo && businessCard.cardSide == 'BACK') {
+                                            backCard = businessCard;
+                                            break;
+                                          }
+                                        }
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ExpandedCardScreen(
+                                              cardInfo: cardInfo,
+                                              backCard: backCard,
+                                            ),
+                                          ),
+                                        ).then((value) {
+                                          if (value == true) {
+                                            _reloadBusinessCards();
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        child: buildBusinessCard(cardInfo, context),
                                       ),
-                                    ),
-                                  ).then((value) {
-                                    if (value == true) {
-                                      _reloadBusinessCards();
-                                    }
-                                  });
+                                    );
+                                  }
                                 },
-                                child: Container(
-                                  child: buildBusinessCard(cardInfo, context),
-                                ),
-                              );
-                            }
+                              ),
+                            ),
+                            renderCardSlideIcon(filteredCards),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                ),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedIndex = 0;
+                            });
                           },
+                          child: Text(
+                            AppLocalizations.of(context)!.contact,
+                            style: TextStyle(
+                                fontWeight: _selectedIndex == 0? FontWeight.w900: null,
+                                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                            ),
+                          ),
                         ),
                       ),
                       renderCardSlideIcon(filteredCards),
