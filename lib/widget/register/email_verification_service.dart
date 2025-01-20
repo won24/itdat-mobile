@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:itdat/models/http_client_model.dart';
+
+import '../../utils/HttpClientManager.dart';
 
 class EmailVerificationService {
   final String sendEmailUrl = "http://10.0.2.2:8082/api/email/send";
@@ -12,7 +13,7 @@ class EmailVerificationService {
 
   // 이메일 인증 코드 발송
   Future<bool> sendVerificationCode(String email) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       final response = await client.post(
         Uri.parse('$baseUrl/api/email/send'),
@@ -36,7 +37,7 @@ class EmailVerificationService {
   // 이메일 인증 코드 검증
   //test
   Future<bool> verifyCode(String email, String code) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       final response = await client.post(
         Uri.parse('$baseUrl/api/email/verify'),
