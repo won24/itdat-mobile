@@ -294,12 +294,13 @@ class _PostBoxState extends State<PostBox> {
               _buildMediaContent(widget.post['fileUrl']),
 
             Text(widget.post['content'] ?? '', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,),),
+            SizedBox(height: 10),
 
             // 링크 렌더링
             if (widget.post['linkUrl'] != null && widget.post['linkUrl'].isNotEmpty)
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     "링크: ",
