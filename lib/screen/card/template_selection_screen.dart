@@ -103,7 +103,6 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
       No2(cardInfo: _card),
     ];
 
-
     personalTemplates = [
       No3(cardInfo: _card),
     ];

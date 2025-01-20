@@ -51,6 +51,13 @@ class No3 extends StatelessWidget {
     }
   }
 
+  String colorToHex(Color color) {
+    int r = (color.r * 255).toInt();
+    int g = (color.g * 255).toInt();
+    int b = (color.b * 255).toInt();
+
+    return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}';
+  }
 
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
     if (hex == null || hex.isEmpty){
@@ -69,6 +76,7 @@ class No3 extends StatelessWidget {
 
     Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.white);
     Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
+
 
     return Container(
       width: 420,

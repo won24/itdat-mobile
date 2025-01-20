@@ -146,78 +146,78 @@ class _MyCardWidgetState extends State<MyCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: NestedScrollView(
-      headerSliverBuilder: (context, innerBoxIsScrolled) {
-        return [
-          SliverToBoxAdapter(
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: FutureBuilder<List<dynamic>>(
-                future: _businessCards,
-                builder: (context, snapshot) {
-                  if (_businessCards == null) {
-                    return const Center(child: WaitAnimationWidget());
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: WaitAnimationWidget());
-                  } else if (snapshot.hasError) {
-                    return  Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
-                            ),
-                          ).then((_) => _reloadBusinessCards());
-                        },
-                        icon: const Icon(Icons.add, size: 64),
-                      ),
-                    );
-                  } else {
-                    var businessCards = snapshot.data!
-                        .map((data) => BusinessCard.fromJson(data)).toList()
-                      ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverToBoxAdapter(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: FutureBuilder<List<dynamic>>(
+                  future: _businessCards,
+                  builder: (context, snapshot) {
+                    if (_businessCards == null) {
+                      return const Center(child: WaitAnimationWidget());
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: WaitAnimationWidget());
+                    } else if (snapshot.hasError) {
+                      return  Center(child: Text(AppLocalizations.of(context)!.errorFetchingCards));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
+                              ),
+                            ).then((_) => _reloadBusinessCards());
+                          },
+                          icon: const Icon(Icons.add, size: 64),
+                        ),
+                      );
+                    } else {
+                      var businessCards = snapshot.data!
+                          .map((data) => BusinessCard.fromJson(data)).toList()
+                        ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
 
-                    var filteredCards = businessCards
-                        .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
-                        .toList();
+                      var filteredCards = businessCards
+                          .where((card) => card.cardSide == 'FRONT' && card.userEmail == _loginEmail)
+                          .toList();
 
-                    _setInitialCard(filteredCards);
+                      _setInitialCard(filteredCards);
 
-                    return Column(
-                      children: [
-                        Flexible(
-                          child: PageView.builder(
-                            controller: _pageController,
-                            itemCount: filteredCards.length + 1,
-                            onPageChanged: (index) {
-                              setState(() {
-                                _cardIndex = index;
-                                if (index < filteredCards.length) {
-                                  selectedCardInfo = filteredCards[index];
-                                }
-                              });
-                            },
-                            itemBuilder: (context, index) {
-                              if (index == filteredCards.length) {
-                                return Center(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              TemplateSelectionScreen(userEmail: _loginEmail),
-                                        ),
-                                      ).then((_) => _reloadBusinessCards());
-                                    },
-                                    icon: const Icon(Icons.add, size: 64),
-                                  ),
-                                );
-                              } else {
-                                var cardInfo = filteredCards[index];
+                      return Column(
+                        children: [
+                          Flexible(
+                            child: PageView.builder(
+                              controller: _pageController,
+                              itemCount: filteredCards.length + 1,
+                              onPageChanged: (index) {
+                                setState(() {
+                                  _cardIndex = index;
+                                  if (index < filteredCards.length) {
+                                    selectedCardInfo = filteredCards[index];
+                                  }
+                                });
+                              },
+                              itemBuilder: (context, index) {
+                                if (index == filteredCards.length) {
+                                  return Center(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                TemplateSelectionScreen(userEmail: _loginEmail),
+                                          ),
+                                        ).then((_) => _reloadBusinessCards());
+                                      },
+                                      icon: const Icon(Icons.add, size: 64),
+                                    ),
+                                  );
+                                } else {
+                                  var cardInfo = filteredCards[index];
 
                                   return GestureDetector(
                                     onTap: (){
@@ -246,20 +246,20 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                                       child: buildBusinessCard(cardInfo, context),
                                     ),
                                   );
-                              }
-                            },
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                        renderCardSlideIcon(filteredCards),
-                      ],
-                    );
-                  }
-                },
+                          renderCardSlideIcon(filteredCards),
+                        ],
+                      );
+                    }
+                  },
+                ),
               ),
             ),
-          ),
-        ];
-      },
+          ];
+        },
         body: Column(
           children: [
             Row(

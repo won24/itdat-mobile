@@ -50,7 +50,9 @@ class _PortfolioWidgetState extends State<PortfolioWidget> {
 
     return Scaffold(
       body: posts.isEmpty
-          ? widget.cardUserEmail == widget.loginUserEmail? Center(child: Text('포트폴리오를 작성해주세요.')) : Center(child: Text('포트폴리오가 없습니다.'))
+          ? widget.cardUserEmail == widget.loginUserEmail
+            ? Center(child: Text('포트폴리오를 작성해주세요.', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,)))
+            : Center(child: Text('포트폴리오가 없습니다.', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,)))
           : ListView.builder(
         physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
         shrinkWrap: true, // 부모 컨테이너 크기에 맞춤
