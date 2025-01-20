@@ -1,11 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/board_model.dart';
 import 'package:itdat/utils/HttpClientManager.dart';
+import 'package:itdat/widget/card/portfolio/DocmentViewer.dart';
+import 'package:itdat/widget/card/portfolio/TextFileViewr.dart';
 import 'package:itdat/widget/card/portfolio/write_post.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../setting/waitwidget.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class PostBox extends StatefulWidget {
   final Map<String, dynamic> post;
@@ -103,6 +107,7 @@ class _PostBoxState extends State<PostBox> {
   }
 
 
+  // 이미지 렌더링
   Widget _buildMediaContent(String fileUrl) {
     if (fileUrl.endsWith('.mp4')) {
       return FutureBuilder<bool>(
@@ -159,9 +164,52 @@ class _PostBoxState extends State<PostBox> {
     }
   }
 
+  // 문서 전체 주소
+  String getFullDocumentUrl(String fileUrl) {
+    final baseUrl = "${dotenv.env['BASE_URL']}";
+    if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
+      return fileUrl;
+    } else {
+      return '$baseUrl$fileUrl';
+    }
+  }
 
-  void _showSnackBar(BuildContext context, String message,
-      {bool isError = false}) {
+
+  // 문서 렌더링
+  Widget _buildFileViewer(String fileUrl) {
+    final fileExtension = fileUrl.split('.').last;
+
+    switch (fileExtension) {
+      case 'pdf':
+        return DocumentViewer(documentUrl: fileUrl);
+      case 'txt':
+        return TextFileViewer(textFileUrl: fileUrl);
+      case 'gif':
+        return _buildFileViewer(fileUrl);
+      default:
+        return Column(
+          children: [
+            Text("지원되지 않는 파일 형식입니다."),
+            ElevatedButton(
+              onPressed: () async {
+                if (await canLaunchUrl(Uri.parse(fileUrl))) {
+                  await launchUrl(Uri.parse(fileUrl));
+                } else {
+                  _showSnackBar(context, "파일 열기 실패", isError: true);
+                }
+              },
+              child: Text("파일 열기"),
+            ),
+          ],
+        );
+    }
+  }
+
+
+
+
+
+  void _showSnackBar(BuildContext context, String message, {bool isError = false}) {
     final snackBar = SnackBar(
       content: Text(message),
       backgroundColor: isError ? Colors.red : Colors.green,
@@ -199,8 +247,10 @@ class _PostBoxState extends State<PostBox> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Material(
       borderRadius: BorderRadius.circular(8.0),
       child: Container(
@@ -215,8 +265,13 @@ class _PostBoxState extends State<PostBox> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.post['title'], style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold)),
+                Text(
+                    widget.post['title'],
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: isDarkMode ? Colors.white : Colors.black,
+                    )),
                 if (widget.post['userEmail'] == widget.currentUserEmail)
                   Align(
                     alignment: Alignment.topRight,
@@ -234,9 +289,45 @@ class _PostBoxState extends State<PostBox> {
                   ),
               ],
             ),
+            // 이미지 렌더링
             if (widget.post['fileUrl'] != null && widget.post['fileUrl'].isNotEmpty)
               _buildMediaContent(widget.post['fileUrl']),
-            Text(widget.post['content'] ?? ''),
+
+            Text(widget.post['content'] ?? '', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,),),
+
+            // 링크 렌더링
+            if (widget.post['linkUrl'] != null && widget.post['linkUrl'].isNotEmpty)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "링크: ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      if (await canLaunchUrl(Uri.parse('https:${widget.post['linkUrl']}'))) {
+                        await launchUrl(Uri.parse('https:${widget.post['linkUrl']}'));
+                      } else {
+                        _showSnackBar(context, "링크 연결 불가", isError: true);
+                      }
+                    },
+                    child: Text(
+                      widget.post['linkUrl']!,
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontSize: 15
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
+            if (widget.post['documentUrl'] != null && widget.post['documentUrl'].isNotEmpty)
+              _buildFileViewer(widget.post['documentUrl']),
             SizedBox(height: 10),
           ],
         ),

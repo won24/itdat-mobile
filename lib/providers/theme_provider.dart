@@ -43,14 +43,54 @@ class ThemeProvider with ChangeNotifier {
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
 
-    // 여기에 라이트 테마에 대한 추가 설정을 넣을 수 있습니다.
+    popupMenuTheme: PopupMenuThemeData(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      textStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 16.0,
+        fontWeight: FontWeight.w600
+      ),
+      elevation: 4.0,
+    ),
+
   );
 
   // 다크 테마 정의
   ThemeData get darkTheme => ThemeData(
     primarySwatch: Colors.blue,
     brightness: Brightness.dark,
-    // 여기에 다크 테마에 대한 추가 설정을 넣을 수 있습니다.
+    hintColor: Color.fromRGBO(0, 202, 145, 1),
+    scaffoldBackgroundColor: Colors.black,
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.grey[900],
+      titleTextStyle: TextStyle(
+        color: Colors.white, // AppBar 제목 색상
+        fontSize: 20.0,
+      ),
+      iconTheme: IconThemeData(color: Colors.white), // AppBar 아이콘 색상
+    ),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+
+    popupMenuTheme: PopupMenuThemeData(
+      color: Colors.black,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        side: BorderSide(
+          color: Colors.white,
+          width: 1.0,
+        ),
+      ),
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 16.0,
+      ),
+      elevation: 6.0,
+    ),
+
+
   );
 
 }

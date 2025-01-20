@@ -16,8 +16,10 @@ class BackTemplate extends StatelessWidget {
   });
 
 
+
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
-    if (hex == null || hex.isEmpty) return fallback;
+    if (hex == null || hex.isEmpty)
+      return fallback;
     try {
       return Color(int.parse(hex.replaceFirst('#', '0xFF')));
     } catch (_) {
@@ -49,8 +51,16 @@ class BackTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.white);
-    Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
+    Color fallbackBack = Colors.white;
+    Color fallbackText = Colors.black87;
+
+    if(cardInfo.appTemplate == "No2"){
+      fallbackBack = Colors.black87;
+      fallbackText = Colors.white;
+    }
+
+    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: fallbackBack);
+    Color textColor = hexToColor(cardInfo.textColor, fallback: fallbackText);
 
     return Container(
       width: 420,

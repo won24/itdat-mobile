@@ -26,6 +26,8 @@ class FormScreen extends StatefulWidget {
   State<FormScreen> createState() => _FormScreenState();
 }
 
+
+
 class _FormScreenState extends State<FormScreen> {
   final _formKey = GlobalKey<FormState>();
   File? _selectedCompanyImage;
@@ -37,6 +39,7 @@ class _FormScreenState extends State<FormScreen> {
     super.initState();
     backgroundColor = hexToColor(widget.cardInfo.backgroundColor ?? "#FFFFFF");
   }
+
 
 
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
@@ -56,13 +59,13 @@ class _FormScreenState extends State<FormScreen> {
     return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}';
   }
 
-
+  // 컬러 변경
   void _changeColor(Color currentColor, bool isBackgroundColor) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  Text(AppLocalizations.of(context)!.selectcolor),
+          title: Text(AppLocalizations.of(context)!.selectcolor),
           content: ColorPicker(
             pickerColor: currentColor,
             onColorChanged: (color) {
@@ -97,6 +100,8 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
+
+  // 폰트 변경
   void _changeFontFamily() {
     final fontList = [
       'Nanum Gothic',
@@ -156,6 +161,7 @@ class _FormScreenState extends State<FormScreen> {
 
 
 
+  // 갤러리에서 이미지 선택
   Future<File?> getImageFromGallery() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -167,7 +173,7 @@ class _FormScreenState extends State<FormScreen> {
     }
   }
 
-
+  //  갤러리 권한
   Future<bool> requestStoragePermission() async {
     var status = await Permission.manageExternalStorage.status;
     if (status.isGranted) {
@@ -183,6 +189,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
+  // 선택 된 이미지 저장
   Future<void> _selectCompanyImage() async {
     if (await requestStoragePermission()) {
       File? image = await getImageFromGallery();
@@ -195,7 +202,7 @@ class _FormScreenState extends State<FormScreen> {
    }
   }
 
-
+  // 선택된 이미지 삭제
   void _removeCompanyImage() {
     setState(() {
       _selectedCompanyImage = null;
@@ -204,6 +211,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
+  // 로고 선택
   Widget _buildCompanyNameInput() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -241,6 +249,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
+  // 저장 버튼
   void _saveCard() {
     if(_formKey.currentState!.validate()){
       showDialog(
@@ -265,15 +274,15 @@ class _FormScreenState extends State<FormScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextButton(onPressed: (){
-                      moveToBackFormScreen();
-                    }, child: Text("네")),
                     TextButton(
                       onPressed: () {
                         _createCard();
                       },
                       child: Text("아니오"),
-                    )
+                    ),
+                    TextButton(onPressed: (){
+                      moveToBackFormScreen();
+                    }, child: Text("네")),
                   ],
                 )
               ],
@@ -287,6 +296,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
+  // 뒷장 만들기
   void moveToBackFormScreen() async {
     if (_selectedCompanyImage == null) {
       await CardModel().saveBusinessCard(widget.cardInfo);
@@ -303,6 +313,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
 
+  // 명함 저장
   void _createCard() async {
     try {
       if (_selectedCompanyImage == null) {
@@ -347,6 +358,7 @@ class _FormScreenState extends State<FormScreen> {
     }
   }
 
+  // 텍스트 인풋
   Widget _buildTextField({
     required String label,
     required String hint,

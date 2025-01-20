@@ -82,11 +82,11 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     return Scaffold(
       body: posts.isEmpty
           ? widget.cardUserEmail == widget.loginUserEmail
-            ? Center(child: Text('간단한 이력사항, 기술 등을 작성할 수 있습니다.'))
-            : Center(child: Text('히스토리가 없습니다.'))
+            ? Center(child: Text('간단한 이력사항, 기술 등을 작성할 수 있습니다.', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,),))
+            : Center(child: Text('히스토리가 없습니다.', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,)))
           : ListView.builder(
-              physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
-              shrinkWrap: true, // 부모 컨테이너 크기에 맞춤
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
               padding: EdgeInsets.all(8.0),
               itemCount: posts.length,
               itemBuilder: (context, index) {
@@ -118,7 +118,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                             ),
                         ],
                       ),
-                      Text(post['content'])
+                      Text(post['content'], style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,),)
                     ],
                   )
                   );

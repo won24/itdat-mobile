@@ -45,24 +45,6 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
         backCard = card;
       }
     }
-    //
-    // frontCard ??= BusinessCard(
-    //   appTemplate: 'Default',
-    //   userName: '이름 없음',
-    //   phone: '전화번호 없음',
-    //   email: '이메일 없음',
-    //   companyName: '회사 없음',
-    //   companyNumber: '사업자 번호 없음',
-    //   companyAddress: '주소 없음',
-    //   companyFax: '팩스 없음',
-    //   department: '부서 없음',
-    //   position: '직급 없음',
-    //   userEmail: widget.loginUserEmail,
-    //   cardNo: 0,
-    //   cardSide: 'FRONT',
-    //   logoUrl: '',
-    //   isPublic: false,
-    // );
   }
 
 
@@ -111,100 +93,126 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
 
     return Scaffold(
       appBar: AppBar(title: const Text("명함 상세 정보")),
-      body: Column(
-        children: [
-          Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final screenWidth = MediaQuery.of(context).size.width;
-                final screenHeight = MediaQuery.of(context).size.height;
-
-                final cardWidth = screenWidth * 0.9;
-                final cardHeight = screenHeight * 0.3;
-                return Container(
-                  width: cardWidth,
-                  height: cardHeight,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExpandedCardScreen(
-                                cardInfo: frontCard!,
-                                backCard: backCard,
-                              ),
-                            ),
-                          );
-                        },
-                        child: _isFlipped
-                            ? BackTemplate(cardInfo: backCard!)
-                            : buildBusinessCard(frontCard),
-                      ),
-                      if (canFlip())
-                        Positioned(
-                          top: 10,
-                          right: 10,
-                          child: renderFlipButton(),
-                        ),
-                    ],
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverToBoxAdapter(
+              child: Container(
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                );
-              },
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final screenWidth = MediaQuery.of(context).size.width;
+                      final screenHeight = MediaQuery.of(context).size.height;
+
+                      final cardWidth = screenWidth * 0.9;
+                      final cardHeight = screenHeight * 0.3;
+                      return Container(
+                        width: cardWidth,
+                        height: cardHeight,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ExpandedCardScreen(
+                                      cardInfo: frontCard!,
+                                      backCard: backCard,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: _isFlipped
+                                  ? BackTemplate(cardInfo: backCard!)
+                                  : buildBusinessCard(frontCard),
+                            ),
+                            if (canFlip())
+                              Positioned(
+                                top: 10,
+                                right: 10,
+                                child: renderFlipButton(),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 0;
-                  });
-                },
-                child: const Text("연락처"),
-              ),
-              const Text("|"),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                },
-                child: const Text("포트폴리오"),
-              ),
-              const Text("|"),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-                child: const Text("히스토리"),
-              ),
-            ],
-          ),
-          Expanded(
-            child: _selectedIndex == 0
-                ? CardInfoWidget(businessCards: frontCard, loginEmail: widget.loginUserEmail,)
-                : _selectedIndex == 1
-                ? PortfolioWidget(
-              loginUserEmail: widget.loginUserEmail,
-              cardUserEmail: frontCard.userEmail,
-            )
-                : HistoryWidget(
-              loginUserEmail: widget.loginUserEmail,
-              cardUserEmail: frontCard.userEmail,
+          ];
+        },
+        body: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 0;
+                    });
+                  },
+                  child: Text(
+                    "연락처",
+                    style: TextStyle(
+                        fontWeight: _selectedIndex == 0? FontWeight.w900: null,
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                    ),
+                  ),
+                ),
+                Text("|"),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 1;
+                    });
+                  },
+                  child: Text(
+                    "포트폴리오",
+                    style: TextStyle(
+                        fontWeight: _selectedIndex == 1? FontWeight.w900: null,
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                    ),),
+                ),
+                Text("|"),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 2;
+                    });
+                  },
+                  child: Text(
+                    "히스토리",
+                    style: TextStyle(
+                        fontWeight: _selectedIndex == 2? FontWeight.w900: null,
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            Expanded(
+              child: _selectedIndex == 0
+                  ? CardInfoWidget(businessCards: frontCard, loginEmail: widget.loginUserEmail,)
+                  : _selectedIndex == 1
+                  ? PortfolioWidget(
+                loginUserEmail: widget.loginUserEmail,
+                cardUserEmail: frontCard.userEmail,
+              )
+                  : HistoryWidget(
+                loginUserEmail: widget.loginUserEmail,
+                cardUserEmail: frontCard.userEmail,
+              ),
+            ),
+          ],
+        )
       ),
     );
   }

@@ -51,11 +51,10 @@ class ExpandedCardScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: InteractiveViewer(
-          boundaryMargin: const EdgeInsets.all(20),
-          minScale: 1.0,
-          maxScale: 3.0,
+      body: InteractiveViewer(
+        minScale: 1.0,
+        maxScale: 3.0,
+        child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,

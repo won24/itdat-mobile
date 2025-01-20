@@ -185,13 +185,12 @@ class _InfoWidgetState extends State<CardInfoWidget> {
                               SizedBox(height: 16),
                               TextField(
                                 controller: _memoController,
-                                maxLines: 5,
+                                maxLines: 3,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
+                                  border: InputBorder.none,
                                   hintText: AppLocalizations.of(context)!.enterMemo,
                                 ),
                               ),
-                              SizedBox(height: 16),
                               ElevatedButton(
                                 child: Text(AppLocalizations.of(context)!.save),
                                 onPressed: () {
