@@ -75,7 +75,6 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.publicCards),
         centerTitle: true,
       ),
       body: _isLoading
