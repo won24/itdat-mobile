@@ -80,7 +80,7 @@ class _ReportuserwidgetState extends State<Reportuserwidget> {
             items: const [
               DropdownMenuItem(
                 value: 'POSTING_PORNOGRAPHY',
-                child: Text('음란물 게시'),
+                child: Text('부적절한 게시물'),
               ),
               DropdownMenuItem(
                 value: 'FAKE_ACCOUNT',
