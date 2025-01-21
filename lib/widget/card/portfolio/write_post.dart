@@ -210,7 +210,7 @@ class _WritePostState extends State<WritePost> {
     if (result != null) {
       setState(() {
         _selectedDocument = File(result.files.single.path!);
-        _documentController.text = result.files.single.name;
+        _documentController.text = result.files.single.path!;
       });
     } else {
       _showSnackBar("문서 선택이 취소되었습니다.", isError: true);
