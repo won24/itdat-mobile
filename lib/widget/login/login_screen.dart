@@ -82,23 +82,28 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      final identifier = _identifierController.text.trim();
-                      final password = _passwordController.text;
-                      bool success = await Provider.of<AuthProvider>(context, listen: false).login(identifier, password);
+                      onPressed: () async {
+                        final identifier = _identifierController.text.trim();
+                        final password = _passwordController.text;
 
-                      if (success) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => MainLayout()),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(AppLocalizations.of(context)!.notfounduser)),
-                        );
-                      }
-                    },
-                    child: Text(AppLocalizations.of(context)!.login),
+                        bool success = await Provider.of<AuthProvider>(context, listen: false).login(identifier, password);
+
+                        if (success) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => MainLayout()),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                Provider.of<AuthProvider>(context, listen: false).errorMessage ?? "로그인 실패",
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: Text(AppLocalizations.of(context)!.login),
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: Color.fromRGBO(0, 202, 145, 1)),
                       shape: RoundedRectangleBorder(
