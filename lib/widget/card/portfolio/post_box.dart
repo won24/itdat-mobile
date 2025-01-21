@@ -178,15 +178,29 @@ class _PostBoxState extends State<PostBox> {
   Widget _buildFileViewer(String fileUrl) {
     final fileExtension = fileUrl.split('.').last;
     String fullUrl = getFullDocumentUrl(fileUrl);
+    print("fullUrl: $fullUrl");
     switch (fileExtension) {
       case 'pdf':
         return FutureBuilder<String?>(
-          future: downloadAndSaveFile(fullUrl),
+          future: downloadAndSaveFileToExternalStorage(fullUrl),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData && snapshot.data != null) {
-              return PDFViewer(documentUrl: snapshot.data!);
+              return TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PDFViewer(documentUrl: snapshot.data!),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "PDF 파일 보기",
+                    // style( TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black))
+                  )
+              );
             } else {
               return Text("PDF를 불러오는 데 실패했습니다.");
             }
@@ -218,7 +232,7 @@ class _PostBoxState extends State<PostBox> {
                     }
                   },
                   icon: Icon(Icons.folder_open_sharp,color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
-              )
+                )
             ),
           ],
         );

@@ -149,8 +149,9 @@ class BusinessCard {
       isPublic: isPublic ?? this.isPublic,
     );
   }
+
   @override
   String toString() {
-    return 'BusinessCard(userEmail: $userEmail, userName: $userName, companyName: $companyName)';
+    return 'BusinessCard{appTemplate: $appTemplate, userName: $userName, phone: $phone, email: $email, companyName: $companyName, companyNumber: $companyNumber, companyAddress: $companyAddress, companyFax: $companyFax, department: $department, position: $position, userEmail: $userEmail, cardNo: $cardNo, cardSide: $cardSide, logoUrl: $logoUrl, isPublic: $isPublic, description: $description, cardId: $cardId, backgroundColor: $backgroundColor, textColor: $textColor, fontFamily: $fontFamily, customText: $customText, isTextEnabled: $isTextEnabled, textPosition: $textPosition}';
   }
 }

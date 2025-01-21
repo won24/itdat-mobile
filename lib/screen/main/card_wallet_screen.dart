@@ -7,9 +7,9 @@ import 'package:itdat/providers/auth_provider.dart';
 import '../../widget/mycard/folder_detail_screen.dart';
 import '../../widget/setting/waitwidget.dart';
 import '../card/card_wallet_card_detail_screen.dart';
-import '../card/template/no_1.dart';
-import '../card/template/no_2.dart';
-import '../card/template/no_3.dart';
+import '../card/template/business/no_1.dart';
+import '../card/template/business/no_2.dart';
+import '../card/template/personal/no_1.dart';
 
 class CardWalletScreen extends StatefulWidget {
   const CardWalletScreen({Key? key}) : super(key: key);
@@ -315,8 +315,8 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         return No1(cardInfo: cardInfo);
       case 'No2':
         return No2(cardInfo: cardInfo);
-      case 'No3':
-        return No3(cardInfo: cardInfo);
+      case 'PersonalNo1':
+        return PersonalNo1(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo); // 기본값
     }
