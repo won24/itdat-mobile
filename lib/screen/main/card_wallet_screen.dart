@@ -329,7 +329,6 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.cardcase),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
