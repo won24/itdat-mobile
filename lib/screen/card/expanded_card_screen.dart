@@ -34,7 +34,7 @@ class _ExpandedCardScreenState extends State<ExpandedCardScreen> {
     cardInfo = widget.cardInfo;
     backCard = widget.backCard;
     print("cardInfo : $cardInfo");
-    print(widget.cardInfo);
+    print("backCard : $backCard");
   }
 
   // 앞면 렌더링

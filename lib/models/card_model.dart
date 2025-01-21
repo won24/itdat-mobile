@@ -295,7 +295,7 @@ class CardModel{
      final client = await HttpClientManager().createHttpClient();
 
      try {
-       final url = Uri.parse('$baseUrl/front/update/logo');
+       final url = Uri.parse('$baseUrl/update/logo');
        var request = http.MultipartRequest('POST', url);
 
        // 카드 정보를 JSON으로 변환하여 추가
@@ -318,16 +318,15 @@ class CardModel{
        final response = await http.Response.fromStream(streamedResponse);
 
        if (response.statusCode == 200) {
-         print("명함과 로고 업데이트 성공");
-         return BusinessCard.fromJson(json.decode(response.body));
+         print("로고 업데이트 성공");
        } else if (response.statusCode == 400) {
-         print("명함과 로고 업데이트 실패: ${response.body}");
+         print("로고 업데이트 실패: ${response.body}");
          return null;
        } else {
-         throw Exception('명함과 로고 업데이트 실패: ${response.statusCode}');
+         throw Exception('로고 업데이트 실패: ${response.statusCode}');
        }
      } catch (e) {
-       print("명함과 로고 업데이트 실패 $e");
+       print("로고 업데이트 실패 $e");
        throw Exception("editBusinessCardWithLogo Error: $e");
      }
    }

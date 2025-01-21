@@ -182,7 +182,7 @@ class _PostBoxState extends State<PostBox> {
     switch (fileExtension) {
       case 'pdf':
         return FutureBuilder<String?>(
-          future: downloadAndSaveFileToExternalStorage(fullUrl),
+          future: downloadAndSaveFile(fullUrl),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
