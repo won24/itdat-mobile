@@ -80,7 +80,9 @@ class _BusinessCardWidgetState extends State<BusinessCardList> {
                   logoUrl: card['logoUrl'],
                   isPublic: card['isPublic'],
                   backgroundColor: card['backgroundColor'],
-                  fontFamily: card['fontFamily']
+                  fontFamily: card['fontFamily'],
+                  textColor: card['textColor'],
+
               );
               return GestureDetector(
                 onTap: () {
