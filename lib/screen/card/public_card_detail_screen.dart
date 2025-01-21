@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/models/BusinessCard.dart';
-import 'package:itdat/screen/card/template/no_1.dart';
-import 'package:itdat/screen/card/template/no_2.dart';
-import 'package:itdat/screen/card/template/no_3.dart';
+import 'package:itdat/screen/card/template/business/no_1.dart';
+import 'package:itdat/screen/card/template/business/no_2.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
+import 'package:itdat/screen/card/template/personal/no_1.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 import 'package:itdat/widget/card/card_info_widget.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -49,6 +51,10 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
         return No2(cardInfo: cardInfo);
       case 'No3':
         return No3(cardInfo: cardInfo);
+      case 'PersonalNo1':
+        return PersonalNo1(cardInfo: cardInfo);
+      case 'PersonalNo2':
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo);
     }
@@ -84,59 +90,85 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverToBoxAdapter(
+              child: Container(
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  margin: const EdgeInsets.all(16.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: buildBusinessCard(widget.cardInfo),
+                  ),
+                ),
+              ),
             ),
-            margin: const EdgeInsets.all(16.0),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: buildBusinessCard(widget.cardInfo),
+          ];
+        },
+        body: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 0;
+                    });
+                  },
+                  child: Text(
+                    "연락처",
+                    style: TextStyle(
+                        fontWeight: _selectedIndex == 0? FontWeight.w900: null,
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                    ),
+                  ),
+                ),
+                Text("|"),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 1;
+                    });
+                  },
+                  child: Text(
+                    "포트폴리오",
+                    style: TextStyle(
+                        fontWeight: _selectedIndex == 1? FontWeight.w900: null,
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                    ),),
+                ),
+                Text("|"),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 2;
+                    });
+                  },
+                  child: Text(
+                    "히스토리",
+                    style: TextStyle(
+                        fontWeight: _selectedIndex == 2? FontWeight.w900: null,
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 0;
-                  });
-                },
-                child:  Text(AppLocalizations.of(context)!.contact),
-              ),
-              const Text("|"),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                },
-                child:  Text(AppLocalizations.of(context)!.portfolio),
-              ),
-              const Text("|"),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-                child:  Text(AppLocalizations.of(context)!.history),
-              ),
-            ],
-          ),
-          // 선택된 섹션 렌더링
-          Expanded(
-            child: _selectedIndex == 0
-                ? CardInfoWidget(businessCards: widget.cardInfo, loginEmail: _loginEmail)
-                : _selectedIndex == 1
-                ? PortfolioWidget(loginUserEmail:_loginEmail, cardUserEmail:widget.cardInfo.userEmail)
-                : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail:widget.cardInfo.userEmail),
-          ),
-        ],
+            Expanded(
+              child: _selectedIndex == 0
+                  ? CardInfoWidget(businessCards: widget.cardInfo, loginEmail: _loginEmail)
+                  : _selectedIndex == 1
+                  ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: widget.cardInfo.userEmail,)
+                  : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: widget.cardInfo.userEmail,),
+            ),
+          ],
+        )
       ),
     );
   }

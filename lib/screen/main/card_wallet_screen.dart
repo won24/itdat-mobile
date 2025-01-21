@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 import 'package:provider/provider.dart';
 import 'package:itdat/models/mywallet_model.dart';
 import 'package:itdat/models/BusinessCard.dart';
@@ -7,9 +9,9 @@ import 'package:itdat/providers/auth_provider.dart';
 import '../../widget/mycard/folder_detail_screen.dart';
 import '../../widget/setting/waitwidget.dart';
 import '../card/card_wallet_card_detail_screen.dart';
-import '../card/template/no_1.dart';
-import '../card/template/no_2.dart';
-import '../card/template/no_3.dart';
+import '../card/template/business/no_1.dart';
+import '../card/template/business/no_2.dart';
+import '../card/template/personal/no_1.dart';
 
 class CardWalletScreen extends StatefulWidget {
   const CardWalletScreen({Key? key}) : super(key: key);
@@ -112,6 +114,13 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  // cardNo 로 필터링
+  List<BusinessCard> filterCardsByEmailAndCardNo(String email, int cardNo) {
+    return _allCards
+        .where((card) => card.userEmail == email && card.cardNo == cardNo)
+        .toList();
   }
 
   Future<void> _fetchFolders(String userEmail) async {
@@ -317,6 +326,10 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         return No2(cardInfo: cardInfo);
       case 'No3':
         return No3(cardInfo: cardInfo);
+      case 'PersonalNo1':
+        return PersonalNo1(cardInfo: cardInfo);
+      case 'PersonalNo2':
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo); // 기본값
     }
@@ -329,7 +342,6 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.cardcase),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -467,6 +479,8 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
               itemBuilder: (context, index) {
                 final card = _allCards[index];
 
+                final filteredCardNo = filterCardsByEmailAndCardNo(card.userEmail, card.cardNo!);
+
                 return LongPressDraggable<BusinessCard>(
                   data: card,
                   feedback: Transform.scale(
@@ -514,7 +528,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => CardWalletCardDetailScreen(
-                            cardInfo: [card],
+                            cardInfo: filteredCardNo,
                             loginUserEmail: Provider.of<AuthProvider>(context, listen: false).userEmail!,
                           ),
                         ),

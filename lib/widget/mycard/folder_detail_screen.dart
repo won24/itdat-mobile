@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:itdat/models/mywallet_model.dart';
 import 'package:itdat/models/BusinessCard.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../screen/card/card_wallet_card_detail_screen.dart';
-import '../../screen/card/template/no_1.dart';
-import '../../screen/card/template/no_2.dart';
-import '../../screen/card/template/no_3.dart';
+import '../../screen/card/template/business/no_1.dart';
+import '../../screen/card/template/business/no_2.dart';
+import '../../screen/card/template/personal/no_1.dart';
 import '../setting/waitwidget.dart';
 
 class FolderDetailScreen extends StatefulWidget {
@@ -119,6 +121,10 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         return No2(cardInfo: cardInfo);
       case 'No3':
         return No3(cardInfo: cardInfo);
+      case 'PersonalNo1':
+        return PersonalNo1(cardInfo: cardInfo);
+      case 'PersonalNo2':
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo); // 기본값
     }

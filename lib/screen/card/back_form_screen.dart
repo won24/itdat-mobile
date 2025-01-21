@@ -25,7 +25,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
   File? _image;
   String? _customText;
   bool _isTextEnabled = false;
-  String _textPosition = '';
+  String _textPosition = 'null';
 
 
   Future<File?> getImageFromGallery() async {
@@ -106,7 +106,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
               Center(
                   child: Container(
                     width: double.infinity,
-                    child: BackTemplate(cardInfo: widget.cardInfo, image: _image),
+                    child: BackTemplate(cardInfo: widget.cardInfo, image: _image, frontSideTemplate: widget.cardInfo.appTemplate!,),
                   )
               ),
               const SizedBox(height: 20),
@@ -180,7 +180,6 @@ class _BackFormScreenState extends State<BackFormScreen> {
                   setState(() {
                     _isTextEnabled = value;
                     widget.cardInfo.isTextEnabled = _isTextEnabled;
-                    print(widget.cardInfo.isTextEnabled);
                   });
                 },
               ),
@@ -240,6 +239,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
+                        elevation: 3,
                       ).copyWith(
                         backgroundColor: WidgetStateProperty.resolveWith((states) {
                           if (states.contains(WidgetState.pressed)) {
@@ -278,6 +278,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
+                        elevation: 3,
                       ),
                       child: Text("취소",
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),

@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:itdat/models/http_client_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
 
 class NfcModel {
   final baseUrl = dotenv.env['BASE_URL'];
   final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   Future<void> processCardInfo(Map<String, dynamic> cardInfo) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       String? userEmail = await _storage.read(key: 'user_email');
       if (userEmail == null) {
@@ -35,7 +35,7 @@ class NfcModel {
   }
 
   Future<void> saveMemo(Map<String, dynamic> card) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.post(
@@ -51,7 +51,7 @@ class NfcModel {
   }
 
   Future<String?> loadMemo(Map<String, dynamic> card) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.post(

@@ -10,7 +10,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widget/nfc/nfcRead.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
+  final bool refresh;
+  const MainLayout({Key? key, this.refresh = false}) : super(key: key);
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -19,13 +20,23 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    MyCardScreen(),
-    CardWalletScreen(),
-    OpenCardScreen(),
-    MyInfoScreen(),
-    //Settings()
-  ];
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPages();
+  }
+
+  void _initPages() {
+    _pages = [
+      MyCardScreen(key: UniqueKey()),
+      CardWalletScreen(key: UniqueKey()),
+      OpenCardScreen(key: UniqueKey()),
+      MyInfoScreen(key: UniqueKey()),
+    ];
+  }
+
   void onTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -33,24 +44,27 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   Widget _buildIcon(String iconName, int index) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     bool isSelected = index == _selectedIndex;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         if (isSelected)
-         const Icon(
-            Icons.circle,
-            size: 8,
-            color: Color.fromRGBO(0, 202, 145, 1)
-            ),
-        Image.asset('assets/icons/$iconName.png', height: 30, width: 30,  color: isDarkMode ? Colors.grey[200] : Colors.black,)
+          const Icon(
+              Icons.circle,
+              size: 8,
+              color: Color.fromRGBO(0, 202, 145, 1)
+          ),
+        Image.asset('assets/icons/$iconName.png', height: 30, width: 30, color: isDarkMode ? Colors.grey[200] : Colors.black,)
       ],
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
+    if (widget.refresh) {
+      _initPages();
+    }
+
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(
@@ -59,7 +73,7 @@ class _MainLayoutState extends State<MainLayout> {
           title: Image.asset(
             isDarkMode ? 'assets/logo_white.png' : 'assets/logo_black.png',
             fit: BoxFit.contain,
-            height: 50, // 원하는 높이로 조정
+            height: 50,
           ),
           centerTitle: false,
           titleSpacing: 12,
@@ -71,13 +85,17 @@ class _MainLayoutState extends State<MainLayout> {
                 height: 25,
                 color: isDarkMode ? Colors.grey[200] : Colors.black,
               ),
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final result = await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => NfcReadPage()),
                 );
+                if (result == true) {
+                  setState(() {
+                    _initPages();
+                  });
+                }
               },
-
             ),
             IconButton(
               icon: Image.asset(
@@ -93,15 +111,6 @@ class _MainLayoutState extends State<MainLayout> {
                 );
               },
             ),
-            // IconButton(
-            //   icon: Icon(Icons.settings, size: 28),
-            //   onPressed: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(builder: (context) => Settings()),
-            //     );
-            //   },
-            // ),
             SizedBox(width: 12),
           ],
           toolbarHeight: 70,

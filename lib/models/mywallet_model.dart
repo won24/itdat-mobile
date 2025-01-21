@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:itdat/models/http_client_model.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
+
 
 class MyWalletModel {
   final baseUrl = dotenv.env['BASE_URL'];
 
   // 명함 가져오기
   Future<List<dynamic>> getCards(String myEmail) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final url = '$baseUrl/api/mywallet/cards?myEmail=$myEmail';
     try {
@@ -30,7 +30,7 @@ class MyWalletModel {
 
   // 폴더 가져오기
   Future<List<dynamic>> getFolders(String userEmail) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final url = '$baseUrl/api/mywallet/folders?userEmail=$userEmail';
     try {
@@ -49,7 +49,7 @@ class MyWalletModel {
 
   // 폴더 내부 명함 가져오기
   Future<List<dynamic>> getFolderCards(String folderName) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final url = '$baseUrl/api/mywallet/folderCards?folderName=$folderName';
     try {
@@ -67,7 +67,7 @@ class MyWalletModel {
 
   // 폴더 생성
   Future<bool> createFolder(String userEmail, String folderName) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final response = await client.post(
       Uri.parse("$baseUrl/api/mywallet/folders/create"),
@@ -79,7 +79,7 @@ class MyWalletModel {
 
   // 폴더 이름 업데이트
   Future<bool> updateFolderName(String userEmail, String oldFolderName, String newFolderName) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final response = await client.put(
       Uri.parse("$baseUrl/api/mywallet/folders/update"),
@@ -102,7 +102,7 @@ class MyWalletModel {
 
   // 폴더 삭제
   Future<bool> deleteFolder(String userEmail, String folderName) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final response = await client.delete(
       Uri.parse("$baseUrl/api/mywallet/folders/$folderName?userEmail=$userEmail"),
@@ -112,7 +112,7 @@ class MyWalletModel {
 
   // 명함 폴더로 이동
   Future<bool> moveCardToFolder(String myEmail, String userEmail, String folderName) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.post(
@@ -139,7 +139,7 @@ class MyWalletModel {
   }
 
   Future<Map<String, String>> getUserInfoByEmail(String email) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final response = await client.get(
       Uri.parse('$baseUrl/api/auth/info?email=$email'),
@@ -153,7 +153,7 @@ class MyWalletModel {
   }
 
   Future<List<dynamic>> getAllCards(String userEmail) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final url = '$baseUrl/api/mywallet/allCards?userEmail=$userEmail';
     final response = await client.get(Uri.parse(url));
@@ -167,7 +167,7 @@ class MyWalletModel {
 
   // 폴더에 속하지 않은 명함 가져오기
   Future<List<dynamic>> getCardsWithoutFolder(String myEmail) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final response = await client.get(
       Uri.parse("$baseUrl/api/mywallet/cards/withoutFolder?myEmail=$myEmail"),
@@ -181,7 +181,7 @@ class MyWalletModel {
 
   // 특정 폴더의 명함 가져오기
   Future<List<dynamic>> getCardsByFolder(String myEmail, String folderName) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     final response = await client.get(
       Uri.parse("$baseUrl/api/mywallet/cards/byFolder?myEmail=$myEmail&folderName=$folderName"),

@@ -1,15 +1,13 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:itdat/models/http_client_model.dart';
-import 'BusinessCard.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
 
 class PublicCardModel {
   final baseUrl = dotenv.env['BASE_URL'];
 
   // 전체 공개 명함 가져오기
   Future<List<dynamic>> getAllPublicCards() async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.get(Uri.parse("$baseUrl/card/public/all"));
@@ -34,7 +32,7 @@ class PublicCardModel {
     required String userEmail,
     required bool isPublic,
   }) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
 
     try {
       final response = await client.post(

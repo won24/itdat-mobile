@@ -1,18 +1,16 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:itdat/models/http_client_model.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
+import '../../../../widget/setting/waitwidget.dart';
 
-import '../../../widget/setting/waitwidget.dart';
-
-class No2 extends StatelessWidget {
+class No3 extends StatelessWidget {
   final BusinessCard cardInfo;
   final File? image;
 
-  No2({
+  No3({
     super.key,
     required this.cardInfo,
     this.image,
@@ -21,7 +19,7 @@ class No2 extends StatelessWidget {
   TextStyle _buildTextStyle({
     required Color? textColor,
     required String? fontFamily,
-    double fontSize = 14,
+    double fontSize = 17,
     FontWeight fontWeight = FontWeight.normal,
   }) {
     return GoogleFonts.getFont(
@@ -44,7 +42,7 @@ class No2 extends StatelessWidget {
 
 
   Future<bool> checkFileExists(String url) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       final response = await client.head(Uri.parse(url));
       return response.statusCode == 200;
@@ -52,6 +50,7 @@ class No2 extends StatelessWidget {
       return false;
     }
   }
+
 
 
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
@@ -67,8 +66,9 @@ class No2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.white);
-    Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
+    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback:Colors.black87);
+    Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.white);
+
 
     return Container(
       width: 420,
@@ -77,9 +77,10 @@ class No2 extends StatelessWidget {
         color: backgroundColor,
       ),
       padding: const EdgeInsets.all(16),
-      child: Column(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FutureBuilder<bool>(
             future: checkFileExists(getFullImageUrl()),
@@ -89,7 +90,7 @@ class No2 extends StatelessWidget {
               } else if (snapshot.hasData && snapshot.data == true) {
                 return Image.network(
                   getFullImageUrl(),
-                  height: 30,
+                  height: 50,
                   fit: BoxFit.contain,
                 );
               } else if (image != null) {
@@ -104,61 +105,53 @@ class No2 extends StatelessWidget {
                   style: _buildTextStyle(
                     textColor: textColor,
                     fontFamily: cardInfo.fontFamily,
-                    fontSize: 18,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 );
               }
             },
           ),
-          const Padding(padding: EdgeInsets.only(top: 20)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     cardInfo.position ?? "",
                     style: _buildTextStyle(
                       textColor: textColor,
                       fontFamily: cardInfo.fontFamily,
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(width: 5),
+                  SizedBox(width: 5,),
                   Text(
                     cardInfo.userName ?? "",
                     style: _buildTextStyle(
                       textColor: textColor,
                       fontFamily: cardInfo.fontFamily,
-                      fontSize: 22,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ],
+                ]
               ),
               Text(
                 cardInfo.department ?? "",
                 style: _buildTextStyle(
                   textColor: textColor,
                   fontFamily: cardInfo.fontFamily,
-                  fontSize: 15,
+                  fontSize: 17,
                 ),
               ),
-              const Divider(thickness: 1, color: Colors.grey),
+              Divider(thickness: 1, color: textColor),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "M. ",
-                    style: _buildTextStyle(
-                      textColor: textColor,
-                      fontFamily: cardInfo.fontFamily,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Icon(Icons.phone_android_sharp, color: textColor,),
                   Text(
                     cardInfo.phone ?? "",
                     style: _buildTextStyle(
@@ -166,16 +159,13 @@ class No2 extends StatelessWidget {
                       fontFamily: cardInfo.fontFamily,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                ]
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   if (cardInfo.email != null && cardInfo.email!.isNotEmpty) ...[
-                    Text(
-                      "E. ",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Icon(Icons.mail_sharp, color: textColor,),
                     Text(
                       cardInfo.email ?? "",
                       style: _buildTextStyle(
@@ -188,16 +178,21 @@ class No2 extends StatelessWidget {
               ),
               Row(
                 children: [
+                  Icon(Icons.business_sharp, color: textColor,),
+                  Text(
+                    cardInfo.companyAddress ?? "",
+                    style: _buildTextStyle(
+                      textColor: textColor,
+                      fontFamily: cardInfo.fontFamily,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
                   if (cardInfo.companyNumber != null &&
                       cardInfo.companyNumber!.isNotEmpty) ...[
-                    Text(
-                      "T. ",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Icon(Icons.phone, color: textColor,),
                     Text(
                       cardInfo.companyNumber ?? "",
                       style: _buildTextStyle(
@@ -205,18 +200,14 @@ class No2 extends StatelessWidget {
                         fontFamily: cardInfo.fontFamily,
                       ),
                     ),
-                    const SizedBox(width: 10),
                   ],
+                ]
+              ),
+              Row(
+                children: [
                   if (cardInfo.companyFax != null &&
                       cardInfo.companyFax!.isNotEmpty) ...[
-                    Text(
-                      "F. ",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Icon(Icons.fax_sharp, color: textColor,),
                     Text(
                       cardInfo.companyFax ?? "",
                       style: _buildTextStyle(
@@ -226,13 +217,6 @@ class No2 extends StatelessWidget {
                     ),
                   ],
                 ],
-              ),
-              Text(
-                cardInfo.companyAddress ?? "",
-                style: _buildTextStyle(
-                  textColor: textColor,
-                  fontFamily: cardInfo.fontFamily,
-                ),
               ),
             ],
           ),

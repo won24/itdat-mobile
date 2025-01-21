@@ -96,16 +96,22 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     try {
       await NfcModel().saveMemo(card);
       _showSnackBar(AppLocalizations.of(context)!.memoSaved);
+      setState(() {
+        widget.businessCards.description = memo; // 로컬 상태 업데이트
+      });
       Navigator.pop(context);
     } catch (e) {
       _showSnackBar(AppLocalizations.of(context)!.failedToSaveMemo, isError: true);
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
+        physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+        shrinkWrap: true, // 부모 컨테이너 크기에 맞춤
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: [
           ListTile(
@@ -183,13 +189,12 @@ class _InfoWidgetState extends State<CardInfoWidget> {
                               SizedBox(height: 16),
                               TextField(
                                 controller: _memoController,
-                                maxLines: 5,
+                                maxLines: 3,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
+                                  border: InputBorder.none,
                                   hintText: AppLocalizations.of(context)!.enterMemo,
                                 ),
                               ),
-                              SizedBox(height: 16),
                               ElevatedButton(
                                 child: Text(AppLocalizations.of(context)!.save),
                                 onPressed: () {

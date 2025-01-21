@@ -233,10 +233,10 @@ class _NfcReadPageState extends State<NfcReadPage> {
           actions: <Widget>[
             TextButton(
               child: Text(AppLocalizations.of(context)!.confirm),
-              onPressed: () {
+              onPressed: () async {
                 _stopNfcRead();
                 Navigator.of(context).popUntil((route) => route.isFirst);
-                Navigator.of(context).pushReplacementNamed('/main');
+                await Navigator.of(context).pushReplacementNamed('/main', arguments: {'refresh': true});
               },
             ),
           ],

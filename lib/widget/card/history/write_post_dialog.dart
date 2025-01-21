@@ -109,6 +109,7 @@ class _WritePostDialogState extends State<WritePostDialog> {
                     ),
                   ),
                   textAlign: TextAlign.center,
+                  style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
                 ),
                 TextField(
                   controller: _contentController,
@@ -117,6 +118,7 @@ class _WritePostDialogState extends State<WritePostDialog> {
                     labelStyle: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
                     border: InputBorder.none,
                   ),
+                  style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
                   maxLines: 3,
                 ),
                 SizedBox(height: 20),

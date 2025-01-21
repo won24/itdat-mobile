@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:itdat/models/publicCard_model.dart';
 import 'package:itdat/screen/card/public_card_detail_screen.dart';
-import 'package:itdat/screen/card/template/no_1.dart';
-import 'package:itdat/screen/card/template/no_2.dart';
-import 'package:itdat/screen/card/template/no_3.dart';
+import 'package:itdat/screen/card/template/business/no_1.dart';
+import 'package:itdat/screen/card/template/business/no_2.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
+import 'package:itdat/screen/card/template/personal/no_1.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 import '../../models/BusinessCard.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -66,6 +68,10 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
         return No2(cardInfo: cardInfo);
       case 'No3':
         return No3(cardInfo: cardInfo);
+      case 'PersonalNo1':
+        return PersonalNo1(cardInfo: cardInfo);
+      case 'PersonalNo2':
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo); // 기본값
     }
@@ -75,7 +81,6 @@ class _OpenCardScreenState extends State<OpenCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.publicCards),
         centerTitle: true,
       ),
       body: _isLoading

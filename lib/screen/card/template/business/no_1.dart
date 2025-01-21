@@ -3,10 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:itdat/models/BusinessCard.dart';
-import 'package:http/http.dart' as http;
-import 'package:itdat/models/http_client_model.dart';
-
-import '../../../widget/setting/waitwidget.dart';
+import 'package:itdat/utils/HttpClientManager.dart';
+import '../../../../widget/setting/waitwidget.dart';
 
 class No1 extends StatelessWidget {
   final BusinessCard cardInfo;
@@ -43,13 +41,21 @@ class No1 extends StatelessWidget {
   }
 
   Future<bool> checkFileExists(String url) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       final response = await client.head(Uri.parse(url));
       return response.statusCode == 200;
     } catch (e) {
       return false;
     }
+  }
+
+  String colorToHex(Color color) {
+    int r = (color.r * 255).toInt();
+    int g = (color.g * 255).toInt();
+    int b = (color.b * 255).toInt();
+
+    return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}';
   }
 
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
@@ -68,6 +74,7 @@ class No1 extends StatelessWidget {
 
     Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.white);
     Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
+
 
     return Container(
       width: 420,
@@ -94,7 +101,7 @@ class No1 extends StatelessWidget {
                       style: _buildTextStyle(
                         textColor: textColor,
                         fontFamily: cardInfo.fontFamily,
-                        fontSize: 23,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

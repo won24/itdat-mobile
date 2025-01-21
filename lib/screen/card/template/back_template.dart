@@ -2,24 +2,26 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
-import 'package:http/http.dart' as http;
-import 'package:itdat/models/http_client_model.dart';
-
+import 'package:itdat/utils/HttpClientManager.dart';
 import '../../../widget/setting/waitwidget.dart';
 
 class BackTemplate extends StatelessWidget {
   final BusinessCard cardInfo;
+  final String frontSideTemplate;
   final File? image;
 
   BackTemplate({
     super.key,
     required this.cardInfo,
     this.image,
+    required this.frontSideTemplate,
   });
 
 
+
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
-    if (hex == null || hex.isEmpty) return fallback;
+    if (hex == null || hex.isEmpty)
+      return fallback;
     try {
       return Color(int.parse(hex.replaceFirst('#', '0xFF')));
     } catch (_) {
@@ -40,7 +42,7 @@ class BackTemplate extends StatelessWidget {
 
 
   Future<bool> checkFileExists(String url) async {
-    final client = await HttpClientModel().createHttpClient();
+    final client = await HttpClientManager().createHttpClient();
     try {
       final response = await client.head(Uri.parse(url));
       return response.statusCode == 200;
@@ -51,8 +53,16 @@ class BackTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.white);
-    Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
+    Color fallbackBack = Colors.white;
+    Color fallbackText = Colors.black87;
+
+    if(cardInfo.appTemplate == "No2" || frontSideTemplate == "No2" || cardInfo.appTemplate == "PersonalNo2" || frontSideTemplate == "PersonalNo2"){
+      fallbackBack = Colors.black87;
+      fallbackText = Colors.white;
+    }
+
+    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: fallbackBack);
+    Color textColor = hexToColor(cardInfo.textColor, fallback: fallbackText);
 
     return Container(
       width: 420,
