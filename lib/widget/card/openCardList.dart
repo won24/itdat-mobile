@@ -189,7 +189,11 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
                   cardNo: card['cardNo'],
                   cardSide: card['cardSide'],
                   logoUrl: card['logoUrl'],
-                  isPublic: card['public'],
+                  isPublic: card['isPublic'],
+                  backgroundColor: card['backgroundColor'],
+                  fontFamily: card['fontFamily'],
+                  textColor: card['textColor'],
+
                 );
                 print("Card ${cardInfo.cardNo} isPublic: ${cardInfo.isPublic}");
                 return GestureDetector(

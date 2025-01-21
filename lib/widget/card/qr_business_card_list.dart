@@ -222,6 +222,10 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
                 cardNo: card['cardNo'],
                 cardSide: card['cardSide'],
                 logoUrl: card['logoUrl'],
+                isPublic: card['isPublic'],
+                backgroundColor: card['backgroundColor'],
+                fontFamily: card['fontFamily'],
+                textColor: card['textColor'],
               );
               return GestureDetector(
                 onTap: () {

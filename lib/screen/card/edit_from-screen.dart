@@ -266,7 +266,7 @@ class _EditFormScreenState extends State<EditFormScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("추가로 명함 뒷면을 제작하시겠습니까?",
+                Text("명함을 저장하시겠습니까?",
                   style: TextStyle(fontSize: 18),
                   textAlign: TextAlign.center,
                 ),
@@ -277,13 +277,17 @@ class _EditFormScreenState extends State<EditFormScreen> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        _createCard();
+                        Navigator.of(context).pop(); // 다이얼로그 닫기
                       },
-                      child: Text("아니오"),
+                      child: Text("취소"),
                     ),
-                    TextButton(onPressed: (){
-                      moveToBackFormScreen();
-                    }, child: Text("네")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // 다이얼로그 닫기
+                          _createCard(); // 명함 생성
+                        },
+                        child: Text("확인")
+                    ),
                   ],
                 )
               ],
@@ -291,29 +295,10 @@ class _EditFormScreenState extends State<EditFormScreen> {
           ),
         ),
       );
-    }else{
+    } else {
       _showSnackBar("입력하신 정보를 확인해주세요.", isError: true);
     }
   }
-
-
-  // 뒷장 만들기
-  void moveToBackFormScreen() async {
-    if (_selectedCompanyImage == null) {
-      await CardModel().saveBusinessCard(widget.cardInfo);
-    } else {
-      await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
-    }
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BackFormScreen(cardInfo: widget.cardInfo),
-      ),
-          (route) => false,
-    );
-  }
-
-
   // 명함 저장
   void _createCard() async {
     try {
@@ -321,13 +306,13 @@ class _EditFormScreenState extends State<EditFormScreen> {
         await CardModel().editBusinessCard(widget.cardInfo);
       } else {
         await CardModel().editBusinessCardWithLogo(widget.cardInfo);
+        _showSnackBar("명함 편집 성공");
       }
-      _showSnackBar("명함 편집 성공");
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (BuildContext context) =>
-              MainLayout()), (route) => false);
-    } catch (e) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) =>
+                MainLayout()), (route) => false);
+      } catch (e) {
       _showSnackBar("명함 편집 실패. 다시 시도해주세요.", isError: true);
     }
   }
