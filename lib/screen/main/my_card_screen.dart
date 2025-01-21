@@ -167,7 +167,9 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                             builder: (context) => TemplateSelectionScreen(userEmail: _loginEmail),
                           ),
                         );
-                      } else {
+                      }
+                    ));
+                }else {
                         var businessCards = snapshot.data!
                             .map((data) => BusinessCard.fromJson(data)).toList()
                           ..sort((a, b) => b.cardNo!.compareTo(a.cardNo!));
