@@ -79,6 +79,8 @@ class CardModel{
 
     try {
       final response = await client.get(Uri.parse("$baseUrl/$userEmail"));
+      print(response.body);
+      print("겟카드모델");
       return jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
     } catch (e) {
       throw Exception("getBusinessCard Error: $e");
@@ -262,6 +264,73 @@ class CardModel{
      } catch (e) {
        print("loadMemo Error: $e");
        throw Exception("loadMemo Error: $e");
+     }
+   }
+
+   Future<BusinessCard?> editBusinessCard(BusinessCard card) async {
+     final client = await HttpClientManager().createHttpClient();
+
+     try {
+       print("editBusinessCard: $card");
+       final response = await client.post(
+         Uri.parse('$baseUrl/front/update'),
+         headers: {"Content-Type": "application/json; charset=UTF-8"},
+         body: json.encode(card.toJson()),
+       );
+
+       if (response.statusCode == 200) {
+         print("명함 업데이트 성공");
+         return BusinessCard.fromJson(json.decode(response.body));
+       } else if (response.statusCode == 400) {
+         print("명함 업데이트 실패: ${response.body}");
+         return null;
+       } else {
+         throw Exception('명함 업데이트 실패: ${response.statusCode}');
+       }
+     } catch (e) {
+       print("명함 업데이트 실패 $e");
+       throw Exception("editBusinessCard Error: $e");
+     }
+   }
+
+   Future<BusinessCard?> editBusinessCardWithLogo(BusinessCard cardInfo) async {
+     final client = await HttpClientManager().createHttpClient();
+
+     try {
+       final url = Uri.parse('$baseUrl/front/update/logo');
+       var request = http.MultipartRequest('POST', url);
+
+       // 카드 정보를 JSON으로 변환하여 추가
+       request.fields['cardInfo'] = jsonEncode(cardInfo.toJson()).trim();
+
+       // 로고 파일이 있는 경우 추가
+       if (cardInfo.logoUrl != null && cardInfo.logoUrl!.isNotEmpty) {
+         final logoFile = File(cardInfo.logoUrl!);
+         final mimeType = lookupMimeType(logoFile.path) ?? 'application/octet-stream';
+         final fileName = path.basename(logoFile.path);
+
+         request.files.add(await http.MultipartFile.fromPath(
+           'logo',
+           logoFile.path,
+           contentType: MediaType.parse(mimeType),
+         ));
+       }
+
+       final streamedResponse = await client.send(request);
+       final response = await http.Response.fromStream(streamedResponse);
+
+       if (response.statusCode == 200) {
+         print("명함과 로고 업데이트 성공");
+         return BusinessCard.fromJson(json.decode(response.body));
+       } else if (response.statusCode == 400) {
+         print("명함과 로고 업데이트 실패: ${response.body}");
+         return null;
+       } else {
+         throw Exception('명함과 로고 업데이트 실패: ${response.statusCode}');
+       }
+     } catch (e) {
+       print("명함과 로고 업데이트 실패 $e");
+       throw Exception("editBusinessCardWithLogo Error: $e");
      }
    }
 

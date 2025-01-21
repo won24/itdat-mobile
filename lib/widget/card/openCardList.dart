@@ -28,6 +28,7 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
   void initState() {
     super.initState();
     _initializeData();
+    print(_businessCards);
   }
 
   Future<void> _initializeData() async {
