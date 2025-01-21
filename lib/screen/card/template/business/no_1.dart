@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/utils/HttpClientManager.dart';
-import '../../../widget/setting/waitwidget.dart';
+import '../../../../widget/setting/waitwidget.dart';
 
 class No1 extends StatelessWidget {
   final BusinessCard cardInfo;

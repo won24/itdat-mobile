@@ -175,9 +175,9 @@ class _WritePostState extends State<WritePost> {
                       onPressed: () {
                         Navigator.pop(context); 
                       },
-                      child: Text("취소"),
+                      child: Text("취소", style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
                     ),
-                    ElevatedButton(
+                    TextButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           setState(() {
@@ -187,7 +187,7 @@ class _WritePostState extends State<WritePost> {
                           Navigator.pop(context);
                         }
                       },
-                      child: Text("추가"),
+                      child: Text("추가",style: TextStyle(color: Color.fromRGBO(0, 202, 145, 1), fontWeight: FontWeight.bold),),
                     ),
                   ],
                 ),

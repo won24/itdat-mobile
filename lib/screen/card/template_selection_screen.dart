@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:itdat/screen/card/template/no_1.dart';
-import 'package:itdat/screen/card/template/no_2.dart';
-import 'package:itdat/screen/card/template/no_3.dart';
+import 'package:itdat/screen/card/template/business/no_1.dart';
+import 'package:itdat/screen/card/template/business/no_2.dart';
+import 'package:itdat/screen/card/template/personal/no_1.dart';
 
 import '../../widget/setting/waitwidget.dart';
 import 'form_screen.dart';
@@ -104,7 +104,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
     ];
 
     personalTemplates = [
-      No3(cardInfo: _card),
+      PersonalNo1(cardInfo: _card),
     ];
   }
 
@@ -183,7 +183,8 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedTemplate = "No${i + 1}";
+                      selectedCategory == "Business"?
+                      selectedTemplate = "No${i + 1}" : selectedTemplate = "PersonalNo${i + 1}";
                       _card = _card.copyWith(appTemplate: selectedTemplate);
                     });
                     Navigator.push(
