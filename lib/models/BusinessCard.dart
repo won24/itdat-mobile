@@ -15,7 +15,7 @@ class BusinessCard {
   String? logoUrl;
   bool? isPublic;
   String? description;
-
+  int? cardId;
   // 커스텀 정보
   String? backgroundColor;
   String? textColor;
@@ -46,7 +46,8 @@ class BusinessCard {
     this.fontFamily,
     this.customText,
     this.isTextEnabled,
-    this.textPosition
+    this.textPosition,
+    this.cardId
   });
 
   @override
@@ -81,7 +82,8 @@ class BusinessCard {
       fontFamily: json['fontFamily'],
       customText: json['customText'],
       isTextEnabled: json['isTextEnabled'],
-      textPosition: json['textPosition']
+      textPosition: json['textPosition'],
+      cardId: json['cardId']
     );
   }
 
@@ -107,7 +109,8 @@ class BusinessCard {
       'fontFamily': fontFamily,
       'customText': customText,
       'isTextEnabled': isTextEnabled,
-      'textPosition' :textPosition
+      'textPosition' :textPosition,
+      'cardId': cardId
     };
   }
 

@@ -7,16 +7,35 @@ import 'package:itdat/screen/card/template/back_template.dart';
 import 'package:itdat/screen/card/template/no_2.dart';
 import 'package:itdat/screen/card/template/no_3.dart';
 
-class ExpandedCardScreen extends StatelessWidget {
+import 'edit_from-screen.dart';
+
+class ExpandedCardScreen extends StatefulWidget {
   final BusinessCard cardInfo;
   final BusinessCard? backCard;
-  final CardModel cardModel = CardModel();
 
   ExpandedCardScreen({
     Key? key,
     required this.cardInfo,
     required this.backCard,
   }) : super(key: key);
+
+  @override
+  _ExpandedCardScreenState createState() => _ExpandedCardScreenState();
+}
+
+class _ExpandedCardScreenState extends State<ExpandedCardScreen> {
+  late BusinessCard cardInfo;
+  late BusinessCard? backCard;
+  final CardModel cardModel = CardModel();
+
+  @override
+  void initState() {
+    super.initState();
+    cardInfo = widget.cardInfo;
+    backCard = widget.backCard;
+    print("cardInfo : $cardInfo");
+    print(widget.cardInfo);
+  }
 
   // 앞면 렌더링
   Widget buildBusinessCard(BusinessCard cardInfo) {
@@ -33,7 +52,6 @@ class ExpandedCardScreen extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +60,18 @@ class ExpandedCardScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () {
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditFormScreen(cardInfo: cardInfo),
+                ),
+              );
+              if (result != null && result is BusinessCard) {
+                setState(() {
+                  cardInfo = result;
+                });
+              }
             },
           ),
           IconButton(
@@ -70,6 +99,7 @@ class ExpandedCardScreen extends StatelessWidget {
       ),
     );
   }
+
 
   Future<void> _showDeleteConfirmation(BuildContext context) async {
     return showDialog<void>(
