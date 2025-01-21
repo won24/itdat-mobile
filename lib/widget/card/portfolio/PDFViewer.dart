@@ -27,10 +27,9 @@ class PDFViewer extends StatelessWidget {
           } else if (snapshot.hasData && snapshot.data == true) {
             return PDFView(
               filePath: documentUrl,
-              swipeHorizontal: true,
-              autoSpacing: false,
-              pageFling: false,
-
+              swipeHorizontal: false,
+              autoSpacing: true,
+              pageFling: true,
             );
           } else {
             return Center(child: Text('파일을 찾을 수 없습니다.'));

@@ -33,7 +33,7 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
   @override
   void initState() {
     super.initState();
-
+    print (widget.cardInfo);
     if (widget.cardInfo.isEmpty) {
       throw Exception("명함 데이터가 비어 있습니다.");
     }

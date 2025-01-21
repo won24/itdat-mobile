@@ -96,11 +96,15 @@ class _InfoWidgetState extends State<CardInfoWidget> {
     try {
       await NfcModel().saveMemo(card);
       _showSnackBar(AppLocalizations.of(context)!.memoSaved);
+      setState(() {
+        widget.businessCards.description = memo; // 로컬 상태 업데이트
+      });
       Navigator.pop(context);
     } catch (e) {
       _showSnackBar(AppLocalizations.of(context)!.failedToSaveMemo, isError: true);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
