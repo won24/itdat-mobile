@@ -86,7 +86,8 @@ class LoginScreen extends StatelessWidget {
                         final identifier = _identifierController.text.trim();
                         final password = _passwordController.text;
 
-                        bool success = await Provider.of<AuthProvider>(context, listen: false).login(identifier, password);
+                        bool success = await Provider.of<AuthProvider>(context, listen: false)
+                            .login(identifier, password);
 
                         if (success) {
                           Navigator.pushReplacement(
@@ -94,12 +95,11 @@ class LoginScreen extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => MainLayout()),
                           );
                         } else {
+                          String? errorMessage =
+                              Provider.of<AuthProvider>(context, listen: false).errorMessage;
+
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                Provider.of<AuthProvider>(context, listen: false).errorMessage ?? "로그인 실패",
-                              ),
-                            ),
+                            SnackBar(content: Text(errorMessage ?? '알 수 없는 오류가 발생했습니다.')),
                           );
                         }
                       },
