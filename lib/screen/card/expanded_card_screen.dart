@@ -20,7 +20,6 @@ class ExpandedCardScreen extends StatelessWidget {
 
   // 앞면 렌더링
   Widget buildBusinessCard(BusinessCard cardInfo) {
-    print("로고 : ${cardInfo.logoUrl}");
     switch (cardInfo.appTemplate) {
       case 'No1':
         return No1(cardInfo: cardInfo);

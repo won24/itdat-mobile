@@ -1,11 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:itdat/models/board_model.dart';
 import 'package:itdat/utils/HttpClientManager.dart';
-import 'package:itdat/widget/card/portfolio/DocmentViewer.dart';
+import 'package:itdat/widget/card/portfolio/PDFViewer.dart';
 import 'package:itdat/widget/card/portfolio/TextFileViewr.dart';
+import 'package:itdat/widget/card/portfolio/downloadAndSaveFile.dart';
 import 'package:itdat/widget/card/portfolio/write_post.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../setting/waitwidget.dart';
@@ -178,27 +177,48 @@ class _PostBoxState extends State<PostBox> {
   // 문서 렌더링
   Widget _buildFileViewer(String fileUrl) {
     final fileExtension = fileUrl.split('.').last;
-
+    String fullUrl = getFullDocumentUrl(fileUrl);
     switch (fileExtension) {
       case 'pdf':
-        return DocumentViewer(documentUrl: fileUrl);
+        return FutureBuilder<String?>(
+          future: downloadAndSaveFile(fullUrl),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasData && snapshot.data != null) {
+              return PDFViewer(documentUrl: snapshot.data!);
+            } else {
+              return Text("PDF를 불러오는 데 실패했습니다.");
+            }
+          },
+        );
       case 'txt':
-        return TextFileViewer(textFileUrl: fileUrl);
+        return TextFileViewer(textFileUrl: fullUrl);
       case 'gif':
-        return _buildFileViewer(fileUrl);
+        return _buildMediaContent(fullUrl);
       default:
-        return Column(
+        return Row(
           children: [
             Text("지원되지 않는 파일 형식입니다."),
-            ElevatedButton(
-              onPressed: () async {
-                if (await canLaunchUrl(Uri.parse(fileUrl))) {
-                  await launchUrl(Uri.parse(fileUrl));
-                } else {
-                  _showSnackBar(context, "파일 열기 실패", isError: true);
-                }
-              },
-              child: Text("파일 열기"),
+            SizedBox(width: 10,),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                color: Colors.grey.shade200,
+                width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(25),
+                ),
+                child:IconButton(
+                  onPressed: () async {
+                    if (await canLaunchUrl(Uri.parse(fileUrl))) {
+                      await launchUrl(Uri.parse(fileUrl));
+                    } else {
+                      _showSnackBar(context, "파일 열기 실패", isError: true);
+                    }
+                  },
+                  icon: Icon(Icons.folder_open_sharp,color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+              )
             ),
           ],
         );

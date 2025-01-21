@@ -5,7 +5,10 @@ import 'package:itdat/utils/HttpClientManager.dart';
 class TextFileViewer extends StatefulWidget {
   final String textFileUrl;
 
-  TextFileViewer({required this.textFileUrl});
+  TextFileViewer({
+    super.key,
+    required this.textFileUrl
+  });
 
   @override
   _TextFileViewerState createState() => _TextFileViewerState();
