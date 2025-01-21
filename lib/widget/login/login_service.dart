@@ -6,7 +6,7 @@ class AuthService {
   final FlutterSecureStorage storage = FlutterSecureStorage();
   final LoginModel _loginModel = LoginModel();
 
-  Future<bool> login(String identifier, String password) async {
+  Future<Map<String, dynamic>> login(String identifier, String password) async {
     Map<String, String> requestBody = {
       'identifier': identifier,
       'password': password,
@@ -15,8 +15,7 @@ class AuthService {
     // 로그인 요청 실행
     var result = await _loginModel.login(requestBody);
 
-    // 성공 처리
-    if (result['success']) {
+    if (result['success'] == true) {
       try {
         // 데이터 추출
         String? token = result['data']['token'];
@@ -28,23 +27,19 @@ class AuthService {
           await storage.write(key: 'auth_token', value: token);
           await storage.write(key: 'user_email', value: userEmail);
           await storage.write(key: 'user_id', value: userId);
-          return true;
+          return {'success': true};
         } else {
-          print("응답 데이터에 필요한 정보가 없습니다.");
-          return false;
+          return {'success': false, 'message': '응답 데이터가 불완전합니다.'};
         }
       } catch (e) {
-        print("로그인 데이터 저장 중 오류 발생: $e");
-        return false;
+        return {'success': false, 'message': '로그인 데이터 저장 중 오류 발생: $e'};
       }
     } else {
       // 실패 처리
-      if (result['message'] == '계정이 제재 상태입니다. 관리자에게 문의하세요.') {
-        print("계정 제재 상태: ${result['message']}");
-      } else {
-        print("로그인 실패: ${result['message']}");
-      }
-      return false;
+      return {
+        'success': false,
+        'message': result['message'] ?? '로그인 실패',
+      };
     }
   }
 

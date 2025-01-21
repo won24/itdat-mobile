@@ -38,14 +38,16 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<bool> login(String identifier, String password) async {
-    bool success = await AuthService().login(identifier, password);
+    var result = await AuthService().login(identifier, password);
 
-    if (success) {
+    if (result['success']) {
       _errorMessage = null;
+      _isLoggedIn = true;
       notifyListeners();
       return true;
     } else {
-      _errorMessage = "로그인 실패. 다시 시도해주세요.";
+      _errorMessage = result['message'];
+      _isLoggedIn = false;
       notifyListeners();
       return false;
     }
