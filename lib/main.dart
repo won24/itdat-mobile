@@ -21,9 +21,15 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
+  final nativeAppKey = dotenv.env['NATIVE_APP_KEY'];
+  final javaScriptAppKey = dotenv.env['JAVASCRIPT_APP_KEY'];
+  if (nativeAppKey == null || javaScriptAppKey == null) {
+    throw Exception('NATIVE_APP_KEY 또는 JAVASCRIPT_APP_KEY가 설정되지 않았습니다.');
+  }
+
   KakaoSdk.init(
-    nativeAppKey: '387812a6ae2897c3e9e59952c211374e',
-    javaScriptAppKey: '159e7d3d7b574fff05fa693174bfa8a8',
+    nativeAppKey: nativeAppKey,
+    javaScriptAppKey: javaScriptAppKey,
     loggingEnabled: true,
   );
 
