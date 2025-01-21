@@ -38,17 +38,19 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<bool> login(String identifier, String password) async {
-    var result = await AuthService().login(identifier, password);
-    if (result['success']) {
-      _errorMessage = null; // 성공 시 에러 메시지 초기화
+    bool success = await AuthService().login(identifier, password);
+
+    if (success) {
+      _errorMessage = null;
       notifyListeners();
       return true;
     } else {
-      _errorMessage = result['message']; // 실패 시 에러 메시지 저장
+      _errorMessage = "로그인 실패. 다시 시도해주세요.";
       notifyListeners();
       return false;
     }
   }
+
 
   Future<void> logout() async {
     await _storage.delete(key: 'auth_token');
