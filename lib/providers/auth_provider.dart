@@ -11,10 +11,12 @@ class AuthProvider with ChangeNotifier {
   bool _isLoggedIn = false;
   String? _userEmail;
   String? _userId;
+  String? _errorMessage;
 
   bool get isLoggedIn => _isLoggedIn;
   String? get userEmail => _userEmail;
   String? get userId => _userId;
+  String? get errorMessage => _errorMessage;
 
   Future<bool> checkLoginStatus() async {
     _isLoggedIn = false;
@@ -36,12 +38,21 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<bool> login(String identifier, String password) async {
-    bool success = await AuthService().login(identifier, password);
-    if (success) {
-      await checkLoginStatus();
+    var result = await AuthService().login(identifier, password);
+
+    if (result['success']) {
+      _errorMessage = null;
+      _isLoggedIn = true;
+      notifyListeners();
+      return true;
+    } else {
+      _errorMessage = result['message'];
+      _isLoggedIn = false;
+      notifyListeners();
+      return false;
     }
-    return success;
   }
+
 
   Future<void> logout() async {
     await _storage.delete(key: 'auth_token');

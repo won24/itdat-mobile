@@ -5,9 +5,9 @@ import 'package:itdat/models/BusinessCard.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../screen/card/card_wallet_card_detail_screen.dart';
-import '../../screen/card/template/no_1.dart';
-import '../../screen/card/template/no_2.dart';
-import '../../screen/card/template/no_3.dart';
+import '../../screen/card/template/business/no_1.dart';
+import '../../screen/card/template/business/no_2.dart';
+import '../../screen/card/template/personal/no_1.dart';
 import '../setting/waitwidget.dart';
 
 class FolderDetailScreen extends StatefulWidget {
@@ -117,8 +117,8 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         return No1(cardInfo: cardInfo);
       case 'No2':
         return No2(cardInfo: cardInfo);
-      case 'No3':
-        return No3(cardInfo: cardInfo);
+      case 'PersonalNo1':
+        return PersonalNo1(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo); // 기본값
     }

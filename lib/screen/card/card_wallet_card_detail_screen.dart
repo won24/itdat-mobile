@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/screen/card/expanded_card_screen.dart';
 import 'package:itdat/screen/card/template/back_template.dart';
-import 'package:itdat/screen/card/template/no_1.dart';
-import 'package:itdat/screen/card/template/no_2.dart';
-import 'package:itdat/screen/card/template/no_3.dart';
+import 'package:itdat/screen/card/template/business/no_1.dart';
+import 'package:itdat/screen/card/template/business/no_2.dart';
+import 'package:itdat/screen/card/template/personal/no_1.dart';
 import 'package:itdat/widget/card/card_info_widget.dart';
 import 'package:itdat/widget/card/history/history_widget.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
@@ -54,8 +54,8 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
         return No1(cardInfo: cardInfo);
       case 'No2':
         return No2(cardInfo: cardInfo);
-      case 'No3':
-        return No3(cardInfo: cardInfo);
+      case 'PersonalNo1':
+        return PersonalNo1(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo);
     }

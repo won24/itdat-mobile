@@ -66,7 +66,7 @@ class CardModel{
       }
 
       final response = await client.send(request);
-      print("response $response");
+      print("response ${response.statusCode}");
 
     } catch (e) {
       throw Exception("saveBusinessCardWithLogo Error: $e");
@@ -79,8 +79,6 @@ class CardModel{
 
     try {
       final response = await client.get(Uri.parse("$baseUrl/$userEmail"));
-      print(response.body);
-      print("겟카드모델");
       return jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
     } catch (e) {
       throw Exception("getBusinessCard Error: $e");

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:itdat/utils/HttpClientManager.dart';
-import '../../../widget/setting/waitwidget.dart';
+import '../../../../widget/setting/waitwidget.dart';
 
-class No3 extends StatelessWidget {
+class PersonalNo1 extends StatelessWidget {
   final BusinessCard cardInfo;
   final File? image;
 
-  const No3({
+  const PersonalNo1({
     super.key,
     required this.cardInfo,
     this.image,

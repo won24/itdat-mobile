@@ -5,7 +5,6 @@ import 'package:itdat/widget/card/openCardList.dart';
 import 'package:itdat/widget/setting/languageTranWidget.dart';
 import 'package:itdat/widget/setting/permissionWidget.dart';
 import 'package:itdat/widget/setting/themeTranWidget.dart';
-
 import '../login/logoutWidget.dart';
 import 'fontSelectWidget.dart';
 
@@ -29,6 +28,7 @@ class _SettingsState extends State<Settings> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
+              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
             ),
           ),
         ),
