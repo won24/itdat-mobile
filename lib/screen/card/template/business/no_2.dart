@@ -19,7 +19,7 @@ class No2 extends StatelessWidget {
   TextStyle _buildTextStyle({
     required Color? textColor,
     required String? fontFamily,
-    double fontSize = 14,
+    double fontSize = 17,
     FontWeight fontWeight = FontWeight.normal,
   }) {
     return GoogleFonts.getFont(
@@ -89,7 +89,7 @@ class No2 extends StatelessWidget {
               } else if (snapshot.hasData && snapshot.data == true) {
                 return Image.network(
                   getFullImageUrl(),
-                  height: 30,
+                  height: 50,
                   fit: BoxFit.contain,
                 );
               } else if (image != null) {
@@ -104,14 +104,14 @@ class No2 extends StatelessWidget {
                   style: _buildTextStyle(
                     textColor: textColor,
                     fontFamily: cardInfo.fontFamily,
-                    fontSize: 18,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 );
               }
             },
           ),
-          const Padding(padding: EdgeInsets.only(top: 20)),
+          const Padding(padding: EdgeInsets.only(top: 10)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -123,7 +123,7 @@ class No2 extends StatelessWidget {
                     style: _buildTextStyle(
                       textColor: textColor,
                       fontFamily: cardInfo.fontFamily,
-                      fontSize: 12,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -133,7 +133,7 @@ class No2 extends StatelessWidget {
                     style: _buildTextStyle(
                       textColor: textColor,
                       fontFamily: cardInfo.fontFamily,
-                      fontSize: 22,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -144,9 +144,10 @@ class No2 extends StatelessWidget {
                 style: _buildTextStyle(
                   textColor: textColor,
                   fontFamily: cardInfo.fontFamily,
-                  fontSize: 15,
+                  fontSize: 17,
                 ),
               ),
+              SizedBox(height: 10,),
               const Divider(thickness: 1, color: Colors.grey),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

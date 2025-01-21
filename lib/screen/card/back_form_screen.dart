@@ -41,19 +41,19 @@ class _BackFormScreenState extends State<BackFormScreen> {
   }
 
 
-  // Future<bool> requestStoragePermission() async {
-  //   var status = await Permission.manageExternalStorage.status;
-  //   if (status.isGranted) {
-  //     return true;
-  //   } else {
-  //     var result = await Permission.manageExternalStorage.request();
-  //     if (result.isGranted) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-  // }
+  Future<bool> requestStoragePermission() async {
+    var status = await Permission.manageExternalStorage.status;
+    if (status.isGranted) {
+      return true;
+    } else {
+      var result = await Permission.manageExternalStorage.request();
+      if (result.isGranted) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
 
 
   void _saveCard() async {
@@ -132,13 +132,13 @@ class _BackFormScreenState extends State<BackFormScreen> {
                         ),
                         child: IconButton(
                           onPressed: () async {
-                            //if (await requestStoragePermission()) {
+                            if (await requestStoragePermission()) {
                               File? imageFile = await getImageFromGallery();
                               if (imageFile != null) {
                                 setState(() {
                                   _image = imageFile;
                                 });
-                              //}
+                              }
                             } else {
                               showDialog(
                                   context: context,

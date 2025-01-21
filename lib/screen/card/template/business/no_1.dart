@@ -101,7 +101,7 @@ class No1 extends StatelessWidget {
                       style: _buildTextStyle(
                         textColor: textColor,
                         fontFamily: cardInfo.fontFamily,
-                        fontSize: 23,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -114,6 +114,13 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
     }
   }
 
+  // cardNo 로 필터링
+  List<BusinessCard> filterCardsByEmailAndCardNo(String email, int cardNo) {
+    return _allCards
+        .where((card) => card.userEmail == email && card.cardNo == cardNo)
+        .toList();
+  }
+
   Future<void> _fetchFolders(String userEmail) async {
     try {
       final folders = await _walletModel.getFolders(userEmail);
@@ -466,6 +473,8 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
               itemBuilder: (context, index) {
                 final card = _allCards[index];
 
+                final filteredCardNo = filterCardsByEmailAndCardNo(card.userEmail, card.cardNo!);
+
                 return LongPressDraggable<BusinessCard>(
                   data: card,
                   feedback: Transform.scale(
@@ -513,7 +522,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => CardWalletCardDetailScreen(
-                            cardInfo: [card],
+                            cardInfo: filteredCardNo,
                             loginUserEmail: Provider.of<AuthProvider>(context, listen: false).userEmail!,
                           ),
                         ),

@@ -33,8 +33,6 @@ class _ExpandedCardScreenState extends State<ExpandedCardScreen> {
     super.initState();
     cardInfo = widget.cardInfo;
     backCard = widget.backCard;
-    print("cardInfo : $cardInfo");
-    print("backCard : $backCard");
   }
 
   // 앞면 렌더링
