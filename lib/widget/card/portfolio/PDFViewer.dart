@@ -25,7 +25,13 @@ class PDFViewer extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData && snapshot.data == true) {
-            return PDFView(filePath: documentUrl);
+            return PDFView(
+              filePath: documentUrl,
+              swipeHorizontal: true,
+              autoSpacing: false,
+              pageFling: false,
+
+            );
           } else {
             return Center(child: Text('파일을 찾을 수 없습니다.'));
           }
