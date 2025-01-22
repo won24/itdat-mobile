@@ -510,8 +510,8 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                     const SizedBox(height: 10),
                     _buildTextField(
-                      label: "부서",
-                      hint: "부서를 입력하세요",
+                      label: "부서 또는 직업",
+                      hint: "부서 또는 직업을 입력하세요",
                       icon: Icons.work_sharp,
                       initialValue: widget.cardInfo.department,
                       onChanged: (value) => widget.cardInfo.department = value,
