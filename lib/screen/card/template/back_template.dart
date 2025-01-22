@@ -56,7 +56,16 @@ class BackTemplate extends StatelessWidget {
     Color fallbackBack = Colors.white;
     Color fallbackText = Colors.black87;
 
-    if(cardInfo.appTemplate == "No2" || frontSideTemplate == "No2" || cardInfo.appTemplate == "PersonalNo2" || frontSideTemplate == "PersonalNo2"){
+    if(cardInfo.appTemplate == "No2"){
+      fallbackBack = Colors.black87;
+      fallbackText = Colors.white;
+    }else if(frontSideTemplate == "No2"){
+      fallbackBack = Colors.black87;
+      fallbackText = Colors.white;
+    }else if(cardInfo.appTemplate == "PersonalNo2"){
+      fallbackBack = Colors.black87;
+      fallbackText = Colors.white;
+    }else if(frontSideTemplate == "PersonalNo2"){
       fallbackBack = Colors.black87;
       fallbackText = Colors.white;
     }

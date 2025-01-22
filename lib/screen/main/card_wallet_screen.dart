@@ -126,6 +126,13 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         .toList();
   }
 
+  // front 카드 정보만 필터링
+  List<BusinessCard> filterCardSide(cards) {
+    return cards
+        .where((card) => card.cardSide == "FRONT")
+        .toList();
+  }
+
   Future<void> _fetchFolders(String userEmail) async {
     try {
       final folders = await _walletModel.getFolders(userEmail);
@@ -481,11 +488,13 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               itemBuilder: (context, index) {
                 final card = _allCards[index];
+                final frontCards = filterCardSide(_allCards);
 
+                final frontCard = frontCards[index];
                 final filteredCardNo = filterCardsByEmailAndCardNo(card.userEmail, card.cardNo!);
 
                 return LongPressDraggable<BusinessCard>(
-                  data: card,
+                  data: frontCard,
                   feedback: Transform.scale(
                     scale: 0.4,
                     child: Material(
@@ -500,7 +509,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              buildBusinessCard(card), // 명함 템플릿 렌더링
+                              buildBusinessCard(frontCard), // 명함 템플릿 렌더링
                             ],
                           ),
                         ),
@@ -519,7 +528,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            buildBusinessCard(card), // 명함 템플릿 렌더링
+                            buildBusinessCard(frontCard), // 명함 템플릿 렌더링
                           ],
                         ),
                       ),
@@ -548,7 +557,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            buildBusinessCard(card), // 명함 템플릿 렌더링
+                            buildBusinessCard(frontCard), // 명함 템플릿 렌더링
                           ],
                         ),
                       ),
