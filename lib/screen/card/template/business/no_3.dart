@@ -127,7 +127,7 @@ class No3 extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 5,),
+                  SizedBox(width: 10,),
                   Text(
                     cardInfo.userName ?? "",
                     style: _buildTextStyle(
@@ -147,77 +147,52 @@ class No3 extends StatelessWidget {
                   fontSize: 15,
                 ),
               ),
+              const SizedBox(height: 8),
               Divider(thickness: 1, color: textColor),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.phone_android_sharp, color: textColor,),
-                  Text(
-                    cardInfo.phone ?? "",
-                    style: _buildTextStyle(
-                      textColor: textColor,
-                      fontFamily: cardInfo.fontFamily,
-                    ),
+              Text(
+                cardInfo.phone ?? "",
+                style: _buildTextStyle(
+                  textColor: textColor,
+                  fontFamily: cardInfo.fontFamily,
+                ),
+              ),
+              if (cardInfo.email != null && cardInfo.email!.isNotEmpty) ...[
+                Text(
+                  cardInfo.email ?? "",
+                  style: _buildTextStyle(
+                    textColor: textColor,
+                    fontFamily: cardInfo.fontFamily,
                   ),
-                ]
+                ),
+              ],
+              Text(
+                cardInfo.companyAddress ?? "",
+                style: _buildTextStyle(
+                  textColor: textColor,
+                  fontFamily: cardInfo.fontFamily,
+                ),
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (cardInfo.email != null && cardInfo.email!.isNotEmpty) ...[
-                    Icon(Icons.mail_sharp, color: textColor,),
-                    Text(
-                      cardInfo.email ?? "",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(Icons.business_sharp, color: textColor,),
-                  Text(
-                    cardInfo.companyAddress ?? "",
-                    style: _buildTextStyle(
-                      textColor: textColor,
-                      fontFamily: cardInfo.fontFamily,
-                    ),
+              if (cardInfo.companyNumber != null &&
+                  cardInfo.companyNumber!.isNotEmpty) ...[
+                Text(
+                  cardInfo.companyNumber ?? "",
+                  style: _buildTextStyle(
+                    textColor: textColor,
+                    fontFamily: cardInfo.fontFamily,
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  if (cardInfo.companyNumber != null &&
-                      cardInfo.companyNumber!.isNotEmpty) ...[
-                    Icon(Icons.phone, color: textColor,),
-                    Text(
-                      cardInfo.companyNumber ?? "",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                      ),
-                    ),
-                  ],
-                ]
-              ),
-              Row(
-                children: [
-                  if (cardInfo.companyFax != null &&
-                      cardInfo.companyFax!.isNotEmpty) ...[
-                    Icon(Icons.fax_sharp, color: textColor,),
-                    Text(
-                      cardInfo.companyFax ?? "",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
+                ),
+              ],
+              if (cardInfo.companyFax != null &&
+                  cardInfo.companyFax!.isNotEmpty) ...[
+
+                Text(
+                  cardInfo.companyFax ?? "",
+                  style: _buildTextStyle(
+                    textColor: textColor,
+                    fontFamily: cardInfo.fontFamily,
+                  ),
+                ),
+              ],
             ],
           ),
         ],
