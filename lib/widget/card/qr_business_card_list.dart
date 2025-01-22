@@ -202,11 +202,11 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
           return  Center(child: Text(AppLocalizations.of(context)!.notfindcard));
         } else {
           var businessCards = snapshot.data;
-
+          var frontCards = businessCards.where((card) => card['cardSide'] == "FRONT").toList();
           return ListView.builder(
-            itemCount: businessCards.length,
+            itemCount: frontCards.length,
             itemBuilder: (context, index) {
-              var card = businessCards[index];
+              var card = frontCards[index];
               BusinessCard cardInfo = BusinessCard(
                 appTemplate: card['appTemplate'],
                 userName: card['userName'],
