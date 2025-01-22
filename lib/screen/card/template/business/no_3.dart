@@ -112,11 +112,12 @@ class No3 extends StatelessWidget {
               }
             },
           ),
+          SizedBox(width: 15,),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     cardInfo.position ?? "",
@@ -144,7 +145,7 @@ class No3 extends StatelessWidget {
                 style: _buildTextStyle(
                   textColor: textColor,
                   fontFamily: cardInfo.fontFamily,
-                  fontSize: 17,
+                  fontSize: 15,
                 ),
               ),
               Divider(thickness: 1, color: textColor),
