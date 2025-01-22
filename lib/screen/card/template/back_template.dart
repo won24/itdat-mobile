@@ -7,12 +7,14 @@ import '../../../widget/setting/waitwidget.dart';
 
 class BackTemplate extends StatelessWidget {
   final BusinessCard cardInfo;
+  final String frontSideTemplate;
   final File? image;
 
   BackTemplate({
     super.key,
     required this.cardInfo,
     this.image,
+    required this.frontSideTemplate,
   });
 
 
@@ -54,7 +56,7 @@ class BackTemplate extends StatelessWidget {
     Color fallbackBack = Colors.white;
     Color fallbackText = Colors.black87;
 
-    if(cardInfo.appTemplate == "No2"){
+    if(cardInfo.appTemplate == "No2" || frontSideTemplate == "No2" || cardInfo.appTemplate == "PersonalNo2" || frontSideTemplate == "PersonalNo2"){
       fallbackBack = Colors.black87;
       fallbackText = Colors.white;
     }

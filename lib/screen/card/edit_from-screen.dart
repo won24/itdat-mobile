@@ -7,7 +7,9 @@ import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/back_form_screen.dart';
 import 'package:itdat/screen/card/template/business/no_1.dart';
 import 'package:itdat/screen/card/template/business/no_2.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
 import 'package:itdat/screen/card/template/personal/no_1.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 import 'package:itdat/screen/mainLayout.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -337,8 +339,12 @@ class _EditFormScreenState extends State<EditFormScreen> {
         return No1(cardInfo: cardInfo, image: _selectedCompanyImage);
       case 'No2':
         return No2(cardInfo: cardInfo, image: _selectedCompanyImage);
+      case 'No3':
+        return No3(cardInfo: cardInfo, image: _selectedCompanyImage);
       case 'PersonalNo1':
         return PersonalNo1(cardInfo: cardInfo, image: _selectedCompanyImage,);
+      case 'PersonalNo2':
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo);
     }

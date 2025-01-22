@@ -1,16 +1,16 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/material.dart';
 import 'package:itdat/models/BusinessCard.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:itdat/utils/HttpClientManager.dart';
 import '../../../../widget/setting/waitwidget.dart';
 
-class No2 extends StatelessWidget {
+class PersonalNo2 extends StatelessWidget {
   final BusinessCard cardInfo;
   final File? image;
 
-  No2({
+  const PersonalNo2({
     super.key,
     required this.cardInfo,
     this.image,
@@ -19,7 +19,7 @@ class No2 extends StatelessWidget {
   TextStyle _buildTextStyle({
     required Color? textColor,
     required String? fontFamily,
-    double fontSize = 17,
+    double fontSize = 14,
     FontWeight fontWeight = FontWeight.normal,
   }) {
     return GoogleFonts.getFont(
@@ -51,10 +51,16 @@ class No2 extends StatelessWidget {
     }
   }
 
+  String colorToHex(Color color) {
+    int r = (color.r * 255).toInt();
+    int g = (color.g * 255).toInt();
+    int b = (color.b * 255).toInt();
 
+    return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}';
+  }
 
   Color hexToColor(String? hex, {Color fallback = Colors.white}) {
-    if (hex == null || hex.isEmpty) {
+    if (hex == null || hex.isEmpty){
       return fallback;
     }
     try {
@@ -64,9 +70,11 @@ class No2 extends StatelessWidget {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback:Colors.black87);
+
+    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback: Colors.black87);
     Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.white);
 
 
@@ -80,6 +88,7 @@ class No2 extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           FutureBuilder<bool>(
             future: checkFileExists(getFullImageUrl()),
@@ -104,137 +113,78 @@ class No2 extends StatelessWidget {
                   style: _buildTextStyle(
                     textColor: textColor,
                     fontFamily: cardInfo.fontFamily,
-                    fontSize: 30,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 );
               }
             },
           ),
-          const Padding(padding: EdgeInsets.only(top: 10)),
+          SizedBox(height: 10,),
+          Divider(thickness: 1, color: textColor),
+          SizedBox(height: 10,),
           Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    cardInfo.position ?? "",
+                    cardInfo.userName ?? "이름",
                     style: _buildTextStyle(
                       textColor: textColor,
                       fontFamily: cardInfo.fontFamily,
-                      fontSize: 17,
+                      fontSize: 23,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(width: 5),
+                  SizedBox(width: 5,),
                   Text(
-                    cardInfo.userName ?? "",
+                    cardInfo.department ?? "직업",
                     style: _buildTextStyle(
                       textColor: textColor,
                       fontFamily: cardInfo.fontFamily,
-                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
-              ),
-              Text(
-                cardInfo.department ?? "",
-                style: _buildTextStyle(
-                  textColor: textColor,
-                  fontFamily: cardInfo.fontFamily,
-                  fontSize: 17,
-                ),
               ),
               SizedBox(height: 10,),
-              Divider(thickness: 1, color: textColor),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "M. ",
-                    style: _buildTextStyle(
-                      textColor: textColor,
-                      fontFamily: cardInfo.fontFamily,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    cardInfo.phone ?? "",
-                    style: _buildTextStyle(
-                      textColor: textColor,
-                      fontFamily: cardInfo.fontFamily,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  if (cardInfo.email != null && cardInfo.email!.isNotEmpty) ...[
-                    Text(
-                      "E. ",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      cardInfo.email ?? "",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-              Row(
-                children: [
-                  if (cardInfo.companyNumber != null &&
-                      cardInfo.companyNumber!.isNotEmpty) ...[
-                    Text(
-                      "T. ",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      cardInfo.companyNumber ?? "",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                  ],
-                  if (cardInfo.companyFax != null &&
-                      cardInfo.companyFax!.isNotEmpty) ...[
-                    Text(
-                      "F. ",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      cardInfo.companyFax ?? "",
-                      style: _buildTextStyle(
-                        textColor: textColor,
-                        fontFamily: cardInfo.fontFamily,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
               Text(
-                cardInfo.companyAddress ?? "",
+                cardInfo.phone ?? "핸드폰 번호",
                 style: _buildTextStyle(
                   textColor: textColor,
                   fontFamily: cardInfo.fontFamily,
                 ),
               ),
+              if (cardInfo.email != null && cardInfo.email!.isNotEmpty) ...[
+                Text(
+                  cardInfo.email ?? "이메일",
+                  style: _buildTextStyle(
+                    textColor: textColor,
+                    fontFamily: cardInfo.fontFamily,
+                  ),
+                ),
+              ],
+              Text(
+                cardInfo.companyAddress ?? "회사 주소",
+                style: _buildTextStyle(
+                  textColor: textColor,
+                  fontFamily: cardInfo.fontFamily,
+                ),
+              ),
+              if (cardInfo.companyNumber != null &&
+                  cardInfo.companyNumber!.isNotEmpty) ...[
+                Text(
+                  "T. ${cardInfo.companyNumber ?? "회사 번호"}",
+                  style: _buildTextStyle(
+                    textColor: textColor,
+                    fontFamily: cardInfo.fontFamily,
+                  ),
+                ),
+              ],
             ],
           ),
         ],

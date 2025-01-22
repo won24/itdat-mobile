@@ -5,7 +5,9 @@ import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/expanded_card_screen.dart';
 import 'package:itdat/screen/card/template/business/no_1.dart';
 import 'package:itdat/screen/card/template/business/no_2.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
 import 'package:itdat/screen/card/template/personal/no_1.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 import 'package:itdat/screen/card/template_selection_screen.dart';
 import 'package:itdat/widget/card/card_info_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -66,15 +68,15 @@ class _MyCardWidgetState extends State<MyCardScreen> {
 
   Widget buildBusinessCard(BusinessCard cardInfo, BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.3,
-      child: Transform.scale(
-        scale: 0.9,
-        child: Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          child: _getTemplateWidget(cardInfo),
-        ),
-      )
+        height: MediaQuery.of(context).size.height * 0.3,
+        child: Transform.scale(
+          scale: 0.9,
+          child: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            child: _getTemplateWidget(cardInfo),
+          ),
+        )
     );
   }
 
@@ -84,8 +86,12 @@ class _MyCardWidgetState extends State<MyCardScreen> {
         return No1(cardInfo: cardInfo,);
       case 'No2':
         return No2(cardInfo: cardInfo);
+      case 'No3':
+        return No3(cardInfo: cardInfo);
       case 'PersonalNo1':
         return PersonalNo1(cardInfo: cardInfo);
+      case 'PersonalNo2':
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo);
     }
@@ -98,9 +104,9 @@ class _MyCardWidgetState extends State<MyCardScreen> {
         if (index == filteredCards.length) {
           return IconButton(
             icon: Icon(
-              Icons.add,
-              size: 15,
-              color: Theme.of(context).iconTheme.color
+                Icons.add,
+                size: 15,
+                color: Theme.of(context).iconTheme.color
             ),
             onPressed: () {
               Navigator.push(
@@ -114,11 +120,11 @@ class _MyCardWidgetState extends State<MyCardScreen> {
         } else {
           return IconButton(
             icon: Icon(
-              Icons.circle,
-              size: 10,
-              color: index == _cardIndex
-                  ? const Color.fromRGBO(0, 202, 145, 1)
-                  : Theme.of(context).iconTheme.color
+                Icons.circle,
+                size: 10,
+                color: index == _cardIndex
+                    ? const Color.fromRGBO(0, 202, 145, 1)
+                    : Theme.of(context).iconTheme.color
             ),
             onPressed: () {
               _pageController.animateToPage(
@@ -273,10 +279,10 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                   },
                   child: Text(
                     AppLocalizations.of(context)!.contact,
-                      style: TextStyle(
+                    style: TextStyle(
                         fontWeight: _selectedIndex == 0? FontWeight.w900: null,
                         color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
-                      ),
+                    ),
                   ),
                 ),
                 Text(
@@ -292,8 +298,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                   child: Text(
                     AppLocalizations.of(context)!.portfolio,
                     style: TextStyle(
-                      fontWeight: _selectedIndex == 1? FontWeight.w900: null,
-                      color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                        fontWeight: _selectedIndex == 1? FontWeight.w900: null,
+                        color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                     ),
                   ),
                 ),
@@ -310,8 +316,8 @@ class _MyCardWidgetState extends State<MyCardScreen> {
                   child: Text(
                     AppLocalizations.of(context)!.history,
                     style: TextStyle(
-                      fontWeight: _selectedIndex == 2? FontWeight.w900: null,
-                      color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                        fontWeight: _selectedIndex == 2? FontWeight.w900: null,
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
                     ),
                   ),
                 ),

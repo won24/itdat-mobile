@@ -4,8 +4,10 @@ import 'package:itdat/models/BusinessCard.dart';
 import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/business/no_1.dart';
 import 'package:itdat/screen/card/template/business/no_2.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
 import 'package:itdat/screen/card/template/personal/no_1.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 
 import '../setting/waitwidget.dart';
 
@@ -46,8 +48,12 @@ class _OpenBusinessCardListState extends State<OpenBusinessCardList> {
         return No1(cardInfo: cardInfo);
       case 'No2':
         return No2(cardInfo: cardInfo);
+      case 'No3':
+        return No3(cardInfo: cardInfo);
       case 'PersonalNo1':
         return PersonalNo1(cardInfo: cardInfo);
+      case 'PersonalNo2':
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo);
     }

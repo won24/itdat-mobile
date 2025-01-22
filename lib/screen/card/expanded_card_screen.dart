@@ -5,7 +5,9 @@ import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/business/no_1.dart';
 import 'package:itdat/screen/card/template/back_template.dart';
 import 'package:itdat/screen/card/template/business/no_2.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
 import 'package:itdat/screen/card/template/personal/no_1.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 
 import 'edit_from-screen.dart';
 
@@ -42,8 +44,12 @@ class _ExpandedCardScreenState extends State<ExpandedCardScreen> {
         return No1(cardInfo: cardInfo);
       case 'No2':
         return No2(cardInfo: cardInfo);
+      case 'No3':
+        return No3(cardInfo: cardInfo);
       case 'PersonalNo1':
         return PersonalNo1(cardInfo: cardInfo);
+      case 'PersonalNo2' :
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo);
     }
@@ -88,7 +94,7 @@ class _ExpandedCardScreenState extends State<ExpandedCardScreen> {
               buildBusinessCard(cardInfo),
               if (backCard != null) ...[
                 const SizedBox(height: 20),
-                BackTemplate(cardInfo: backCard!)
+                BackTemplate(cardInfo: backCard!, frontSideTemplate: cardInfo.appTemplate!)
               ],
             ],
           ),

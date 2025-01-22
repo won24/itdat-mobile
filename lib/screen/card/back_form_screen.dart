@@ -71,8 +71,6 @@ class _BackFormScreenState extends State<BackFormScreen> {
 
     try {
       await CardModel().saveBusinessCardWithLogo(widget.cardInfo);
-      print(widget.cardInfo.cardSide);
-      print("back");
       _showSnackBar("명함 제작 성공");
       Navigator.pushAndRemoveUntil(
           context,
@@ -108,7 +106,7 @@ class _BackFormScreenState extends State<BackFormScreen> {
               Center(
                   child: Container(
                     width: double.infinity,
-                    child: BackTemplate(cardInfo: widget.cardInfo, image: _image),
+                    child: BackTemplate(cardInfo: widget.cardInfo, image: _image, frontSideTemplate: widget.cardInfo.appTemplate!,),
                   )
               ),
               const SizedBox(height: 20),
@@ -182,7 +180,6 @@ class _BackFormScreenState extends State<BackFormScreen> {
                   setState(() {
                     _isTextEnabled = value;
                     widget.cardInfo.isTextEnabled = _isTextEnabled;
-                    print(widget.cardInfo.isTextEnabled);
                   });
                 },
               ),

@@ -6,7 +6,9 @@ import 'package:itdat/models/card_model.dart';
 import 'package:itdat/screen/card/template/business/no_1.dart';
 import 'package:itdat/screen/card/template/business/no_2.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
 import 'package:itdat/screen/card/template/personal/no_1.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:ui' as ui;
@@ -42,8 +44,12 @@ class _BusinessCardWidgetState extends State<QrBusinessCardList> {
         return No1(cardInfo: cardInfo);
       case 'No2':
         return No2(cardInfo: cardInfo);
+      case 'No3':
+        return No3(cardInfo: cardInfo);
       case 'PersonalNo1':
         return PersonalNo1(cardInfo: cardInfo);
+      case 'PersonalNo2':
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo); // 기본값
     }

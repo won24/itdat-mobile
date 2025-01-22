@@ -4,7 +4,9 @@ import 'package:itdat/screen/card/expanded_card_screen.dart';
 import 'package:itdat/screen/card/template/back_template.dart';
 import 'package:itdat/screen/card/template/business/no_1.dart';
 import 'package:itdat/screen/card/template/business/no_2.dart';
+import 'package:itdat/screen/card/template/business/no_3.dart';
 import 'package:itdat/screen/card/template/personal/no_1.dart';
+import 'package:itdat/screen/card/template/personal/no_2.dart';
 import 'package:itdat/widget/card/card_info_widget.dart';
 import 'package:itdat/widget/card/history/history_widget.dart';
 import 'package:itdat/widget/card/portfolio/portfolio_widget.dart';
@@ -26,14 +28,12 @@ class CardWalletCardDetailScreen extends StatefulWidget {
 class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen> {
   int _selectedIndex = 0;
   bool _isFlipped = false;
-  BusinessCard? cardInfo;
   late BusinessCard frontCard;
   BusinessCard? backCard;
 
   @override
   void initState() {
     super.initState();
-    print (widget.cardInfo);
     if (widget.cardInfo.isEmpty) {
       throw Exception("명함 데이터가 비어 있습니다.");
     }
@@ -54,8 +54,12 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
         return No1(cardInfo: cardInfo);
       case 'No2':
         return No2(cardInfo: cardInfo);
+      case 'No3':
+        return No3(cardInfo: cardInfo);
       case 'PersonalNo1':
         return PersonalNo1(cardInfo: cardInfo);
+      case 'PersonalNo2':
+        return PersonalNo2(cardInfo: cardInfo);
       default:
         return No1(cardInfo: cardInfo);
     }
@@ -98,50 +102,47 @@ class _CardWalletCardDetailScreenState extends State<CardWalletCardDetailScreen>
           return [
             SliverToBoxAdapter(
               child: Container(
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final screenWidth = MediaQuery.of(context).size.width;
-                      final screenHeight = MediaQuery.of(context).size.height;
-
-                      final cardWidth = screenWidth * 0.9;
-                      final cardHeight = screenHeight * 0.3;
-                      return Container(
-                        width: cardWidth,
-                        height: cardHeight,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ExpandedCardScreen(
-                                      cardInfo: frontCard!,
-                                      backCard: backCard,
+                height: MediaQuery.of(context).size.height * 0.3,
+                child: Transform.scale(
+                  scale: 0.9,
+                    child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Container(
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ExpandedCardScreen(
+                                        cardInfo: frontCard,
+                                        backCard: backCard,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                              child: _isFlipped
-                                  ? BackTemplate(cardInfo: backCard!)
-                                  : buildBusinessCard(frontCard),
-                            ),
-                            if (canFlip())
-                              Positioned(
-                                top: 10,
-                                right: 10,
-                                child: renderFlipButton(),
+                                  );
+                                },
+                                child: _isFlipped
+                                    ? BackTemplate(cardInfo: backCard!, frontSideTemplate: frontCard.appTemplate!,)
+                                    : buildBusinessCard(frontCard),
                               ),
-                          ],
-                        ),
-                      );
-                    },
+                              if (canFlip())
+                                Positioned(
+                                  top: 10,
+                                  right: 10,
+                                  child: renderFlipButton(),
+                                ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
