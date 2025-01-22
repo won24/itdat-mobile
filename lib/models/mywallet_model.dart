@@ -157,10 +157,13 @@ class MyWalletModel {
 
     final url = '$baseUrl/api/mywallet/allCards?userEmail=$userEmail';
     final response = await client.get(Uri.parse(url));
+      print("1: ${response.statusCode}");
+      print("1 :${jsonDecode(response.body)}");
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
+      print("2: ${response.statusCode}");
       throw Exception("Failed to fetch business cards");
     }
   }

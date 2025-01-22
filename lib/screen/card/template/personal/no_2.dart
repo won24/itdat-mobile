@@ -122,14 +122,13 @@ class PersonalNo2 extends StatelessWidget {
           ),
           SizedBox(height: 10,),
           Divider(thickness: 1, color: textColor),
-          SizedBox(height: 10,),
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     cardInfo.userName ?? "이름",

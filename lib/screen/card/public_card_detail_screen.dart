@@ -162,7 +162,7 @@ class _PublicCardDetailScreenState extends State<PublicCardDetailScreen> {
             ),
             Expanded(
               child: _selectedIndex == 0
-                  ? CardInfoWidget(businessCards: widget.cardInfo, loginEmail: _loginEmail)
+                  ? CardInfoWidget(businessCards: widget.cardInfo, loginEmail: _loginEmail, screen: "publicCard",)
                   : _selectedIndex == 1
                   ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: widget.cardInfo.userEmail,)
                   : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: widget.cardInfo.userEmail,),

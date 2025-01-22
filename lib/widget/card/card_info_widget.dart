@@ -7,11 +7,13 @@ import '../../models/nfc_model.dart';
 class CardInfoWidget extends StatefulWidget {
   final BusinessCard businessCards;
   final String loginEmail;
+  final String screen;
 
   CardInfoWidget({
     super.key,
     required this.businessCards,
-    required this.loginEmail
+    required this.loginEmail,
+    required this.screen,
   });
 
   @override
@@ -165,9 +167,9 @@ class _InfoWidgetState extends State<CardInfoWidget> {
               icon: Image.asset('assets/icons/location.png', height: 30, width: 30),
             ),
           ),
-          widget.businessCards.userEmail != widget.loginEmail
+          widget.screen == "myWallet"
               ? ListTile(
-            title: Text('${widget.businessCards.description}', style: TextStyle(fontWeight: FontWeight.w600),),
+            title: widget.businessCards.description == null ? Text("") : Text('${widget.businessCards.description}', style: TextStyle(fontWeight: FontWeight.w600),),
             subtitle: Text(AppLocalizations.of(context)!.memo, style: TextStyle(color: Colors.grey),),
             trailing: IconButton(
               onPressed: () {

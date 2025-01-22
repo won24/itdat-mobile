@@ -82,9 +82,10 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
 
       // 전체 명함 로드
       setState(() {
-        _allCards = (allCardsResponse as List)
+        _allCards = (allCardsResponse)
             .map((card) => BusinessCard.fromJson(card as Map<String, dynamic>))
             .toList();
+        print(_allCards);
       });
       // debugPrint("API 응답 데이터: $allCardsResponse");
 
@@ -101,7 +102,7 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
         // debugPrint("폴더 '$folderName'의 명함 응답: $folderCardsResponse");
 
         setState(() {
-          _folderCards[folderName] = (folderCardsResponse as List)
+          _folderCards[folderName] = (folderCardsResponse)
               .map((card) => BusinessCard.fromJson(card as Map<String, dynamic>))
               .toList();
         });

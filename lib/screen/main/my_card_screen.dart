@@ -325,7 +325,7 @@ class _MyCardWidgetState extends State<MyCardScreen> {
             ),
             Expanded(
               child: _selectedIndex == 0
-                  ? CardInfoWidget(businessCards: selectedCardInfo ?? emptyCardInfo, loginEmail: _loginEmail)
+                  ? CardInfoWidget(businessCards: selectedCardInfo ?? emptyCardInfo, loginEmail: _loginEmail, screen: "myCard",)
                   : _selectedIndex == 1
                   ? PortfolioWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail)
                   : HistoryWidget(loginUserEmail: _loginEmail, cardUserEmail: _loginEmail),
