@@ -66,9 +66,8 @@ class No3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback:Colors.black87);
-    Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.white);
-
+    Color backgroundColor = hexToColor(cardInfo.backgroundColor, fallback:Colors.white);
+    Color textColor = hexToColor(cardInfo.textColor, fallback: Colors.black87);
 
     return Container(
       width: 420,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:itdat/screen/card/template/business/no_3.dart';
 import 'package:itdat/screen/card/template/personal/no_2.dart';
 import 'package:provider/provider.dart';
@@ -61,8 +62,9 @@ class _CardWalletScreenState extends State<CardWalletScreen> {
 
 
   Future<void> _initializeData() async {
-    final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
-
+    //final userEmail = Provider.of<AuthProvider>(context, listen: false).userEmail;
+    final storage = FlutterSecureStorage();
+    final userEmail = await storage.read(key: 'user_email');
     if (userEmail == null) {
       _showErrorSnackBar(AppLocalizations.of(context)!.loginRequired);
       return;

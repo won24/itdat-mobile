@@ -33,6 +33,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final email = Provider.of<AuthProvider>(context, listen: false).userEmail;
+      print(email);
       if (email != null) {
         setState(() {
           userEmail = email;
