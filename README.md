@@ -1,16 +1,61 @@
-# itdat
+# 온라인 명함 관리 플랫폼 ITDAT
+![logo](https://github.com/user-attachments/assets/8ac6db93-1ac5-4a0f-bf0e-3cf0e3e6382f)
+<br>
 
-A new Flutter project.
+<summary>목차</summary>
 
-## Getting Started
+1. [프로젝트 소개](#intro)
+2. [요구사항](#reqirements)
+3. [팀원 소개](#members)
+4. [페이지별 기능](#page)
+5. [개발 환경](#env)
 
-This project is a starting point for a Flutter application.
+<br>
 
-A few resources to get you started if this is your first Flutter project:
+## 1. <span id="intro">프로젝트 소개</span>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+##### ITDAT은 기존 종이 명함을 디지털 명함으로 대체하여 환경오염을 줄이고, 효율적인 네트워킹을 가능하게 하는 서비스입니다.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+##### ITDAT은 ESG 경영 실천 및 탄소중립 목표 달성을 위한 솔루션으로 기획되었습니다.
+
+✅ 디지털 명함 생성 및 관리: 사용자가 자신만의 명함을 생성하고, QR 코드나 NFC를 통해 손쉽게 교환 가능
+
+✅ 명함 데이터 저장 및 분류 기능: 물리적인 보관이 필요 없이, 명함 지갑에 저장하고 분류 가능
+
+✅ 인증된 사용자 기반 서비스: 인증된 사용자 기반의 서비스로, 신뢰할 수 있는 명함 제작 가능
+
+✅ 관리자의 사용자 관리: 부적절한 명함 제작의 사용자에 대한 관리자의 제재 가능
+
+<br>
+
+## 2. <span id="reqirements">요구사항</span>
+
+
+<br>
+  
+## 3. <span id="members">팀원</span> 
+
+
+<br>
+
+## 4. <span id="page">페이지별 기능</span>
+
+<br>
+
+## 5. <span id="env">개발 기간 및 환경</span>
+
+#### 개발기간 
+2024.12.09 ~ 2025.01.23
+
+#### 시스템 구성도
+
+
+#### UML
+
+
+#### 데이터베이스
+
+
+
+#### 기술 스택
+
