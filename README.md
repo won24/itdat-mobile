@@ -75,13 +75,11 @@
 
 ## 🔎 역할 분담
 ##### 김동규(PM)
-- 기능
 
 ##### 서현준
 
 ##### 진원
-- 기능
-  - 명함 템플릿 제작, 커스텀 명함 제작, 명함 상세페이지, 명함 정보 기반 연락처 종류 별 기능 연동, 포트폴리오/히스토리 게시판, 명함 확대보기
+- 명함 템플릿 제작, 커스텀 명함 제작, 명함 상세페이지, 명함 정보 기반 연락처 종류 별 기능 연동, 포트폴리오/히스토리 게시판, 명함 확대보기
 
 ##### 손정원
 
@@ -100,11 +98,17 @@
 ![시스템 아키텍쳐](https://github.com/user-attachments/assets/82c7dc8f-7522-4054-aae9-79587cd45691)
 
 #### UML
-
+![UML](https://github.com/user-attachments/assets/1186f30a-a9a7-4fad-97d9-3a1f5ad3773a)
 
 #### 데이터베이스
 ERD(데이터 사전 정의서를 기반으로 설계)
   ![image](https://github.com/user-attachments/assets/e7ae9990-93e5-421e-a1b2-04e0b17e38a9)
 
 #### 기술 스택
+![Flutter](https://img.shields.io/badge/Flutter-03E6FF?style=for-the-badge&logo=openjdk&logoColor=white)   
+![Kakao API](https://img.shields.io/badge/Kakao%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)  
+![Naver API](https://img.shields.io/badge/Naver%20API-03C75A?style=for-the-badge&logo=naver&logoColor=white)  
+![Google API](https://img.shields.io/badge/Google%20API-4285F4?style=for-the-badge&logo=google&logoColor=white) 
 
+#### WBS
+[WBS 보기](https://docs.google.com/spreadsheets/d/1GfJm25oclrC1F1lVo9e7SdV8qnmDxA-MVvHAA7A2jsA/edit?gid=1523815437#gid=1523815437)
