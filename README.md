@@ -29,12 +29,60 @@
 <br>
 
 ## 2. <span id="reqirements">요구사항</span>
+📁 인증: 자체 회원가입/로그인, 소셜 회원가입/로그인, 이메일 인증 및 유효성 검사
 
+📁 명함 제작: 템플릿 선택, 명함 정보 입력, 명함 커스텀
+
+📁 내 명함: 명함 생성/조회, 명함 정보 기반 연락처 기능 별 연동, 포트폴리오 & 히스토리 작성 및 관리  
+
+📁 QR 코드: QR코드 생성/스캔/이미지를 통해 명함 전송
+
+📁 NFC: NFC 카드에 명함 등록, 휴대폰 태깅을 통해 전달
+
+📁 명함첩: 받은 명함 폴더로 관리, 명함 상세 보기, 명함첩 관리
+
+📁 공개 명함: 공개된 명함 조회, 명함 상세보기, 부적절한 명함 신고
+
+📁 내 정보: 어플 환경설정, 내 정보 수정/삭제, 내 명함 수정/삭제, 공개 명함 설정
 
 <br>
   
 ## 3. <span id="members">팀원</span> 
+<table>
+  <tr>
+    <td align="center">
+      <strong>김동규</strong><br>
+      <img src="https://github.com/user-attachments/assets/48f2fbdf-8839-4498-a1c8-800e3185bc55" width="100"><br>
+      <a href="https://github.com/nicdkim">GitHub</a>
+    </td>
+    <td align="center">
+      <strong>서현준</strong><br>
+      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
+      <a href="본인 깃허브 링크">GitHub</a>
+    </td>
+    <td align="center">
+      <strong>진원</strong><br>
+      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
+      <a href="https://github.com/won24/won24.github.io">GitHub</a>
+    </td>
+    <td align="center">
+      <strong>손정원</strong><br>
+      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
+      <a href="본인 깃허브 링크">GitHub</a>
+    </td>
+  </tr>
+</table>
 
+## 🔎 역할 분담
+##### 김동규(PM)
+- 기능
+  - 사용자 인증, 회원가입, 이메일 인증, 로그인, 소셜(구글, 카카오, 네이버) 가입 및 로그인, CI/CD 구축, SSL 인증, Security 관리, 명함 지갑 관리, 명함 공유 불러오기, 환경변수 설정, 스키마 설계
+
+##### 서현준
+
+##### 진원
+
+##### 손정원
 
 <br>
 
