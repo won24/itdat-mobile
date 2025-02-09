@@ -93,7 +93,7 @@
 
 | **로그인** | **명함 만들기** |
 | :------------: | :------------: |
-|![로그인](https://github.com/user-attachments/assets/7c52e528-2a5f-453a-9f14-cdc945726a1b)|![커스텀 명함](https://github.com/user-attachments/assets/1143d831-9853-45cd-afcb-6d9c5551788a)|
+|![로그인](https://github.com/user-attachments/assets/7c52e528-2a5f-453a-9f14-cdc945726a1b)|![커스텀 명함](https://github.com/user-attachments/assets/8fc0cbab-91a8-4c3c-852b-178e59f4e88f)|
 | 이메일 또는 아이디 로그인 / 소셜 로그인  | 템플릿 선택 후 명함 정보 확인 및 수정, 배경 색, 글씨색, 글씨체 변경으로 커스텀 제작 가능, 추가로 뒷면 제작 가능 |
 
 | **내 명함/ 명함 디테일 페이지** | **포트폴리오/히스토리** |
