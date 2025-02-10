@@ -8,7 +8,7 @@
 2. [요구사항](#reqirements)
 3. [페이지별 기능](#page)
 4. [개발 환경](#env)
-5. 3. [팀원 소개](#members)
+5. [팀원 소개](#members)
 
 <br>
 
@@ -102,12 +102,14 @@ ERD(데이터 사전 정의서를 기반으로 설계)
 
 
 #### 기술 스택
-![Flutter](https://img.shields.io/badge/Flutter-03E6FF?style=for-the-badge&logo=openjdk&logoColor=grey)   
+![Flutter](https://img.shields.io/badge/Flutter-03E6FF?style=for-the-badge&logo=flutter&logoColor=grey)   
 ![Kakao API](https://img.shields.io/badge/Kakao%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)  
 ![Naver API](https://img.shields.io/badge/Naver%20API-03C75A?style=for-the-badge&logo=naver&logoColor=white)  
-![Google API](https://img.shields.io/badge/Google%20API-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![Google API](https://img.shields.io/badge/Google%20API-4285F4?style=for-the-badge&logo=google&logoColor=white) 
+![Firebase](https://img.shields.io/badge/Firebase-BC0000?style=for-the-badge&logo=firebase&logoColor=white) 
+Flutter (Dart) + Android (Java) 네이티브 연동
 
-#### Tools
+#### TOOLS
 ![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)  
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)  
 
