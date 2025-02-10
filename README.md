@@ -6,9 +6,9 @@
 
 1. [프로젝트 소개](#intro)
 2. [요구사항](#reqirements)
-3. [팀원 소개](#members)
-4. [페이지별 기능](#page)
-5. [개발 환경](#env)
+3. [페이지별 기능](#page)
+4. [개발 환경](#env)
+5. 3. [팀원 소개](#members)
 
 <br>
 
@@ -46,46 +46,8 @@
 📁 내 정보: 어플 환경설정, 내 정보 수정/삭제, 내 명함 수정/삭제, 공개 명함 설정
 
 <br>
-  
-## 3. <span id="members">팀원</span> 
-<table>
-  <tr>
-    <td align="center">
-      <strong>김동규</strong><br>
-      <img src="https://github.com/user-attachments/assets/48f2fbdf-8839-4498-a1c8-800e3185bc55" width="100"><br>
-      <a href="https://github.com/nicdkim">GitHub</a>
-    </td>
-    <td align="center">
-      <strong>서현준</strong><br>
-      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
-      <a href="본인 깃허브 링크">GitHub</a>
-    </td>
-    <td align="center">
-      <strong>진원</strong><br>
-      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
-      <a href="https://github.com/won24/won24.github.io">GitHub</a>
-    </td>
-    <td align="center">
-      <strong>손정원</strong><br>
-      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
-      <a href="본인 깃허브 링크">GitHub</a>
-    </td>
-  </tr>
-</table>
 
-## 🔎 역할 분담
-##### 김동규(PM)
-- 사용자 인증, 회원가입, 이메일 인증, 로그인, 소셜(구글, 카카오, 네이버) 가입 및 로그인, Security 관리, 명함 지갑 관리, 명함 공유 불러오기, 환경변수 설정
-##### 서현준
-
-##### 진원
-- 명함 템플릿 제작, 커스텀 명함 제작, 명함 상세페이지, 명함 정보 기반 연락처 종류 별 기능 연동, 포트폴리오/히스토리 게시판, 명함 확대보기
-
-##### 손정원
-
-<br>
-
-## 4. <span id="page">위젯 별 상세 기능</span>
+## 3. <span id="page">위젯 별 상세 기능</span>
 | **회원가입** | **명함 정보 입력 및 약관동의** |
 | :------------: | :------------: |
 |![회원가입](https://github.com/user-attachments/assets/3d66a8de-6305-4b11-9745-d2c588fde04e)|![정보입력](https://github.com/user-attachments/assets/5aeab720-74af-45cf-84d1-bd869e3aa3c2)|
@@ -122,7 +84,7 @@
 | 다국어, 어플테마, 글씨체 변경, 로그아웃, 내 정보 변경 등 어플 환경설정 및 내 정보 관리 가능 | 내정보 위젯에서 명함 선택 후 공개/비공개 설정 가능 |
 <br>
 
-## 5. <span id="env">개발 기간 및 환경</span>
+## 4. <span id="env">개발 기간 및 환경</span>
 
 #### 개발기간 
 2024.12.09 ~ 2025.01.23
@@ -143,8 +105,50 @@ ERD(데이터 사전 정의서를 기반으로 설계)
 ![Flutter](https://img.shields.io/badge/Flutter-03E6FF?style=for-the-badge&logo=openjdk&logoColor=grey)   
 ![Kakao API](https://img.shields.io/badge/Kakao%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)  
 ![Naver API](https://img.shields.io/badge/Naver%20API-03C75A?style=for-the-badge&logo=naver&logoColor=white)  
-![Google API](https://img.shields.io/badge/Google%20API-4285F4?style=for-the-badge&logo=google&logoColor=white) 
+![Google API](https://img.shields.io/badge/Google%20API-4285F4?style=for-the-badge&logo=google&logoColor=white)
+
+#### Tools
+![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)  
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)  
 
 
 #### WBS
 [WBS 보기](https://docs.google.com/spreadsheets/d/1GfJm25oclrC1F1lVo9e7SdV8qnmDxA-MVvHAA7A2jsA/edit?gid=1523815437#gid=1523815437)
+
+<br>
+
+## 5. <span id="members">팀원</span> 
+<table>
+  <tr>
+    <td align="center">
+      <strong>김동규</strong><br>
+      <img src="https://github.com/user-attachments/assets/48f2fbdf-8839-4498-a1c8-800e3185bc55" width="100"><br>
+      <a href="https://github.com/nicdkim">GitHub</a>
+    </td>
+    <td align="center">
+      <strong>서현준</strong><br>
+      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
+      <a href="본인 깃허브 링크">GitHub</a>
+    </td>
+    <td align="center">
+      <strong>진원</strong><br>
+      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
+      <a href="https://github.com/won24/won24.github.io">GitHub</a>
+    </td>
+    <td align="center">
+      <strong>손정원</strong><br>
+      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
+      <a href="본인 깃허브 링크">GitHub</a>
+    </td>
+  </tr>
+</table>
+
+## 🔎 역할 분담
+##### 김동규(PM)
+- 사용자 인증, 회원가입, 이메일 인증, 로그인, 소셜(구글, 카카오, 네이버) 가입 및 로그인, Security 관리, 명함 지갑 관리, 명함 공유 불러오기, 환경변수 설정
+##### 서현준
+
+##### 진원
+- 명함 템플릿 제작, 커스텀 명함 제작, 명함 상세페이지, 명함 정보 기반 연락처 종류 별 기능 연동, 포트폴리오/히스토리 게시판, 명함 확대보기
+
+##### 손정원
