@@ -147,7 +147,7 @@ Flutter (Dart) + Android (Java) 네이티브 연동
 
 ## 🔎 역할 분담
 ##### 김동규(PM)
-- 사용자 인증, 회원가입, 이메일 인증, 로그인, 소셜(구글, 카카오, 네이버) 가입 및 로그인, Security 관리, 명함 지갑 관리, 명함 공유 불러오기, 환경변수 설정
+- 사용자 인증, 회원가입, 이메일 인증, 로그인, 소셜(구글, 카카오, 네이버) 가입 및 로그인, Security 관리, 명함 지갑 관리, 명함 공유 불러오기, 환경변수 설정, MethodChannel을 활용한 Flutter ↔ Android 통신, Android Intent 및 Redirect URI 처리 (OAuth 로그인 지원), AndroidManifest.xml 메타데이터 조회 기능 구현
 ##### 서현준
 
 ##### 진원
