@@ -128,8 +128,8 @@ Flutter (Dart) + Android (Java) 네이티브 연동
     </td>
     <td align="center">
       <strong>서현준</strong><br>
-      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
-      <a href="본인 깃허브 링크">GitHub</a>
+      <img src="https://github.com/user-attachments/assets/6b42b5db-4ca8-42a4-a7b9-2b8627de00c5" width="100"><br>
+      <a href="https://github.com/kkandda">GitHub</a>
     </td>
     <td align="center">
       <strong>진원</strong><br>
@@ -149,6 +149,7 @@ Flutter (Dart) + Android (Java) 네이티브 연동
 - 사용자 인증, 회원가입, 이메일 인증, 로그인, 소셜(구글, 카카오, 네이버) 가입 및 로그인, Security 관리, 명함 지갑 관리, 명함 공유 불러오기, 환경변수 설정, MethodChannel을 활용한 Flutter ↔ Android 통신, Android Intent 및 Redirect URI 처리 (OAuth 로그인 지원), AndroidManifest.xml 메타데이터 조회 기능 구현
 
 ##### 서현준
+- 상세 페이지 내 신고 버튼 추가
 
 ##### 진원
 - 명함 템플릿 제작, 커스텀 명함 제작, 명함 상세페이지, 명함 정보 기반 연락처 종류 별 기능 연동, 포트폴리오/히스토리 게시판, 명함 확대보기
