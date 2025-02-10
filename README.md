@@ -69,7 +69,86 @@
 
 | **QR 코드** | **NFC** |
 | :------------: | :------------: |
-|![qr](https://github.com/user-attachments/assets/23585de3-fe1b-4263-a084-1ec725a5aae6)|![nfc](https:가
+|![qr](https://github.com/user-attachments/assets/23585de3-fe1b-4263-a084-1ec725a5aae6)|![nfc](https://github.com/user-attachments/assets/ff9ea19f-977e-4a42-831a-a2e1033e7cc3)|
+| 선택 명함 QR 생성, QR 코드를 통해 명함 전달 | NFC카드에 명함 저장, 핸드폰에 태깅으로 명함 전송 |
+
+| **명함 상세보기** | **명함첩** |
+| :------------: | :------------: |
+|![명함 수정](https://github.com/user-attachments/assets/4fedcfcd-b80a-40d2-9ff1-cf2734f2102b)|![명함첩](https://github.com/user-attachments/assets/7f9a0953-21cb-4479-a80a-4671a11ab277)|
+| 명함 클릭 후 명함 확대 보기 가능, 내 명함 수정,삭제 기능 | 받은 명함을 폴더별로 정리 가능, 폴더 생성/수정/삭제, 명함첩 내 명함 관리 |
+
+| **공개명함** | **공개명함 신고** |
+| :------------: | :------------: |
+|![공개명함](https://github.com/user-attachments/assets/531b0ee0-74ef-42d6-a7fe-7065c4d99e5c)|![명함 신고](https://github.com/user-attachments/assets/b49c2dac-86a4-4c24-9d3e-e63529961f74)|
+| 공개된 명함 조회, 명함 상세보기 | 부적절한 명함 관리자에게 신고 가능 |
+
+| **내 정보** | **공개명함 설정** |
+| :------------: | :------------: |
+|![어플설정](https://github.com/user-attachments/assets/ac9ac667-5097-4d78-bdf2-88fdbb0da86e)|![공개명함설정](https://github.com/user-attachments/assets/6b4955c6-e0e8-4c5b-844d-e226b4b6e208)|
+| 다국어, 어플테마, 글씨체 변경, 로그아웃, 내 정보 변경 등 어플 환경설정 및 내 정보 관리 가능 | 내정보 위젯에서 명함 선택 후 공개/비공개 설정 가능 |
+
+<br>
+
+## 4. <span id="env">개발 기간 및 환경</span>
+#### 개발기간 
+2024.12.09 ~ 2025.01.23
+
+#### 시스템 구성도
+![시스템 아키텍쳐](https://github.com/user-attachments/assets/82c7dc8f-7522-4054-aae9-79587cd45691)
+#### UML
+![UML](https://github.com/user-attachments/assets/1186f30a-a9a7-4fad-97d9-3a1f5ad3773a)
+
+#### 데이터베이스
+ERD(데이터 사전 정의서를 기반으로 설계)
+  ![image](https://github.com/user-attachments/assets/e7ae9990-93e5-421e-a1b2-04e0b17e38a9)
+  
+#### 기술 스택
+![Flutter](https://img.shields.io/badge/Flutter-03E6FF?style=for-the-badge&logo=flutter&logoColor=grey)   
+![Kakao API](https://img.shields.io/badge/Kakao%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)  
+![Naver API](https://img.shields.io/badge/Naver%20API-03C75A?style=for-the-badge&logo=naver&logoColor=white)  
+![Google API](https://img.shields.io/badge/Google%20API-4285F4?style=for-the-badge&logo=google&logoColor=white) <br>
+![Firebase](https://img.shields.io/badge/Firebase-BC0000?style=for-the-badge&logo=firebase&logoColor=white) <br>
+Flutter (Dart) + Android (Java) 네이티브 연동
+
+#### TOOLS
+![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)  
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)  
+
+#### WBS
+[WBS 보기](https://docs.google.com/spreadsheets/d/1GfJm25oclrC1F1lVo9e7SdV8qnmDxA-MVvHAA7A2jsA/edit?gid=1523815437#gid=1523815437)
+<br>
+
+## 5. <span id="members">팀원</span> 
+<table>
+  <tr>
+    <td align="center">
+      <strong>김동규</strong><br>
+      <img src="https://github.com/user-attachments/assets/48f2fbdf-8839-4498-a1c8-800e3185bc55" width="100"><br>
+      <a href="https://github.com/nicdkim">GitHub</a>
+    </td>
+    <td align="center">
+      <strong>서현준</strong><br>
+      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
+      <a href="본인 깃허브 링크">GitHub</a>
+    </td>
+    <td align="center">
+      <strong>진원</strong><br>
+      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
+      <a href="https://github.com/won24/won24.github.io">GitHub</a>
+    </td>
+    <td align="center">
+      <strong>손정원</strong><br>
+      <img src="여기에 각자 사진 가져오면 됨" width="100"><br>
+      <a href="본인 깃허브 링크">GitHub</a>
+    </td>
+  </tr>
+</table>
+
+## 🔎 역할 분담
+##### 김동규(PM)
+- 사용자 인증, 회원가입, 이메일 인증, 로그인, 소셜(구글, 카카오, 네이버) 가입 및 로그인, Security 관리, 명함 지갑 관리, 명함 공유 불러오기, 환경변수 설정, MethodChannel을 활용한 Flutter ↔ Android 통신, Android Intent 및 Redirect URI 처리 (OAuth 로그인 지원), AndroidManifest.xml 메타데이터 조회 기능 구현
+
+##### 서현준
 
 ##### 진원
 - 명함 템플릿 제작, 커스텀 명함 제작, 명함 상세페이지, 명함 정보 기반 연락처 종류 별 기능 연동, 포트폴리오/히스토리 게시판, 명함 확대보기
