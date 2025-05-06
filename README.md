@@ -117,8 +117,3 @@ Flutter (Dart) + Android (Java) 네이티브 연동
 [WBS 보기](https://docs.google.com/spreadsheets/d/1GfJm25oclrC1F1lVo9e7SdV8qnmDxA-MVvHAA7A2jsA/edit?gid=1523815437#gid=1523815437)
 <br>
 
-
-##### 진원
-- 명함 템플릿 제작, 커스텀 명함 제작, 명함 상세페이지, 명함 정보 기반 연락처 종류 별 기능 연동, 포트폴리오/히스토리 게시판, 명함 확대보기
-
-##### 손정원
