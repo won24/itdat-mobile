@@ -3,6 +3,11 @@
 <br>
 버전 코드 : 16 (2.0.7)
 
+> 본 README는 ITDAT 프로젝트에서 제가 맡은 기능에 한해 포트폴리오 용도로 일부 수정하였습니다.
+전체 프로젝트는 아래 원본 저장소에서 확인할 수 있습니다.
+> [원본 GitHub Repository](https://github.com/itdat-namewallet/Mobile)
+>
+
 <br>
 
 
@@ -10,8 +15,10 @@
 
 1. [프로젝트 소개](#intro)
 2. [요구사항](#reqirements)
-3. [페이지별 기능](#page)
-4. [개발 환경](#env)
+3. [맡은 기능](#my)
+4. [트러블 슈팅](#troubleShooting)
+5. [페이지별 기능](#page)
+6. [개발 환경](#env)
 
 <br>
 
@@ -50,7 +57,34 @@
 
 <br>
 
-## 3. <span id="page">위젯 별 상세 기능</span>
+## 3. <span id="my">맡은 기능</span>
+#### 기획, 디자인, 프론트엔드, 백엔드
+| **기능 페이지** | **주요 내용** |
+| :-------: | :-------: |
+| 메인페이지 | 최근 본 게시글 구현 <br> 배너를 통해 해당 아이템 상세보기 <br> 홈페이지 전체 레이아웃 |
+| 라이브 경매 게시판 | 시간에 따른 채팅/입찰/낙찰 후 환불 기능 활성화 <br> 낙찰자 안내 모달창 |
+| 경매품 게시판 | 경매 목록 <br> 필터링 <br> 검색 <br> 즐겨찾기 <br> 경매품 상세보기 페이지 |
+| 관리자 모드 | 게시글 승인/수정/삭제 기능 <br> 권한 분리 |
+
+<br>
+
+## 4. <span id="troubleShooting">트러블 슈팅</span>
+
+#### 최근 본 게시물 – 브라우저 뒤로가기 시 상태 미반영 문제
+
+- 로컬스토리지를 기반으로 게시물을 보여주도록 구현했으나, 브라우저 뒤로가기 시 `useEffect`가 재실행되지 않아 상태가 갱신되지 않는 문제 발생  
+- `window.addEventListener('popstate', ...)`를 통해 뒤로가기 이벤트 감지 후 상태를 업데이트하여 해결  
+- **SPA 라우팅과 상태 관리 간의 연결을 명확히 이해하고 대응할 수 있었던 경험**
+
+#### 경매 종료 후 환불 로직 반복 실행 문제
+
+- 경매 종료 후, 낙찰자를 제외한 사용자에게 금액을 환불하는 로직이 타이머가 작동하는 5분간 계속 반복되어 **중복 환불 발생**  
+- `requestSent` 상태 플래그를 도입해 로직을 최초 1회만 실행하도록 조건 분기하여 API 호출 중복을 방지  
+- **실시간 로직에서의 비동기 제어와 상태 플래그 사용의 중요성을 체감**
+
+<br>
+
+## 5. <span id="page">위젯 별 상세 기능</span>
 | **회원가입** | **명함 정보 입력 및 약관동의** |
 | :------------: | :------------: |
 |![회원가입](https://github.com/user-attachments/assets/3d66a8de-6305-4b11-9745-d2c588fde04e)|![정보입력](https://github.com/user-attachments/assets/5aeab720-74af-45cf-84d1-bd869e3aa3c2)|
@@ -88,7 +122,7 @@
 
 <br>
 
-## 4. <span id="env">개발 기간 및 환경</span>
+## 6. <span id="env">개발 기간 및 환경</span>
 #### 개발기간 
 2024.12.09 ~ 2025.01.23
 
@@ -112,8 +146,5 @@ Flutter (Dart) + Android (Java) 네이티브 연동
 #### TOOLS
 ![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)  
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)  
-
-#### WBS
-[WBS 보기](https://docs.google.com/spreadsheets/d/1GfJm25oclrC1F1lVo9e7SdV8qnmDxA-MVvHAA7A2jsA/edit?gid=1523815437#gid=1523815437)
 <br>
 
