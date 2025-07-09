@@ -160,6 +160,7 @@
 ## 6. <span id="env">개발 기간 및 환경</span>
 #### 개발기간 
 2024.12.09 ~ 2025.01.23
+(4인 팀 프로젝트)
 
 #### 시스템 구성도
 ![시스템 아키텍쳐](https://github.com/user-attachments/assets/82c7dc8f-7522-4054-aae9-79587cd45691)
